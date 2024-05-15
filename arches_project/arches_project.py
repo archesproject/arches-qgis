@@ -36,12 +36,12 @@ from qgis.gui import (QgsAttributeTableView,
 from .resources import *
 
 # Import the code for the dialog
-from .arches_project_dialog import ArchesProjectDialog
+from .ui.arches_project_dialog import ArchesProjectDialog
 
 # Import the confirmation dialogs
-from .dialog.create_resource_confirmation_dialog import CreateResourceConfirmation
-from .dialog.edit_resource_add_confirmation_dialog import EditResourceAddConfirmation
-from .dialog.edit_resource_replace_confirmation_dialog import EditResourceReplaceConfirmation
+from .ui.create_resource_confirmation_dialog import CreateResourceConfirmation
+from .ui.edit_resource_add_confirmation_dialog import EditResourceAddConfirmation
+from .ui.edit_resource_replace_confirmation_dialog import EditResourceReplaceConfirmation
 
 import os.path
 import sys
@@ -948,7 +948,7 @@ class ArchesProject:
             except:
                 pass
             
-
+        print("BUTTON PRESS")
         # reset connection status on button press
         self.dlg.connection_status.setText("")
 
@@ -970,7 +970,7 @@ class ArchesProject:
                 formatted_url = format_url()
 
                 self.dlg.connection_status.setText("Connecting...")
-
+                print("before clientid")
                 clientid = get_clientid(formatted_url)
                 if clientid:
                     # If client id NOT None then connection has been made

@@ -38,21 +38,21 @@ LOCALES =
 # translation
 SOURCES = \
 	__init__.py \
-	arches_project.py arches_project_dialog.py
+	arches_project/arches_project.py arches_project/ui/arches_project_dialog.py
 
 PLUGINNAME = arches_project
 
 PY_FILES = \
 	__init__.py \
-	arches_project.py arches_project_dialog.py
+	arches_project/arches_project.py arches_project/ui/arches_project_dialog.py
 
-UI_FILES = arches_project_dialog_base.ui
+UI_FILES = arches_project/ui/arches_project_dialog_base.ui
 
 EXTRAS = metadata.txt icons/arches.png
 
 EXTRA_DIRS =
 
-COMPILED_RESOURCE_FILES = resources.py
+COMPILED_RESOURCE_FILES = arches_project/resources.py
 
 PEP8EXCLUDE=pydev,resources.py,conf.py,third_party,ui
 
@@ -73,7 +73,7 @@ PEP8EXCLUDE=pydev,resources.py,conf.py,third_party,ui
 
 HELP = help/build/html
 
-PLUGIN_UPLOAD = $(c)/plugin_upload.py
+# PLUGIN_UPLOAD = $(c)/plugin_upload.py
 
 RESOURCE_SRC=$(shell grep '^ *<file' resources.qrc | sed 's@</file>@@g;s/.*>//g' | tr '\n' ' ')
 
