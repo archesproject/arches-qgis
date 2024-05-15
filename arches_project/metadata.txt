@@ -5,12 +5,12 @@
 [general]
 name=Arches Project
 qgisMinimumVersion=3.0
-description=This plugin links QGIS to an Arches project.
+description=A plugin that QGIS to an Arches project.
 version=0.1
 author=Knowledge Integration
 email=samuel.scandrett@k-int.co.uk
 
-about=This plugin provides a link between QGIS and an Arches project
+about=A QGIS plugin for integration and data management with an Arches project. 
 
 tracker=http://bugs
 repository=http://repo

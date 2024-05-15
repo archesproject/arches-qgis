@@ -48,7 +48,7 @@ PY_FILES = \
 
 UI_FILES = arches_project/ui/arches_project_dialog_base.ui
 
-EXTRAS = metadata.txt icons/arches.png
+EXTRAS = arches_project/metadata.txt icons/arches.png
 
 EXTRA_DIRS =
 
