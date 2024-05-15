@@ -37,13 +37,13 @@ LOCALES =
 
 # translation
 SOURCES = \
-	__init__.py \
+	arches_project/__init__.py \
 	arches_project/arches_project.py arches_project/ui/arches_project_dialog.py
 
 PLUGINNAME = arches_project
 
 PY_FILES = \
-	__init__.py \
+	arches_project/__init__.py \
 	arches_project/arches_project.py arches_project/ui/arches_project_dialog.py
 
 UI_FILES = arches_project/ui/arches_project_dialog_base.ui

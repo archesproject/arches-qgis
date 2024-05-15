@@ -1,5 +1,6 @@
 # Virtual environments
 env/
+env3.11/
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
