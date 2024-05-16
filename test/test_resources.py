@@ -31,7 +31,7 @@ class ArchesProjectDialogTest(unittest.TestCase):
 
     def test_icon_png(self):
         """Test we can click OK."""
-        path = ':/plugins/ArchesProject/icon.png'
+        path = ':/plugins/ArchesProject/arches.png'
         icon = QIcon(path)
         self.assertFalse(icon.isNull())
 

@@ -18,7 +18,7 @@
   </property>
   <property name="windowIcon">
    <iconset>
-    <normaloff>icons/arches_transparent_bg.png</normaloff>icons/arches_transparent_bg.png</iconset>
+    <normaloff>../icons/arches_transparent_bg.png</normaloff>../icons/arches_transparent_bg.png</iconset>
   </property>
   <property name="modal">
    <bool>false</bool>

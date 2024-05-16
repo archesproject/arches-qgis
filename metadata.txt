@@ -5,15 +5,15 @@
 [general]
 name=Arches Project
 qgisMinimumVersion=3.0
-description=A plugin that QGIS to an Arches project.
+description=A plugin that links QGIS to an Arches project.
 version=0.1
 author=Knowledge Integration
 email=samuel.scandrett@k-int.co.uk
 
 about=A QGIS plugin for integration and data management with an Arches project. 
-
-tracker=http://bugs
-repository=http://repo
+    
+tracker=https://github.com/archesproject/arches-qgis/issues
+repository=https://github.com/archesproject/arches-qgis
 # End of mandatory metadata
 
 # Recommended items:
@@ -25,9 +25,9 @@ hasProcessingProvider=no
 # Tags are comma separated with spaces allowed
 tags=python
 
-homepage=http://homepage
+homepage=https://github.com/archesproject/arches-qgis
 category=Plugins
-icon=icons/arches.png
+icon=arches_project/icons/arches.png
 # experimental flag
 experimental=True
 

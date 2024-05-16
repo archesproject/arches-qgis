@@ -32,5 +32,5 @@ def classFactory(iface):  # pylint: disable=invalid-name
     :type iface: QgsInterface
     """
     #
-    from .arches_project import ArchesProject
+    from .arches_project.arches_project import ArchesProject
     return ArchesProject(iface)
