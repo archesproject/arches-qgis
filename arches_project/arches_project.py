@@ -43,6 +43,10 @@ from .ui.create_resource_confirmation_dialog import CreateResourceConfirmation
 from .ui.edit_resource_add_confirmation_dialog import EditResourceAddConfirmation
 from .ui.edit_resource_replace_confirmation_dialog import EditResourceReplaceConfirmation
 
+from .core.arches.connection import ArchesConnection
+from .core.arches.resources import ArchesResources
+from .core.utils.format_url import format_url
+
 import os.path
 import sys
 #from shapely import GeometryCollection
@@ -306,7 +310,9 @@ class ArchesProject:
 
 
     def map_selection(self):
-        """Get the Arches Resource from the map"""
+        """
+        Get the Arches Resource from the map
+        """
 
         active_layer = self.iface.activeLayer()
         canvas = self.iface.mapCanvas()
@@ -396,7 +402,9 @@ class ArchesProject:
 
 
     def update_map_layers(self, checkbox):
-        """Function to update new vector layers dynamically """
+        """
+        Function to update new vector layers dynamically
+        """
 
         if checkbox.isChecked():
             all_current_layers = [l for l in QgsProject.instance().mapLayers().values() if l.type() == QgsVectorLayer.VectorLayer if str(l.dataProvider().name()) != "postgres"] 
@@ -410,9 +418,10 @@ class ArchesProject:
 
 
 
-
     def show_hide_psql_layers(self, combobox1, combobox2):
-        """Reflect change made by checkbox to show or hide PSQL layers from self.layers"""
+        """
+        Reflect change made by checkbox to show or hide PSQL layers from self.layers
+        """
         # TODO: Not sure I like the way this works but it works
 
         def change_both_comboboxes(c):
@@ -856,102 +865,10 @@ class ArchesProject:
 
 
     def arches_connection_save(self):
-        """Data for connection to Arches project server"""
-
-        # strip and remove ending slash
-        def format_url():
-            formatted_url = self.dlg.arches_server_input.text().strip()
-            if formatted_url[-1] == "/":
-                formatted_url = formatted_url[:-1]
-            return formatted_url
-
-        # once Oauth registered the clientID can be fetched and used
-        def get_clientid(url):
-            try:
-                files = {
-                    'username': (None, self.dlg.username_input.text()),
-                    'password': (None, self.dlg.password_input.text()),
-                }
-                response = requests.post(url+"/auth/get_client_id", data=files)
-                clientid = response.json()["clientid"]
-                return clientid
-            except:
-                self.dlg.connection_status.setText("Failed to connect.\n- Check URL, username and password are correct.\n- Check the Arches instance is running.\n- Check the instance has a registered Oauth application.")
-                return None
-
-        def get_user_permissions(url):
-            try:
-                files = {
-                    'username': (None, self.dlg.username_input.text()),
-                    'password': (None, self.dlg.password_input.text()),
-                }
-                response = requests.post(url+"/auth/user_profile", data=files)
-                self.arches_user_info["deletable_nodegroups"] = response.json()["deletable_nodegroups"]
-                self.arches_user_info["editable_nodegroups"] = response.json()["editable_nodegroups"]
-                self.arches_user_info["groups"] = response.json()["groups"]
-                self.arches_user_info["is_active"] = response.json()["is_active"]
-            except:
-                self.arches_user_info["deletable_nodegroups"] = None
-                self.arches_user_info["editable_nodegroups"] = None
-                self.arches_user_info["is_active"] = None
-                self.arches_user_info["groups"] = []
-
-        def get_token(url, clientid):
-            try:
-                files = {
-                    'username': (None, self.dlg.username_input.text()),
-                    'password': (None, self.dlg.password_input.text()),
-                    'client_id': (None, clientid),
-                    'grant_type': (None, "password")
-                }
-                response = requests.post(url+"/o/token/", data=files)
-                self.arches_token = response.json()
-                self.arches_token["formatted_url"] = url
-                self.arches_token["time"] = str(datetime.now())
-
-                # If the token has an error status in it then break
-                if "error" in self.arches_token.keys():
-                    error_msg = self.arches_token["error"]
-                    self.arches_token = {} # reset token to empty
-                    self.dlg.connection_status.setText(f"Error connecting to token: {error_msg}.")
-
-            except:
-                self.dlg.connection_status.setText("Can't get Arches oauth2 token.")
-
-        def get_graphs(url):
-            try:
-                response = requests.get("%s/graphs/" % (url))
-                graphids = [x["graphid"] for x in response.json() if x["graphid"] != "ff623370-fa12-11e6-b98b-6c4008b05c4c"] # sys settings
-
-                for graph in graphids:
-                    geometry_node_data = {}
-                    contains_geom = False
-                    geom_node_count = 0
-
-                    req = requests.get("%s/graphs/%s" % (url, graph))
-
-                    if req.json()["graph"]["publication_id"]:   # if graph is published
-                        for nodes in req.json()["graph"]["nodes"]:
-                            if nodes["datatype"] == "geojson-feature-collection":
-                                contains_geom = True
-                                geom_node_count += 1
-                                nodegroupid = nodes["nodegroup_id"]
-                                nodeid = nodes["nodeid"]
-                                node_name = nodes["name"]
-                                geometry_node_data[nodeid] = {"nodegroup_id": nodegroupid, "name": node_name}
-                        if contains_geom == True:
-                            if geom_node_count > 1: multiple = True
-                            else: multiple = False
-                            self.arches_graphs_list.append({
-                                "graph_id":graph,
-                                "name":req.json()["graph"]["name"],
-                                "geometry_node_data": geometry_node_data,
-                                "multiple_geometry_nodes": multiple
-                            })
-            except:
-                pass
+        """
+        Connection to Arches project server
+        """
             
-        print("BUTTON PRESS")
         # reset connection status on button press
         self.dlg.connection_status.setText("")
 
@@ -970,22 +887,28 @@ class ArchesProject:
         # URL field has data in
         if is_valid_input == True:
             if self.dlg.arches_server_input.text() != "":
-                formatted_url = format_url()
+                # format URL
+                formatted_url = format_url(self.dlg.arches_server_input.text())
 
                 self.dlg.connection_status.setText("Connecting...")
                 print("before clientid")
-                clientid = get_clientid(formatted_url)
+
+                arches_connection = ArchesConnection(url=formatted_url,
+                                                     username=self.dlg.username_input.text(),
+                                                     password=self.dlg.password_input.text())
+
+                clientid = arches_connection.get_client_id()
                 if clientid:
                     # If client id NOT None then connection has been made
                     # check cache first before firing connection again
 
                     # get/update user info on the logged in user
                     self.arches_user_info = {}
-                    get_user_permissions(formatted_url)
+                    self.arches_user_info = arches_connection.get_user_permissions(self.arches_user_info)
 
                     # re-fetch graphs before checking cache as updates may have occurred
                     self.arches_graphs_list = []
-                    get_graphs(formatted_url)
+                    self.arches_graphs_list = arches_connection.get_graphs(self.arches_graphs_list)
 
                     if self.arches_connection_cache:
                         # IF THE CACHE IS UNCHANGED THEN DON'T REFIRE CONNECTION
@@ -1004,7 +927,7 @@ class ArchesProject:
                             self.dlg.editResSelectFeatures.addItems([layer.name() for layer in self.layers])
                             return            
 
-                    get_token(formatted_url, clientid)
+                    self.arches_token = arches_connection.get_token(clientid, self.arches_token)
 
                     if self.arches_token:
                         
