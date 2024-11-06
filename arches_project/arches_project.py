@@ -45,11 +45,11 @@ from .ui.edit_resource_replace_confirmation_dialog import EditResourceReplaceCon
 
 from .core.arches.connection import ArchesConnection
 from .core.arches.resources import ArchesResources
+
 from .core.utils.format_url import format_url
 
 import os.path
 import sys
-#from shapely import GeometryCollection
 import requests
 from datetime import datetime
 
@@ -597,54 +597,6 @@ class ArchesProject:
         elif not self.dlg.enableLoggingCheckbox.isChecked():
             self.dlg.tabWidget.setTabVisible(5, False)
 
-        
-
-
-
-    def geometry_conversion(self, selectedLayer):
-        """Convert QGIS geometries into Arches"""
-
-        # TODO: QGIS stores all polygons named as multipolygons even though they're separate and 
-        # all multipoints as individual multipoints - these should be separated 
-        geom_and_count = {} # to store geom type and how many 
-
-        # Find what type and how many we are dealing with
-        # for feature in selectedLayer.getFeatures():
-        #     geomtype = str(feature.geometry().type()).split(".")
-        #     if geomtype[-1] not in geom_and_count:
-        #         geom_and_count[geomtype[-1]] = 1
-        #     else:
-        #         geom_and_count[geomtype[-1]] += 1
-        #     print(feature.geometry().asPolygon())
-
-        # if "Polygon" in geom_and_count.keys():
-        #     if geom_and_count["Polygon"] == 1:
-        #         all_features = [feature.geometry().asWkt() for feature in selectedLayer.getFeatures()]
-        #         combined_feature = (','.join(all_features))
-        #         combined_feature = combined_feature.replace("MultiPolygon","Polygon")
-        #         return combined_feature
-
-        # Return info for the confirmation dialog text box
-        geometry_type_dict = {}
-
-        print(selectedLayer.getFeatures())
-        for feature in selectedLayer.getFeatures():
-            geom = feature.geometry()
-            print(geom)
-            geomtype = str(geom.type()).split(".")
-            if geomtype[-1] not in geometry_type_dict:
-                geometry_type_dict[geomtype[-1]] = 1
-            else:
-                geometry_type_dict[geomtype[-1]] += 1
-
-        # Would use shapely to create GEOMETRYCOLLECTION but that'd require users to install the dependency themselves
-        # this is the alternative        
-        all_features = [feature.geometry().asWkt() for feature in selectedLayer.getFeatures()]
-        geomcoll = "GEOMETRYCOLLECTION (%s)" % (','.join(all_features))
-        
-        return geomcoll, geometry_type_dict
-
-
 
 
     def multiple_geometry_node_check(self):
@@ -670,158 +622,33 @@ class ArchesProject:
     def create_resource(self):
         """Create Resource dialog and functionality"""
 
-        def send_new_resource_to_arches():
-            if selectedNode["nodegroup_id"] in self.arches_user_info["editable_nodegroups"]:
-                try:
-                    results = self.save_to_arches(tileid=None,
-                                                nodeid = selectedNode["node_id"],
-                                                geometry_collection=geomcoll,
-                                                geometry_format=None,
-                                                arches_operation="create")
-                    self.dlg.createResOutputBox.setText("""Successfully created a new resource with the selected geometry.
-                                                        \nTo continue the creation of your new resource, navigate to...\n%s/resource/%s""" % 
-                                                    (self.arches_token["formatted_url"], results["resourceinstance_id"]))
-                    self.dlg_resource_creation.close()
-                except:
-                    self.dlg.createResOutputBox.setText("Resource creation FAILED.")
-                    self.dlg_resource_creation.close()
-            else:
-                self.dlg.createResOutputBox.setText("This user does not have permission to create data for the geometry nodegroup in this resource model. An Arches resource has not been created.")
-                self.dlg_resource_creation.close()
-
-        def close_dialog():
-            self.dlg_resource_creation.close()
-
-        # Get info on current layer and selected graph
-        selectedLayerIndex = self.dlg.createResFeatureSelect.currentIndex()
-        selectedLayer = self.layers[selectedLayerIndex]
-        selectedGraphIndex = self.dlg.createResModelSelect.currentIndex()
-        selectedGraph = self.arches_graphs_list[selectedGraphIndex]
-
-        if selectedGraph["multiple_geometry_nodes"] == True:
-            selectedNodeIndex = self.dlg.geometryNodeSelect.currentIndex()
-            selectedNode = self.geometry_nodes[selectedNodeIndex]
-
-        elif selectedGraph["multiple_geometry_nodes"] == False:
-            node_id = list(selectedGraph["geometry_node_data"].keys())[0]
-            nodegroup_id = selectedGraph["geometry_node_data"][node_id]["nodegroup_id"]
-            selectedNode = {"node_id": node_id, "nodegroup_id": nodegroup_id, "name": selectedGraph["geometry_node_data"][node_id]["name"]}
-
-        geomcoll, geometry_type_dict = self.geometry_conversion(selectedLayer)
-     
-        # Format text box
-        self.dlg_resource_creation.infoText.viewport().setAutoFillBackground(False) # Sets the text box to be invisible
-        self.dlg_resource_creation.infoText.setText("")
-        self.dlg_resource_creation.infoText.append("An Arches resource will be created with the following geometries:\n")
-        for k,v in geometry_type_dict.items():
-            self.dlg_resource_creation.infoText.append(f"{k}: {v}")
-
-        # open dialog
-        self.dlg_resource_creation.show()
-
-        # Push button responses    
-        self.dlg_resource_creation.createDialogCreate.clicked.connect(send_new_resource_to_arches)
-        self.dlg_resource_creation.createDialogCancel.clicked.connect(close_dialog)
-
+        arches_create_resource = ArchesResources(nodeid=None, # filled by selectedNode
+                                                 tileid=None,
+                                                 arches_token=self.arches_token, 
+                                                 arches_graphs_list=self.arches_graphs_list,
+                                                 layers=self.layers,
+                                                 arches_user_info=self.arches_user_info,
+                                                 geometry_nodes=self.geometry_nodes)
+        arches_create_resource.create_resource(dlg=self.dlg,
+                                               dlg_resource_creation=self.dlg_resource_creation)
 
 
 
     def edit_resource(self, replace):
         """Save geometries to existing resource - either replace or add"""
 
-        def send_edited_data_to_arches(operation_type, dialog):
-            if nodegroup_value in self.arches_user_info["editable_nodegroups"]:
-                try:
-                    results = self.save_to_arches(tileid=self.arches_selected_resource["tileid"],
-                                                    nodeid = self.arches_selected_resource["nodeid"],
-                                                    geometry_collection=geomcoll,
-                                                    geometry_format=None,
-                                                    arches_operation=operation_type)
-                    dialog.close()
-                except:
-                    print(f"Couldn't {operation_type} geometry in resource")
-                    dialog.close()
-            else:
-                print("This user does not have permission to update data for the geometry nodegroup in this resource model.")
-                dialog.close()
-
-        def close_dialog(dialog):
-            dialog.close()
-
-
-        if self.arches_selected_resource:
-            selectedLayerIndex = self.dlg.editResSelectFeatures.currentIndex()
-            selectedLayer = self.layers[selectedLayerIndex]
-
-            geomcoll, geometry_type_dict = self.geometry_conversion(selectedLayer)
-
-            # Get nodegroup from graph
-            for graph in self.arches_graphs_list:
-                for k,v in graph["geometry_node_data"].items():
-                    if k == self.arches_selected_resource["nodeid"]:
-                        nodegroup_value = v["nodegroup_id"]
-                        break
-
-            # Replace geometry
-            if replace == True:
-                # Format text box
-                self.dlg_edit_resource_replace.infoText.viewport().setAutoFillBackground(False) # Sets the text box to be invisible
-                self.dlg_edit_resource_replace.infoText.setText("")
-                self.dlg_edit_resource_replace.infoText.append("The following geometries will be replace the existing Arches resource's geometries:\n")
-                for k,v in geometry_type_dict.items():
-                    self.dlg_edit_resource_replace.infoText.append(f"{k}: {v}")
-
-                self.dlg_edit_resource_replace.editDialogCreate.disconnect()
-                self.dlg_edit_resource_replace.editDialogCreate.clicked.connect(lambda: send_edited_data_to_arches(operation_type="create",
-                                                                                        dialog=self.dlg_edit_resource_replace))
-                self.dlg_edit_resource_replace.editDialogCancel.disconnect()
-                self.dlg_edit_resource_replace.editDialogCancel.clicked.connect(lambda: close_dialog(dialog=self.dlg_edit_resource_replace))
-                # Show confirmation dialog
-                self.dlg_edit_resource_replace.show()
-
-            # Add geometry to the resource
-            else:
-                # Format text box
-                self.dlg_edit_resource_add.infoText.viewport().setAutoFillBackground(False) # Sets the text box to be invisible
-                self.dlg_edit_resource_add.infoText.setText("")
-                self.dlg_edit_resource_add.infoText.append("The following geometries will be added to the Arches resource:\n")
-                for k,v in geometry_type_dict.items():
-                    self.dlg_edit_resource_add.infoText.append(f"{k}: {v}")
-
-                self.dlg_edit_resource_add.editDialogCreate.disconnect()
-                self.dlg_edit_resource_add.editDialogCreate.clicked.connect(lambda: send_edited_data_to_arches(operation_type="append",
-                                                                                    dialog=self.dlg_edit_resource_add))
-                self.dlg_edit_resource_add.editDialogCancel.disconnect()
-                self.dlg_edit_resource_add.editDialogCancel.clicked.connect(lambda: close_dialog(dialog=self.dlg_edit_resource_add))
-                # Show confirmation dialog
-                self.dlg_edit_resource_add.show()
-
-
-
-
-    def save_to_arches(self, tileid, nodeid, geometry_collection, geometry_format, arches_operation):
-        """Save data to arches resource"""
-        if self.arches_token:
-            try:
-                files = {
-                    'tileid': (None, tileid),
-                    'nodeid': (None, nodeid),
-                    'data': (None, geometry_collection),
-                    'format': (None, geometry_format),
-                    'operation': (None, arches_operation),
-                }
-                headers = {"Authorization": "Bearer %s" % (self.arches_token["access_token"])}
-                response = requests.post("%s/api/node_value/" % (self.arches_token["formatted_url"]), headers=headers, data=files)
-            
-                if response.ok == True:
-                    arches_created_resource = {"nodegroup_id": response.json()["nodegroup_id"],
-                                               "resourceinstance_id": response.json()["resourceinstance_id"],
-                                               "tile_id": response.json()["tileid"]}
-                    return arches_created_resource
-                else:
-                    print("Resource creation faiiled with response code:%s" % (response.status_code))
-            except:
-                print("Cannot create new resource")
+        arches_edit_resource = ArchesResources(nodeid=self.arches_selected_resource["nodeid"],
+                                               tileid=self.arches_selected_resource["tileid"],
+                                               arches_token=self.arches_token,
+                                               arches_graphs_list=self.arches_graphs_list,
+                                               layers=self.layers,
+                                               arches_user_info=self.arches_user_info,
+                                               geometry_nodes=self.geometry_nodes)
+        arches_edit_resource.edit_resource(replace=replace,
+                                           arches_selected_resource=self.arches_selected_resource,                                            
+                                           dlg=self.dlg,
+                                           dlg_edit_resource_replace=self.dlg_edit_resource_replace, 
+                                           dlg_edit_resource_add=self.dlg_edit_resource_add)
 
 
 
