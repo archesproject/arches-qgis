@@ -46,6 +46,9 @@ from .ui.edit_resource_replace_confirmation_dialog import EditResourceReplaceCon
 from .core.arches.connection import ArchesConnection
 from .core.arches.resources import ArchesResources
 
+from .core.views.stylesheets import PluginStylesheets
+from .core.views.logging import enable_logging
+
 from .core.utils.format_url import format_url
 
 import os.path
@@ -236,9 +239,20 @@ class ArchesProject:
             self.dlg_edit_resource_replace = EditResourceReplaceConfirmation()
 
             # Setup Arches Stylesheet
-            self.stylesheet_change(on_start=True)
+            PluginStylesheets(dlg = self.dlg,
+                              dlg_resource_creation = self.dlg_resource_creation,
+                              dlg_edit_resource_add = self.dlg_edit_resource_add,
+                              dlg_edit_resource_replace = self.dlg_edit_resource_replace,
+                              on_start = True,
+                              plugin_dir = self.plugin_dir)
             # if stylesheet is disabled
-            self.dlg.useStylesheetCheckbox.stateChanged.connect(lambda: self.stylesheet_change(on_start=False))
+            self.dlg.useStylesheetCheckbox.stateChanged.connect(
+                lambda: PluginStylesheets(dlg = self.dlg,
+                                          dlg_resource_creation = self.dlg_resource_creation,
+                                          dlg_edit_resource_add = self.dlg_edit_resource_add,
+                                          dlg_edit_resource_replace = self.dlg_edit_resource_replace,
+                                          on_start = False,
+                                          plugin_dir = self.plugin_dir))
 
             ## Have everything called in here so multiple connections aren't made when plugin button pressed
             # This way only one connection is made at a time
@@ -248,14 +262,16 @@ class ArchesProject:
             self.dlg.tabWidget.setTabVisible(1, False)
             self.dlg.tabWidget.setTabVisible(5, False)
 
-            self.dlg.enableLoggingCheckbox.stateChanged.connect(self.enable_logging)
+            self.dlg.enableLoggingCheckbox.stateChanged.connect(enable_logging)
 
             # initiate the current selected layer
             self.map_selection()
 
             # Connection to Arches instance
             self.dlg.btnSave.clicked.connect(self.arches_connection_save)
-            self.dlg.btnReset.clicked.connect(lambda: self.arches_connection_reset(hard_reset=True))
+            self.dlg.btnReset.clicked.connect(lambda: ArchesConnection(None, None, None).
+                                              connection_reset(hard_reset=True,
+                                                                self_obj=self))
 
             # Get the map selection and update when changed
             self.iface.mapCanvas().selectionChanged.connect(self.map_selection)
@@ -443,162 +459,6 @@ class ArchesProject:
 
 
 
-
-    def stylesheet_change(self, on_start):
-        def on_by_default():
-            try:
-                self.dlg.useStylesheetCheckbox.setChecked(True)
-                stylesheet_path = os.path.join(self.plugin_dir, "stylesheets", "arches_styling.qss")
-                with open(stylesheet_path, "r") as f:
-                    arches_styling = f.read()
-
-                # self.dlg.setAutoFillBackground(False)
-                # self.dlg.setContentsMargins(0,0,0,0)
-                # # self.dlg.setStyleSheet("QDialog{background-color: green;}")
-
-                self.dlg.setStyleSheet(arches_styling)
-                self.dlg_resource_creation.setStyleSheet(arches_styling)
-                self.dlg_edit_resource_add.setStyleSheet(arches_styling)
-                self.dlg_edit_resource_replace.setStyleSheet(arches_styling)
-
-                QDir.addSearchPath('images', os.path.join(self.plugin_dir, "icons"))
-
-                self.dlg.btnSave.setIcon(QIcon(os.path.join(self.plugin_dir, "icons", "ion-log-in.svg")))
-                self.dlg.btnSave.setIconSize(QtCore.QSize(12,12))
-                self.dlg.btnSave.setCursor(QCursor(QtCore.Qt.PointingHandCursor))
-
-                self.dlg.btnReset.setIcon(QIcon(os.path.join(self.plugin_dir, "icons", "ion-arrow-undo.svg")))
-                self.dlg.btnReset.setIconSize(QtCore.QSize(12,12))
-                self.dlg.btnReset.setCursor(QCursor(QtCore.Qt.PointingHandCursor))
-
-                self.dlg.addNewRes.setIcon(QIcon(os.path.join(self.plugin_dir, "icons", "mdi-pencil.svg")))
-                self.dlg.addNewRes.setIconSize(QtCore.QSize(12,12))
-                self.dlg.addNewRes.setCursor(QCursor(QtCore.Qt.PointingHandCursor))
-
-                self.dlg.addEditRes.setIcon(QIcon(os.path.join(self.plugin_dir, "icons", "fa-plus.svg")))
-                self.dlg.addEditRes.setIconSize(QtCore.QSize(12,12))
-                self.dlg.addEditRes.setCursor(QCursor(QtCore.Qt.PointingHandCursor))
-
-                self.dlg.replaceEditRes.setIcon(QIcon(os.path.join(self.plugin_dir, "icons", "mi-replace.svg")))
-                self.dlg.replaceEditRes.setIconSize(QtCore.QSize(12,12))
-                self.dlg.replaceEditRes.setCursor(QCursor(QtCore.Qt.PointingHandCursor))
-
-                self.dlg_resource_creation.createDialogCancel.setIcon(QIcon(os.path.join(self.plugin_dir, "icons", "fa-times.svg")))
-                self.dlg_resource_creation.createDialogCancel.setIconSize(QtCore.QSize(12,12))
-                self.dlg_resource_creation.createDialogCancel.setCursor(QCursor(QtCore.Qt.PointingHandCursor))
-
-                self.dlg_resource_creation.createDialogCreate.setIcon(QIcon(os.path.join(self.plugin_dir, "icons", "fa-plus.svg")))
-                self.dlg_resource_creation.createDialogCreate.setIconSize(QtCore.QSize(12,12))
-                self.dlg_resource_creation.createDialogCreate.setCursor(QCursor(QtCore.Qt.PointingHandCursor))
-
-                self.dlg_edit_resource_add.editDialogCancel.setIcon(QIcon(os.path.join(self.plugin_dir, "icons", "fa-times.svg")))
-                self.dlg_edit_resource_add.editDialogCancel.setIconSize(QtCore.QSize(12,12))
-                self.dlg_edit_resource_add.editDialogCancel.setCursor(QCursor(QtCore.Qt.PointingHandCursor))
-
-                self.dlg_edit_resource_add.editDialogCreate.setIcon(QIcon(os.path.join(self.plugin_dir, "icons", "fa-plus.svg")))
-                self.dlg_edit_resource_add.editDialogCreate.setIconSize(QtCore.QSize(12,12))
-                self.dlg_edit_resource_add.editDialogCreate.setCursor(QCursor(QtCore.Qt.PointingHandCursor))
-
-                self.dlg_edit_resource_replace.editDialogCancel.setIcon(QIcon(os.path.join(self.plugin_dir, "icons", "fa-times.svg")))
-                self.dlg_edit_resource_replace.editDialogCancel.setIconSize(QtCore.QSize(12,12))
-                self.dlg_edit_resource_replace.editDialogCancel.setCursor(QCursor(QtCore.Qt.PointingHandCursor))
-
-                self.dlg_edit_resource_replace.editDialogCreate.setIcon(QIcon(os.path.join(self.plugin_dir, "icons", "fa-times.svg")))
-                self.dlg_edit_resource_replace.editDialogCreate.setIconSize(QtCore.QSize(12,12))
-                self.dlg_edit_resource_replace.editDialogCreate.setCursor(QCursor(QtCore.Qt.PointingHandCursor))
-
-                self.dlg.tabWidget.setDocumentMode(True)
-
-                self.dlg.tabWidget.setTabIcon(0, QIcon(QPixmap(os.path.join(self.plugin_dir, "icons", "mdi-connection.svg")).transformed(QTransform().rotate(90))))
-                self.dlg.tabWidget.setIconSize(QtCore.QSize(16,16))
-                self.dlg.tabWidget.setTabText(0, "")
-
-                self.dlg.tabWidget.setTabIcon(1, QIcon(QPixmap(os.path.join(self.plugin_dir, "icons", "ti-home.svg")).transformed(QTransform().rotate(90))))
-                self.dlg.tabWidget.setIconSize(QtCore.QSize(16,16))
-                self.dlg.tabWidget.setTabText(1, "")
-
-                self.dlg.tabWidget.setTabIcon(2, QIcon(QPixmap(os.path.join(self.plugin_dir, "icons", "fa-building.svg")).transformed(QTransform().rotate(90))))
-                self.dlg.tabWidget.setIconSize(QtCore.QSize(16,16))
-                self.dlg.tabWidget.setTabText(2, "")
-
-                self.dlg.tabWidget.setTabIcon(3, QIcon(QPixmap(os.path.join(self.plugin_dir, "icons", "mdi-pencil.svg")).transformed(QTransform().rotate(90))))
-                self.dlg.tabWidget.setIconSize(QtCore.QSize(16,16))
-                self.dlg.tabWidget.setTabText(3, "")
-
-                self.dlg.tabWidget.setTabIcon(4, QIcon(QPixmap(os.path.join(self.plugin_dir, "icons", "fa-cog.svg")).transformed(QTransform().rotate(90))))
-                self.dlg.tabWidget.setIconSize(QtCore.QSize(16,16))
-                self.dlg.tabWidget.setTabText(4, "")
-
-                self.dlg.tabWidget.setTabIcon(5, QIcon(QPixmap(os.path.join(self.plugin_dir, "icons", "ti-ticket.svg")).transformed(QTransform().rotate(90))))
-                self.dlg.tabWidget.setIconSize(QtCore.QSize(16,16))
-                self.dlg.tabWidget.setTabText(5, "")
-
-
-            except:
-                # Prevent the use of the Arches stylesheet if error occurs
-                default_stylesheet()
-                self.dlg.useStylesheetCheckbox.setEnabled(False)
-                self.dlg.useStylesheetCheckbox.setChecked(False)
-
-
-        def default_stylesheet():
-            # reset stylesheets
-            self.dlg.setStyleSheet("")
-            self.dlg_resource_creation.setStyleSheet("")
-            self.dlg_edit_resource_add.setStyleSheet("")
-            self.dlg_edit_resource_replace.setStyleSheet("")
-            # remove icons from buttons
-            self.dlg.btnSave.setIcon(QIcon(""))
-            self.dlg.btnReset.setIcon(QIcon(""))
-            self.dlg.addNewRes.setIcon(QIcon(""))
-            self.dlg.addEditRes.setIcon(QIcon(""))
-            self.dlg.replaceEditRes.setIcon(QIcon(""))
-            self.dlg_resource_creation.createDialogCancel.setIcon(QIcon(""))
-            self.dlg_resource_creation.createDialogCreate.setIcon(QIcon(""))
-            self.dlg_edit_resource_add.editDialogCancel.setIcon(QIcon(""))
-            self.dlg_edit_resource_add.editDialogCreate.setIcon(QIcon(""))
-            self.dlg_edit_resource_replace.editDialogCancel.setIcon(QIcon(""))
-            self.dlg_edit_resource_replace.editDialogCreate.setIcon(QIcon(""))
-            # nav bar
-            # TODO: don't like the fact I have to add the exact strings (from qtcreator) back to the tab titles, seems like could be a better method...
-            self.dlg.tabWidget.setStyleSheet(" QTabWidget {qproperty-tabPosition: North;} ")
-            self.dlg.tabWidget.setStyleSheet("")
-
-            self.dlg.tabWidget.setAutoFillBackground(False)
-            self.dlg.tabWidget.setTabIcon(0, QIcon(""))
-            self.dlg.tabWidget.setTabText(0, "Arches Connection")
-            self.dlg.tabWidget.setTabIcon(1, QIcon(""))
-            self.dlg.tabWidget.setTabText(1, "Arches Connection")
-            self.dlg.tabWidget.setTabIcon(2, QIcon(""))
-            self.dlg.tabWidget.setTabText(2, "Create Resource")
-            self.dlg.tabWidget.setTabIcon(3, QIcon(""))
-            self.dlg.tabWidget.setTabText(3, "Edit Resource")
-            self.dlg.tabWidget.setTabIcon(4, QIcon(""))
-            self.dlg.tabWidget.setTabText(4, "Settings")
-            self.dlg.tabWidget.setTabIcon(5, QIcon(""))
-            self.dlg.tabWidget.setTabText(5, "Log")
-
-        if not self.dlg.useStylesheetCheckbox.isChecked():
-            default_stylesheet()
-        
-        elif self.dlg.useStylesheetCheckbox.isChecked():
-            on_by_default()
-
-        if on_start == True:
-            on_by_default()
-
-
-
-
-    def enable_logging(self):
-        if self.dlg.enableLoggingCheckbox.isChecked():
-            self.dlg.tabWidget.setTabVisible(5, True)
-
-        elif not self.dlg.enableLoggingCheckbox.isChecked():
-            self.dlg.tabWidget.setTabVisible(5, False)
-
-
-
     def multiple_geometry_node_check(self):
         selectedGraphIndex = self.dlg.createResModelSelect.currentIndex()
         selectedGraph = self.arches_graphs_list[selectedGraphIndex]
@@ -649,45 +509,6 @@ class ArchesProject:
                                            dlg=self.dlg,
                                            dlg_edit_resource_replace=self.dlg_edit_resource_replace, 
                                            dlg_edit_resource_add=self.dlg_edit_resource_add)
-
-
-
-
-    def arches_connection_reset(self, hard_reset):
-        """Reset Arches connection"""
-        if hard_reset == True:
-            # Reset connection inputs
-            self.dlg.connection_status.setText("Logged out of Arches instance. Please reconnect to use the plugin.")
-            self.dlg.arches_server_input.setText("")
-            self.dlg.username_input.setText("")
-            self.dlg.password_input.setText("")
-            # Replace login tab with logged in tab
-            self.dlg.tabWidget.setTabVisible(0, True)
-            self.dlg.tabWidget.setTabVisible(1, False)
-            self.dlg.tabWidget.setCurrentIndex(0)
-
-        # Reset stored data
-        self.arches_user_info = {}
-        self.arches_connection_cache = {}
-        self.arches_token = {}
-        self.arches_graphs_list = []
-        # Reset Create Resource tab as no longer useable
-        self.dlg.createResModelSelect.setEnabled(False)
-        self.dlg.createResFeatureSelect.setEnabled(False)
-        self.dlg.addNewRes.setEnabled(False)
-        self.dlg.createResOutputBox.setText("")
-        ## Set "Edit Resource" to false to begin with
-        self.dlg.addEditRes.setEnabled(False)
-        self.dlg.replaceEditRes.setEnabled(False)
-        self.dlg.editResSelectFeatures.setEnabled(False)
-        self.dlg.selectedResAttributeTable.setRowCount(0)
-        self.dlg.selectedResAttributeTable.setEnabled(False)
-        self.dlg.selectedResUUID.setText("Connect to your Arches instance to edit resources.")
-        # Hide multiple nodegroup dropdown
-        self.dlg.geometryNodeSelect.setEnabled(False)
-
-
-
 
 
 
@@ -804,11 +625,14 @@ class ArchesProject:
                             self.dlg.displayArchesURL.setOpenExternalLinks(True)
 
                         else:
-                            self.arches_connection_reset(hard_reset=False)
+                            ArchesConnection(None, None, None).connection_reset(hard_reset=True,
+                                                                                self_obj=self)
                             self.dlg.connection_status.setText("This user does not have the permissions to create Arches resources.")
                 else:
-                    self.arches_connection_reset(hard_reset=False)
+                    ArchesConnection(None, None, None).connection_reset(hard_reset=True,
+                                                                        self_obj=self)
 
             else:
                 # If clientid is None i.e no connection, reset cache and token to {}
-                self.arches_connection_reset(hard_reset=False)
+                ArchesConnection(None, None, None).connection_reset(hard_reset=True,
+                                                                    self_obj=self)
