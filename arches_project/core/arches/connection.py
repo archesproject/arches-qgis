@@ -8,6 +8,7 @@ class ArchesConnection():
         self.password = password
         self.username = username
 
+
     def get_client_id(self):
         try:
             files = {
@@ -20,6 +21,7 @@ class ArchesConnection():
         except:
             # self.dlg.connection_status.setText("Failed to connect.\n- Check URL, username and password are correct.\n- Check the Arches instance is running.\n- Check the instance has a registered Oauth application.")
             return None
+
 
     def get_user_permissions(self, arches_user_info):
         try:
@@ -38,6 +40,7 @@ class ArchesConnection():
             arches_user_info["is_active"] = None
             arches_user_info["groups"] = []
         return arches_user_info
+
 
     def get_token(self, clientid, arches_token):
         try:
@@ -61,6 +64,7 @@ class ArchesConnection():
         except:
             #self.dlg.connection_status.setText("Can't get Arches oauth2 token.")
             return arches_token
+
 
     def get_graphs(self, arches_graphs_list):
         try:
@@ -96,3 +100,41 @@ class ArchesConnection():
         except:
             pass
         return arches_graphs_list
+    
+
+    def connection_reset(self, 
+                         hard_reset, 
+                         self_obj):
+        """
+        Reset Arches connection
+        """
+        if hard_reset == True:
+            # Reset connection inputs
+            self_obj.dlg.connection_status.setText("Logged out of Arches instance. Please reconnect to use the plugin.")
+            self_obj.dlg.arches_server_input.setText("")
+            self_obj.dlg.username_input.setText("")
+            self_obj.dlg.password_input.setText("")
+            # Replace login tab with logged in tab
+            self_obj.dlg.tabWidget.setTabVisible(0, True)
+            self_obj.dlg.tabWidget.setTabVisible(1, False)
+            self_obj.dlg.tabWidget.setCurrentIndex(0)
+
+        # Reset stored data
+        self_obj.arches_user_info = {}
+        self_obj.arches_connection_cache = {}
+        self_obj.arches_token = {}
+        self_obj.arches_graphs_list = []
+        # Reset Create Resource tab as no longer useable
+        self_obj.dlg.createResModelSelect.setEnabled(False)
+        self_obj.dlg.createResFeatureSelect.setEnabled(False)
+        self_obj.dlg.addNewRes.setEnabled(False)
+        self_obj.dlg.createResOutputBox.setText("")
+        ## Set "Edit Resource" to false to begin with
+        self_obj.dlg.addEditRes.setEnabled(False)
+        self_obj.dlg.replaceEditRes.setEnabled(False)
+        self_obj.dlg.editResSelectFeatures.setEnabled(False)
+        self_obj.dlg.selectedResAttributeTable.setRowCount(0)
+        self_obj.dlg.selectedResAttributeTable.setEnabled(False)
+        self_obj.dlg.selectedResUUID.setText("Connect to your Arches instance to edit resources.")
+        # Hide multiple nodegroup dropdown
+        self_obj.dlg.geometryNodeSelect.setEnabled(False)
