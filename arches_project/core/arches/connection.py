@@ -2,6 +2,14 @@ import requests
 from datetime import datetime
 import os
 
+from qgis.core import (QgsProject, 
+                       QgsVectorLayer,
+                       QgsApplication, 
+                       QgsTask, 
+                       QgsMessageLog, 
+                       Qgis
+                       )
+
 class ArchesConnection():
     def __init__(self, url, username, password):
         self.url = url
@@ -138,3 +146,127 @@ class ArchesConnection():
         self_obj.dlg.selectedResUUID.setText("Connect to your Arches instance to edit resources.")
         # Hide multiple nodegroup dropdown
         self_obj.dlg.geometryNodeSelect.setEnabled(False)
+
+
+class ConnectionProcess(QgsTask):
+    def __init__(self, url, username, password, arch_obj):
+        super().__init__()
+        self.url = url
+        self.password = password
+        self.username = username
+        self.arch_obj = arch_obj
+
+    def run(self):
+        QgsMessageLog.logMessage('Started task')        
+        arches_connection = ArchesConnection(url=self.url,
+                                            username=self.username,
+                                            password=self.username)
+
+        clientid = arches_connection.get_client_id()
+        if clientid:
+            # If client id NOT None then connection has been made
+            # check cache first before firing connection again
+
+            # get/update user info on the logged in user
+            self.arch_obj.arches_user_info = {}
+            print("get user perms")
+            self.arch_obj.arches_user_info = arches_connection.get_user_permissions(self.arch_obj.arches_user_info)
+
+            # re-fetch graphs before checking cache as updates may have occurred
+            self.arch_obj.arches_graphs_list = []
+            print("Get graphs")
+            self.arch_obj.arches_graphs_list = arches_connection.get_graphs(self.arch_obj.arches_graphs_list)
+
+            if self.arch_obj.arches_connection_cache:
+                # IF THE CACHE IS UNCHANGED THEN DON'T REFIRE CONNECTION
+                if (self.arch_obj.dlg.arches_server_input.text() == self.arch_obj.arches_connection_cache["url"] and
+                    self.arch_obj.dlg.username_input.text() == self.arch_obj.arches_connection_cache["username"]):
+                    self.arch_obj.dlg.connection_status.setText("Connection reattempt prevented as login details remain unchanged. \nGraphs have been refetched to reflect changed made on Arches.")   
+                    # Re-fetch the graphs with updated list
+                    if self.arch_obj.arches_graphs_list:
+                        self.arch_obj.dlg.createResModelSelect.clear()
+                        self.arch_obj.dlg.createResModelSelect.addItems([graph["name"] for graph in self.arches_graphs_list])
+                    # Re-fill the comboboxes
+                    self.arch_obj.layers = [l for l in QgsProject.instance().mapLayers().values() if l.type() == QgsVectorLayer.VectorLayer if str(l.dataProvider().name()) != "postgres"] 
+                    self.arch_obj.dlg.createResFeatureSelect.clear()
+                    self.arch_obj.dlg.createResFeatureSelect.addItems([layer.name() for layer in self.arch_obj.layers])
+                    self.arch_obj.dlg.editResSelectFeatures.clear()
+                    self.arch_obj.dlg.editResSelectFeatures.addItems([layer.name() for layer in self.arch_obj.layers])
+                    return            
+
+            self.arch_obj.arches_token = arches_connection.get_token(clientid, self.arch_obj.arches_token)
+
+            if self.arch_obj.arches_token:
+                
+                # Store for preventing duplicate connection requests
+                self.arch_obj.arches_connection_cache = {"url": self.arch_obj.dlg.arches_server_input.text(),
+                                                "username": self.arch_obj.dlg.username_input.text()}
+                                    
+                if 2 in self.arch_obj.arches_user_info["groups"]:
+                    return True
+
+                else:
+                    return False
+            else:
+                return False
+        else:
+            return False
+            
+
+    def finished(self, result):
+        QgsMessageLog.logMessage("finished???")
+        if result:
+            if 2 in self.arch_obj.arches_user_info["groups"]:
+                # THIS IS THE RESOURCE EDITOR PERMISSION
+
+                self.arch_obj.dlg.connection_status.setText(f"Connected to Arches instance as user {self.arch_obj.dlg.username_input.text()}.")  
+                self.arch_obj.dlg.selectedResUUID.setText("Connected to Arches. Select an Arches resource to proceed.")
+
+                # Create resource tab
+                self.arch_obj.dlg.createResModelSelect.clear()
+                # get all vector layers
+                self.arch_obj.layers = [l for l in QgsProject.instance().mapLayers().values() if l.type() == QgsVectorLayer.VectorLayer if str(l.dataProvider().name()) != "postgres"] 
+
+                self.arch_obj.dlg.createResFeatureSelect.setEnabled(True)
+                self.arch_obj.dlg.createResFeatureSelect.clear()
+                self.arch_obj.dlg.createResFeatureSelect.addItems([layer.name() for layer in self.arch_obj.layers])
+                
+                if self.arch_obj.arches_graphs_list:
+                    self.arch_obj.dlg.createResModelSelect.setEnabled(True)
+                    self.arch_obj.dlg.createResModelSelect.addItems([graph["name"] for graph in self.arch_obj.arches_graphs_list])
+
+                    self.arch_obj.dlg.addNewRes.setEnabled(True)
+
+                # Edit resources tab
+                self.arch_obj.dlg.addEditRes.setEnabled(False)
+                self.arch_obj.dlg.replaceEditRes.setEnabled(False)
+                if self.arch_obj.arches_selected_resource["resourceinstanceid"]:
+                    self.arch_obj.dlg.addEditRes.setEnabled(True)
+                    self.arch_obj.dlg.replaceEditRes.setEnabled(True)
+                self.arch_obj.dlg.editResSelectFeatures.setEnabled(True)
+                self.arch_obj.dlg.editResSelectFeatures.clear()
+                self.arch_obj.dlg.editResSelectFeatures.addItems([layer.name() for layer in self.arch_obj.layers])
+                self.arch_obj.dlg.selectedResAttributeTable.setEnabled(True)
+
+                # Replace login tab with logged in tab
+                self.arch_obj.dlg.tabWidget.setTabVisible(0, False)
+                self.arch_obj.dlg.tabWidget.setTabVisible(1, True)
+                self.arch_obj.dlg.tabWidget.setCurrentIndex(1)
+
+                self.arch_obj.dlg.displayUser.setText(f"You are logged in as user: {self.arch_obj.dlg.username_input.text()}")
+                self.arch_obj.dlg.displayArchesURL.setText(f"Visit your Arches instance: {self.url}")
+                self.arch_obj.dlg.displayArchesURL.setOpenExternalLinks(True) #TODO: doesnt work
+
+            else:
+                ArchesConnection(None,None,None).connection_reset(hard_reset=True,
+                                                                self_obj=self.arch_obj)
+                self.arch_obj.dlg.connection_status.setText("This user does not have the permissions to create Arches resources.")
+        else:
+            ArchesConnection(None,None,None).connection_reset(hard_reset=True,
+                                                            self_obj=self.arch_obj)
+            self.arch_obj.dlg.connection_status.setText("Could not connect to Arches instance.")
+
+
+    def cancel(self):
+        QgsMessageLog.logMessage('task was canceled')
+        super().cancel()
