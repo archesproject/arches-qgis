@@ -556,4 +556,6 @@ class ArchesProject:
                                                       arch_obj=self)
                 QgsApplication.taskManager().addTask(arches_connection)
 
-                print("after ")
+                # A log message (or print) is required for the task to be run.
+                # It is an existing QGIS issue https://github.com/qgis/QGIS/issues/37655
+                QgsMessageLog.logMessage("Connection task started")

@@ -157,7 +157,6 @@ class ConnectionProcess(QgsTask):
         self.arch_obj = arch_obj
 
     def run(self):
-        QgsMessageLog.logMessage('Started task')        
         arches_connection = ArchesConnection(url=self.url,
                                             username=self.username,
                                             password=self.username)
@@ -169,12 +168,12 @@ class ConnectionProcess(QgsTask):
 
             # get/update user info on the logged in user
             self.arch_obj.arches_user_info = {}
-            print("get user perms")
+
             self.arch_obj.arches_user_info = arches_connection.get_user_permissions(self.arch_obj.arches_user_info)
 
             # re-fetch graphs before checking cache as updates may have occurred
             self.arch_obj.arches_graphs_list = []
-            print("Get graphs")
+
             self.arch_obj.arches_graphs_list = arches_connection.get_graphs(self.arch_obj.arches_graphs_list)
 
             if self.arch_obj.arches_connection_cache:
@@ -214,7 +213,6 @@ class ConnectionProcess(QgsTask):
             
 
     def finished(self, result):
-        QgsMessageLog.logMessage("finished???")
         if result:
             if 2 in self.arch_obj.arches_user_info["groups"]:
                 # THIS IS THE RESOURCE EDITOR PERMISSION
