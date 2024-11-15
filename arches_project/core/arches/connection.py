@@ -213,6 +213,8 @@ class ConnectionProcess(QgsTask):
             
 
     def finished(self, result):
+        self.arch_obj.dlg.tabWidget.show()
+        self.arch_obj.dlg.loading_wheel.hide()
         if result:
             if 2 in self.arch_obj.arches_user_info["groups"]:
                 # THIS IS THE RESOURCE EDITOR PERMISSION
@@ -266,5 +268,7 @@ class ConnectionProcess(QgsTask):
 
 
     def cancel(self):
+        self.arch_obj.dlg.tabWidget.show()
+        self.arch_obj.dlg.loading_wheel.hide()
         QgsMessageLog.logMessage('task was canceled')
         super().cancel()

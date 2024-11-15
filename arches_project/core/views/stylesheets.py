@@ -19,6 +19,8 @@ class PluginStylesheets:
         self.plugin_dir = plugin_dir
         self.on_start = on_start
 
+        self.dlg.loading_wheel.hide() # connection wheel label 
+
         if not self.dlg.useStylesheetCheckbox.isChecked():
             self.default_stylesheet()
         elif self.dlg.useStylesheetCheckbox.isChecked():
@@ -67,7 +69,7 @@ class PluginStylesheets:
 
 
     def arches_stylesheet(self):
-        # try:
+        try:
             self.dlg.useStylesheetCheckbox.setChecked(True)
             stylesheet_path = os.path.join(self.plugin_dir, "stylesheets", "arches_styling.qss")
             with open(stylesheet_path, "r") as f:
@@ -155,8 +157,8 @@ class PluginStylesheets:
             self.dlg.tabWidget.setTabText(5, "")
 
 
-        # except:
-        #     # Prevent the use of the Arches stylesheet if error occurs
-        #     self.default_stylesheet()
-        #     self.dlg.useStylesheetCheckbox.setEnabled(False)
-        #     self.dlg.useStylesheetCheckbox.setChecked(False)
+        except:
+            # Prevent the use of the Arches stylesheet if error occurs
+            self.default_stylesheet()
+            self.dlg.useStylesheetCheckbox.setEnabled(False)
+            self.dlg.useStylesheetCheckbox.setChecked(False)
