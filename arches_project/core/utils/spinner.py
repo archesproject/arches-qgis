@@ -1,8 +1,5 @@
-from PyQt5.QtCore import Qt, QPropertyAnimation, QPoint, QTimer
 from PyQt5 import QtCore, QtGui, QtWidgets
-from qgis.PyQt.QtGui import QPixmap, QPainter, QTransform
-from qgis.PyQt.QtCore import QDir, QSize
-
+from qgis.PyQt.QtGui import QPixmap
 import os
 
 
@@ -41,7 +38,6 @@ class triggerSpinner(QtWidgets.QWidget):
     def __init__(self, parent=None, arches_obj=None):
         super(triggerSpinner, self).__init__(parent)
 
-        label = Spinner(arches_obj, arches_obj.dlg.loading_wheel, )
-        # label.setAlignment(QtCore.Qt.AlignCenter)
-        label.set_pixmap(QPixmap(os.path.join(arches_obj.plugin_dir, "icons", "spinner.svg")))
-        label.start()
+        spinner = Spinner(arches_obj, arches_obj.dlg.loading_wheel, )
+        spinner.set_pixmap(QPixmap(os.path.join(arches_obj.plugin_dir, "icons", "spinner.svg")))
+        spinner.start()

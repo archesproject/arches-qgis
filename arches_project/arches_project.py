@@ -21,7 +21,6 @@
  *                                                                         *
  ***************************************************************************/
 """
-from PyQt5 import QtGui, QtWidgets
 from PyQt5.QtCore import Qt
 from qgis.PyQt.QtCore import QSettings, QTranslator, QCoreApplication, QDir
 from qgis.PyQt.QtGui import QIcon, QFontDatabase, QPixmap, QCursor, QTransform
@@ -60,9 +59,7 @@ from .core.views.stylesheets import PluginStylesheets
 from .core.views.logging import enable_logging
 
 from .core.utils.format_url import format_url
-
 from .core.utils.spinner import triggerSpinner
-
 
 import os.path
 import sys
