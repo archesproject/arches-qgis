@@ -21,6 +21,7 @@
  *                                                                         *
  ***************************************************************************/
 """
+from PyQt5 import QtGui, QtWidgets
 from PyQt5.QtCore import Qt
 from qgis.PyQt.QtCore import QSettings, QTranslator, QCoreApplication, QDir
 from qgis.PyQt.QtGui import QIcon, QFontDatabase, QPixmap, QCursor, QTransform
@@ -59,6 +60,9 @@ from .core.views.stylesheets import PluginStylesheets
 from .core.views.logging import enable_logging
 
 from .core.utils.format_url import format_url
+
+from .core.utils.spinner import triggerSpinner
+
 
 import os.path
 import sys
@@ -525,7 +529,6 @@ class ArchesProject:
         """
         Connection to Arches project server
         """
-            
         # reset connection status on button press
         self.dlg.connection_status.setText("")
 
@@ -555,6 +558,10 @@ class ArchesProject:
                                                       password=self.dlg.password_input.text(),
                                                       arch_obj=self)
                 QgsApplication.taskManager().addTask(arches_connection)
+
+                self.dlg.tabWidget.hide()
+                self.dlg.loading_wheel.show()
+                triggerSpinner(arches_obj=self)
 
                 # A log message (or print) is required for the task to be run.
                 # It is an existing QGIS issue https://github.com/qgis/QGIS/issues/37655
