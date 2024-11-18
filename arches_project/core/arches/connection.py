@@ -11,6 +11,7 @@ from qgis.core import (QgsProject,
                        )
 
 class ArchesConnection():
+    """ Class for Arches APIs """
     def __init__(self, url, username, password):
         self.url = url
         self.password = password
@@ -122,6 +123,8 @@ class ArchesConnection():
             self_obj.dlg.arches_server_input.setText("")
             self_obj.dlg.username_input.setText("")
             self_obj.dlg.password_input.setText("")
+            self_obj.dlg.displayUser.setText("")
+            self_obj.dlg.displayArchesURL.setText("")
             # Replace login tab with logged in tab
             self_obj.dlg.tabWidget.setTabVisible(0, True)
             self_obj.dlg.tabWidget.setTabVisible(1, False)
@@ -149,6 +152,7 @@ class ArchesConnection():
 
 
 class ConnectionProcess(QgsTask):
+    """ Connecting to Arches via QGIS task and updating the UI """
     def __init__(self, url, username, password, arch_obj):
         super().__init__()
         self.url = url
@@ -159,7 +163,7 @@ class ConnectionProcess(QgsTask):
     def run(self):
         arches_connection = ArchesConnection(url=self.url,
                                             username=self.username,
-                                            password=self.username)
+                                            password=self.password)
 
         clientid = arches_connection.get_client_id()
         if clientid:
@@ -213,50 +217,54 @@ class ConnectionProcess(QgsTask):
             
 
     def finished(self, result):
+        def update_login_tab():
+            # Replace login tab with logged in tab
+            self.arch_obj.dlg.tabWidget.setTabVisible(0, False)
+            self.arch_obj.dlg.tabWidget.setTabVisible(1, True)
+            self.arch_obj.dlg.tabWidget.setCurrentIndex(1)
+
+            self.arch_obj.dlg.displayUser.setText(f"You are logged in as user: {self.arch_obj.dlg.username_input.text()}")
+            self.arch_obj.dlg.displayArchesURL.setText(f"Visit your Arches instance: {self.url}")
+            self.arch_obj.dlg.displayArchesURL.setOpenExternalLinks(True) #TODO: doesnt work
+
+            self.arch_obj.dlg.connection_status.setText(f"Connected to Arches instance as user {self.arch_obj.dlg.username_input.text()}.")  
+
+        def update_create_resources_tab():
+            self.arch_obj.dlg.createResModelSelect.clear()
+            # get all vector layers
+            self.arch_obj.layers = [l for l in QgsProject.instance().mapLayers().values() if l.type() == QgsVectorLayer.VectorLayer if str(l.dataProvider().name()) != "postgres"] 
+
+            self.arch_obj.dlg.createResFeatureSelect.setEnabled(True)
+            self.arch_obj.dlg.createResFeatureSelect.clear()
+            self.arch_obj.dlg.createResFeatureSelect.addItems([layer.name() for layer in self.arch_obj.layers])
+            
+            if self.arch_obj.arches_graphs_list:
+                self.arch_obj.dlg.createResModelSelect.setEnabled(True)
+                self.arch_obj.dlg.createResModelSelect.addItems([graph["name"] for graph in self.arch_obj.arches_graphs_list])
+                self.arch_obj.dlg.addNewRes.setEnabled(True)
+
+        def update_edit_resources_tab():
+            self.arch_obj.dlg.addEditRes.setEnabled(False)
+            self.arch_obj.dlg.replaceEditRes.setEnabled(False)
+            if self.arch_obj.arches_selected_resource["resourceinstanceid"]:
+                self.arch_obj.dlg.addEditRes.setEnabled(True)
+                self.arch_obj.dlg.replaceEditRes.setEnabled(True)
+            self.arch_obj.dlg.editResSelectFeatures.setEnabled(True)
+            self.arch_obj.dlg.editResSelectFeatures.clear()
+            self.arch_obj.dlg.editResSelectFeatures.addItems([layer.name() for layer in self.arch_obj.layers])
+            self.arch_obj.dlg.selectedResAttributeTable.setEnabled(True)
+            self.arch_obj.dlg.selectedResUUID.setText("Connected to Arches. Select an Arches resource to proceed.")
+
+
         self.arch_obj.dlg.tabWidget.show()
         self.arch_obj.dlg.loading_wheel.hide()
+
         if result:
             if 2 in self.arch_obj.arches_user_info["groups"]:
                 # THIS IS THE RESOURCE EDITOR PERMISSION
-
-                self.arch_obj.dlg.connection_status.setText(f"Connected to Arches instance as user {self.arch_obj.dlg.username_input.text()}.")  
-                self.arch_obj.dlg.selectedResUUID.setText("Connected to Arches. Select an Arches resource to proceed.")
-
-                # Create resource tab
-                self.arch_obj.dlg.createResModelSelect.clear()
-                # get all vector layers
-                self.arch_obj.layers = [l for l in QgsProject.instance().mapLayers().values() if l.type() == QgsVectorLayer.VectorLayer if str(l.dataProvider().name()) != "postgres"] 
-
-                self.arch_obj.dlg.createResFeatureSelect.setEnabled(True)
-                self.arch_obj.dlg.createResFeatureSelect.clear()
-                self.arch_obj.dlg.createResFeatureSelect.addItems([layer.name() for layer in self.arch_obj.layers])
-                
-                if self.arch_obj.arches_graphs_list:
-                    self.arch_obj.dlg.createResModelSelect.setEnabled(True)
-                    self.arch_obj.dlg.createResModelSelect.addItems([graph["name"] for graph in self.arch_obj.arches_graphs_list])
-
-                    self.arch_obj.dlg.addNewRes.setEnabled(True)
-
-                # Edit resources tab
-                self.arch_obj.dlg.addEditRes.setEnabled(False)
-                self.arch_obj.dlg.replaceEditRes.setEnabled(False)
-                if self.arch_obj.arches_selected_resource["resourceinstanceid"]:
-                    self.arch_obj.dlg.addEditRes.setEnabled(True)
-                    self.arch_obj.dlg.replaceEditRes.setEnabled(True)
-                self.arch_obj.dlg.editResSelectFeatures.setEnabled(True)
-                self.arch_obj.dlg.editResSelectFeatures.clear()
-                self.arch_obj.dlg.editResSelectFeatures.addItems([layer.name() for layer in self.arch_obj.layers])
-                self.arch_obj.dlg.selectedResAttributeTable.setEnabled(True)
-
-                # Replace login tab with logged in tab
-                self.arch_obj.dlg.tabWidget.setTabVisible(0, False)
-                self.arch_obj.dlg.tabWidget.setTabVisible(1, True)
-                self.arch_obj.dlg.tabWidget.setCurrentIndex(1)
-
-                self.arch_obj.dlg.displayUser.setText(f"You are logged in as user: {self.arch_obj.dlg.username_input.text()}")
-                self.arch_obj.dlg.displayArchesURL.setText(f"Visit your Arches instance: {self.url}")
-                self.arch_obj.dlg.displayArchesURL.setOpenExternalLinks(True) #TODO: doesnt work
-
+                update_login_tab()
+                update_edit_resources_tab()
+                update_create_resources_tab()
             else:
                 ArchesConnection(None,None,None).connection_reset(hard_reset=True,
                                                                 self_obj=self.arch_obj)
