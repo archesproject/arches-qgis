@@ -9,6 +9,7 @@ from qgis.core import (QgsProject,
                        QgsMessageLog, 
                        Qgis
                        )
+from ..utils.spinner import triggerSpinner
 
 class ArchesConnection():
     """ Class for Arches APIs """
@@ -255,9 +256,7 @@ class ConnectionProcess(QgsTask):
             self.arch_obj.dlg.selectedResAttributeTable.setEnabled(True)
             self.arch_obj.dlg.selectedResUUID.setText("Connected to Arches. Select an Arches resource to proceed.")
 
-
-        self.arch_obj.dlg.tabWidget.show()
-        self.arch_obj.dlg.loading_wheel.hide()
+        triggerSpinner(arches_obj=self.arch_obj).hide_spinner()
 
         if result:
             if 2 in self.arch_obj.arches_user_info["groups"]:
@@ -276,7 +275,6 @@ class ConnectionProcess(QgsTask):
 
 
     def cancel(self):
-        self.arch_obj.dlg.tabWidget.show()
-        self.arch_obj.dlg.loading_wheel.hide()
+        triggerSpinner(arches_obj=self.arch_obj).hide_spinner()
         QgsMessageLog.logMessage('task was canceled')
         super().cancel()

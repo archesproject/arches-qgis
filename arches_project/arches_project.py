@@ -556,9 +556,8 @@ class ArchesProject:
                                                       arch_obj=self)
                 QgsApplication.taskManager().addTask(arches_connection)
 
-                self.dlg.tabWidget.hide()
-                self.dlg.loading_wheel.show()
-                triggerSpinner(arches_obj=self)
+                spinner = triggerSpinner(arches_obj=self)
+                spinner.start_spinner()
 
                 # A log message (or print) is required for the task to be run.
                 # It is an existing QGIS issue https://github.com/qgis/QGIS/issues/37655
