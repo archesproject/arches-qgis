@@ -6,7 +6,7 @@
 name=Arches Project
 qgisMinimumVersion=3.0
 description=A plugin that links QGIS to an Arches project.
-version=0.1
+version=1.0.0a
 author=Knowledge Integration
 email=samuel.scandrett@k-int.co.uk
 
@@ -40,7 +40,7 @@ deprecated=False
 # plugin_dependencies=
 
 Category of the plugin: Raster, Vector, Database or Web
-# category=
+# category=Web
 
 # If the plugin can run on QGIS Server.
 server=False
