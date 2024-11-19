@@ -17,7 +17,6 @@ class Spinner(QtWidgets.QLabel):
         self.arches_obj = arches_obj
     
     def start(self):
-        # Lets start
         self._animation.setLoopCount(-1)        
         if self._animation.state() != QtCore.QAbstractAnimation.Running:
             self._animation.start(QtCore.QAbstractAnimation.DeletionPolicy.KeepWhenStopped)
@@ -37,7 +36,18 @@ class Spinner(QtWidgets.QLabel):
 class triggerSpinner(QtWidgets.QWidget):
     def __init__(self, parent=None, arches_obj=None):
         super(triggerSpinner, self).__init__(parent)
+        self.arches_obj = arches_obj
+        self.spinner = Spinner(arches_obj, arches_obj.dlg.loading_wheel, )
+        self.spinner.set_pixmap(QPixmap(os.path.join(arches_obj.plugin_dir, "icons", "spinner.svg")))
 
-        spinner = Spinner(arches_obj, arches_obj.dlg.loading_wheel, )
-        spinner.set_pixmap(QPixmap(os.path.join(arches_obj.plugin_dir, "icons", "spinner.svg")))
-        spinner.start()
+    def start_spinner(self):
+        self.reveal_spinner()
+        self.spinner.start()
+    
+    def reveal_spinner(self):
+        self.arches_obj.dlg.tabWidget.hide()
+        self.arches_obj.dlg.loading_wheel.show()
+
+    def hide_spinner(self):
+        self.arches_obj.dlg.tabWidget.show()
+        self.arches_obj.dlg.loading_wheel.hide()
