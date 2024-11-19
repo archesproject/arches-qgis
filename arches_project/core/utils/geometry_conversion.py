@@ -1,42 +1,51 @@
-def geometry_conversion(selectedLayer):
-    """
-    Convert QGIS geometries into Arches
-    """
+from qgis.core import (QgsProject,
+                       QgsCoordinateReferenceSystem,
+                       QgsCoordinateTransform,
+                       QgsCoordinateTransformContext,
+                       )
 
-    # TODO: QGIS stores all polygons named as multipolygons even though they're separate and 
-    # all multipoints as individual multipoints - these should be separated 
-    geom_and_count = {} # to store geom type and how many 
+class Geometries():
+    def __init__(self, selectedLayer):
+        self.selectedLayer = selectedLayer
+        self.selected_layer_crs = selectedLayer.crs()
+        self.arches_crs = QgsCoordinateReferenceSystem(4326)
+        # note that qgscoordinatereferencesystem is deprecated
 
-    # Find what type and how many we are dealing with
-    # for feature in selectedLayer.getFeatures():
-    #     geomtype = str(feature.geometry().type()).split(".")
-    #     if geomtype[-1] not in geom_and_count:
-    #         geom_and_count[geomtype[-1]] = 1
-    #     else:
-    #         geom_and_count[geomtype[-1]] += 1
-    #     print(feature.geometry().asPolygon())
-
-    # if "Polygon" in geom_and_count.keys():
-    #     if geom_and_count["Polygon"] == 1:
-    #         all_features = [feature.geometry().asWkt() for feature in selectedLayer.getFeatures()]
-    #         combined_feature = (','.join(all_features))
-    #         combined_feature = combined_feature.replace("MultiPolygon","Polygon")
-    #         return combined_feature
-
-    # Return info for the confirmation dialog text box
-    geometry_type_dict = {}
-
-    for feature in selectedLayer.getFeatures():
-        geom = feature.geometry()
-        geomtype = str(geom.type()).split(".")
-        if geomtype[-1] not in geometry_type_dict:
-            geometry_type_dict[geomtype[-1]] = 1
+    def coordinate_transform(self, geom):
+        if self.selected_layer_crs != self.arches_crs:
+            tr = QgsCoordinateTransform(self.selected_layer_crs,
+                                                     self.arches_crs,
+                                                     QgsProject.instance())
+            
+            geom.transform(tr)
+            return geom
         else:
-            geometry_type_dict[geomtype[-1]] += 1
+            return geom
 
-    # Would use shapely to create GEOMETRYCOLLECTION but that'd require users to install the dependency themselves
-    # this is the alternative        
-    all_features = [feature.geometry().asWkt() for feature in selectedLayer.getFeatures()]
-    geomcoll = "GEOMETRYCOLLECTION (%s)" % (','.join(all_features))
-    
-    return geomcoll, geometry_type_dict
+    def geometry_conversion(self):
+        """
+        Convert QGIS geometries into Arches format
+        """
+        # Return info for the confirmation dialog text box
+        geometry_type_dict = {}
+        all_features = []
+
+        for feature in self.selectedLayer.getFeatures():
+            geom = feature.geometry()
+            geom = self.coordinate_transform(geom)
+            all_features.append(geom.asWkt())
+
+            # Store types 
+            geomtype = str(geom.type()).split(".")
+            if geomtype[-1] not in geometry_type_dict:
+                geometry_type_dict[geomtype[-1]] = 1
+            else:
+                geometry_type_dict[geomtype[-1]] += 1
+
+        # Would use shapely to create GEOMETRYCOLLECTION but that'd require users to install the dependency themselves
+        # this is the alternative        
+        # all_features = [feature.geometry().asWkt() for feature in self.selectedLayer.getFeatures()] 
+        # removed for conversion
+        geomcoll = "GEOMETRYCOLLECTION (%s)" % (','.join(all_features))
+        
+        return geomcoll, geometry_type_dict

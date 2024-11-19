@@ -1,4 +1,4 @@
-from ..utils.geometry_conversion import geometry_conversion
+from ..utils.geometry_conversion import Geometries
 
 import requests
 
@@ -87,7 +87,8 @@ class ArchesResources:
             nodegroup_id = selectedGraph["geometry_node_data"][node_id]["nodegroup_id"]
             selectedNode = {"node_id": node_id, "nodegroup_id": nodegroup_id, "name": selectedGraph["geometry_node_data"][node_id]["name"]}
 
-        geomcoll, geometry_type_dict = geometry_conversion(selectedLayer)
+        geom_convert = Geometries(selectedLayer)
+        geomcoll, geometry_type_dict = geom_convert.geometry_conversion()
      
         # Format text box
         dlg_resource_creation.infoText.viewport().setAutoFillBackground(False) # Sets the text box to be invisible
@@ -139,7 +140,8 @@ class ArchesResources:
             selectedLayerIndex = dlg.editResSelectFeatures.currentIndex()
             selectedLayer = self.layers[selectedLayerIndex]
 
-            geomcoll, geometry_type_dict = geometry_conversion(selectedLayer)
+            geom_convert = Geometries(selectedLayer)
+            geomcoll, geometry_type_dict = geom_convert.geometry_conversion()
 
             # Get nodegroup from graph
             for graph in self.arches_graphs_list:
