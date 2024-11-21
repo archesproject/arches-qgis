@@ -206,11 +206,7 @@ class ConnectionProcess(QgsTask):
                 self.arch_obj.arches_connection_cache = {"url": self.arch_obj.dlg.arches_server_input.text(),
                                                 "username": self.arch_obj.dlg.username_input.text()}
                                     
-                if 2 in self.arch_obj.arches_user_info["groups"]:
-                    return True
-
-                else:
-                    return False
+                return True # return true for all, even if user doesn't have perms as this will be dealt with in finished()
             else:
                 return False
         else:
@@ -232,9 +228,6 @@ class ConnectionProcess(QgsTask):
 
         def update_create_resources_tab():
             self.arch_obj.dlg.createResModelSelect.clear()
-            # get all vector layers
-            self.arch_obj.layers = [l for l in QgsProject.instance().mapLayers().values() if l.type() == QgsVectorLayer.VectorLayer if str(l.dataProvider().name()) != "postgres"] 
-
             self.arch_obj.dlg.createResFeatureSelect.setEnabled(True)
             self.arch_obj.dlg.createResFeatureSelect.clear()
             self.arch_obj.dlg.createResFeatureSelect.addItems([layer.name() for layer in self.arch_obj.layers])
@@ -261,6 +254,10 @@ class ConnectionProcess(QgsTask):
         if result:
             if 2 in self.arch_obj.arches_user_info["groups"]:
                 # THIS IS THE RESOURCE EDITOR PERMISSION
+
+                # get all vector layers
+                self.arch_obj.layers = [l for l in QgsProject.instance().mapLayers().values() if l.type() == QgsVectorLayer.VectorLayer if str(l.dataProvider().name()) != "postgres"] 
+
                 update_login_tab()
                 update_edit_resources_tab()
                 update_create_resources_tab()
