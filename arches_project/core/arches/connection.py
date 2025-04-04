@@ -1,6 +1,7 @@
 import requests
 from datetime import datetime
 import os
+from ..utils.error_handler import error, warning, information, success
 
 from qgis.core import (QgsProject, 
                        QgsVectorLayer,
@@ -266,6 +267,7 @@ class ConnectionProcess(QgsTask):
                                                                 self_obj=self.arch_obj)
                 self.arch_obj.dlg.connection_status.setText("This user does not have the permissions to create Arches resources.")
         else:
+            error(self.arch_obj.iface, "Failed to connect to Arches instance." )
             ArchesConnection(None,None,None).connection_reset(hard_reset=True,
                                                             self_obj=self.arch_obj)
             self.arch_obj.dlg.connection_status.setText("Could not connect to Arches instance.")
