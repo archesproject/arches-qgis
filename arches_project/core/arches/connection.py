@@ -1,7 +1,7 @@
 import requests
 from datetime import datetime
 import os
-from ..utils.error_handler import error, warning, information, success
+from ..utils.qgis_messaging import show_message
 
 from qgis.core import (QgsProject, 
                        QgsVectorLayer,
@@ -115,16 +115,16 @@ class ArchesConnection():
 
     def connection_reset(self, 
                          hard_reset, 
-                         self_obj):
+                         self_obj,
+                         manual_logout=False):
         """
         Reset Arches connection
         """
         if hard_reset == True:
             # Reset connection inputs
-            self_obj.dlg.connection_status.setText("Logged out of Arches instance. Please reconnect to use the plugin.")
-            self_obj.dlg.arches_server_input.setText("")
-            self_obj.dlg.username_input.setText("")
-            self_obj.dlg.password_input.setText("")
+            self_obj.dlg.archesServerInput.setText("")
+            self_obj.dlg.usernameInput.setText("")
+            self_obj.dlg.passwordInput.setText("")
             self_obj.dlg.displayUser.setText("")
             self_obj.dlg.displayArchesURL.setText("")
             # Replace login tab with logged in tab
@@ -152,6 +152,8 @@ class ArchesConnection():
         # Hide multiple nodegroup dropdown
         self_obj.dlg.geometryNodeSelect.setEnabled(False)
 
+        if manual_logout:
+            show_message(self_obj.iface, "information", "Logged out of Arches instance. Please reconnect to use the plugin.")
 
 class ConnectionProcess(QgsTask):
     """ Connecting to Arches via QGIS task and updating the UI """
@@ -184,9 +186,9 @@ class ConnectionProcess(QgsTask):
 
             if self.arch_obj.arches_connection_cache:
                 # IF THE CACHE IS UNCHANGED THEN DON'T REFIRE CONNECTION
-                if (self.arch_obj.dlg.arches_server_input.text() == self.arch_obj.arches_connection_cache["url"] and
-                    self.arch_obj.dlg.username_input.text() == self.arch_obj.arches_connection_cache["username"]):
-                    self.arch_obj.dlg.connection_status.setText("Connection reattempt prevented as login details remain unchanged. \nGraphs have been refetched to reflect changed made on Arches.")   
+                if (self.arch_obj.dlg.archesServerInput.text() == self.arch_obj.arches_connection_cache["url"] and
+                    self.arch_obj.dlg.usernameInput.text() == self.arch_obj.arches_connection_cache["username"]):
+                    print("Connection reattempt prevented as login details remain unchanged. \nGraphs have been refetched to reflect changed made on Arches.")   
                     # Re-fetch the graphs with updated list
                     if self.arch_obj.arches_graphs_list:
                         self.arch_obj.dlg.createResModelSelect.clear()
@@ -204,8 +206,8 @@ class ConnectionProcess(QgsTask):
             if self.arch_obj.arches_token:
                 
                 # Store for preventing duplicate connection requests
-                self.arch_obj.arches_connection_cache = {"url": self.arch_obj.dlg.arches_server_input.text(),
-                                                "username": self.arch_obj.dlg.username_input.text()}
+                self.arch_obj.arches_connection_cache = {"url": self.arch_obj.dlg.archesServerInput.text(),
+                                                "username": self.arch_obj.dlg.usernameInput.text()}
                                     
                 return True # return true for all, even if user doesn't have perms as this will be dealt with in finished()
             else:
@@ -221,11 +223,9 @@ class ConnectionProcess(QgsTask):
             self.arch_obj.dlg.tabWidget.setTabVisible(1, True)
             self.arch_obj.dlg.tabWidget.setCurrentIndex(1)
 
-            self.arch_obj.dlg.displayUser.setText(f"You are logged in as user: {self.arch_obj.dlg.username_input.text()}")
+            self.arch_obj.dlg.displayUser.setText(f"You are logged in as user: {self.arch_obj.dlg.usernameInput.text()}")
             self.arch_obj.dlg.displayArchesURL.setText(f"Visit your Arches instance: {self.url}")
             self.arch_obj.dlg.displayArchesURL.setOpenExternalLinks(True) #TODO: doesnt work
-
-            self.arch_obj.dlg.connection_status.setText(f"Connected to Arches instance as user {self.arch_obj.dlg.username_input.text()}.")  
 
         def update_create_resources_tab():
             self.arch_obj.dlg.createResModelSelect.clear()
@@ -265,12 +265,11 @@ class ConnectionProcess(QgsTask):
             else:
                 ArchesConnection(None,None,None).connection_reset(hard_reset=True,
                                                                 self_obj=self.arch_obj)
-                self.arch_obj.dlg.connection_status.setText("This user does not have the permissions to create Arches resources.")
+                show_message(self.arch_obj.iface, "Warning", "Login prevented: This user does not have the permissions to create Arches resources.")
         else:
-            error(self.arch_obj.iface, "Failed to connect to Arches instance." )
+            show_message(self.arch_obj.iface, "Error", "Failed to connect to Arches instance." )
             ArchesConnection(None,None,None).connection_reset(hard_reset=True,
                                                             self_obj=self.arch_obj)
-            self.arch_obj.dlg.connection_status.setText("Could not connect to Arches instance.")
 
 
     def cancel(self):
