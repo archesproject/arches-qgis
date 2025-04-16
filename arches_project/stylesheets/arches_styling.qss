@@ -20,6 +20,14 @@ QLabel#loginSuccess {
     font-weight: 550;
     color: #2f527a;
 }
+QLabel#signInLabel {
+    font-size: 34px;
+    font-weight: 300;
+}
+QLabel#signInDescriptionLabel {
+    font-size: 18px;
+    font-weight: 300;
+}
 
 
 QTextEdit {
@@ -31,7 +39,7 @@ QTextEdit {
 
 
 QFrame {
-    background-color: #FFF;
+    background-color: #FFFFFF;
 }
 QFrame#connectionButtons, QFrame#logoutFrame, QFrame#archesURLFrame, QFrame#archesUserFrame {
     border: 0;
@@ -68,11 +76,11 @@ QPushButton {
     font-weight: 600;
     border-radius: 0;
 }
-QPushButton#btnSave {
+QPushButton#btnConnect {
     background-color: #579ddb;
     border-color: #5fa2dd;
 }
-QPushButton#btnSave:hover {
+QPushButton#btnConnect:hover {
     background-color: #337ab7;
     border-color: #2e6da4;
 }
@@ -110,7 +118,7 @@ QGroupBox {
     font-size: 15px;
     font-weight: 550;
     color: #2f527a;
-    background-color: #FFF;
+    background-color: white;
 }
 
 

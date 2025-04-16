@@ -60,6 +60,7 @@ from .core.views.logging import enable_logging
 
 from .core.utils.format_url import format_url
 from .core.utils.spinner import triggerSpinner
+from .core.utils.qgis_messaging import show_message
 
 import os.path
 import sys
@@ -278,10 +279,11 @@ class ArchesProject:
             self.map_selection()
 
             # Connection to Arches instance
-            self.dlg.btnSave.clicked.connect(self.arches_connection_save)
+            self.dlg.btnConnect.clicked.connect(self.arches_connection_save)
             self.dlg.btnReset.clicked.connect(lambda: ArchesConnection(None, None, None).
                                               connection_reset(hard_reset=True,
-                                                                self_obj=self))
+                                                                self_obj=self,
+                                                                manual_logout=True))
 
             # Get the map selection and update when changed
             self.iface.mapCanvas().selectionChanged.connect(self.map_selection)
@@ -527,32 +529,28 @@ class ArchesProject:
         Connection to Arches project server
         """
         # reset connection status on button press
-        self.dlg.connection_status.setText("")
-
         is_valid_input = True
-        if self.dlg.arches_server_input.text() == "" or str(self.dlg.arches_server_input.text()).isspace() == True:
-            self.dlg.connection_status.append("Please enter the URL to your Arches project.")
+        if self.dlg.archesServerInput.text() == "" or str(self.dlg.archesServerInput.text()).isspace() == True:
+            show_message(self.iface, "error", "Please enter the URL to your Arches project.")
             is_valid_input = False
-        if self.dlg.username_input.text() == "":    
-            self.dlg.connection_status.append("Please enter your username.")
+        if self.dlg.usernameInput.text() == "":    
+            show_message(self.iface, "error", "Please enter your username.")
             is_valid_input = False
-        if self.dlg.password_input.text() == "":
-            self.dlg.connection_status.append("Please enter your password.")
+        if self.dlg.passwordInput.text() == "":
+            show_message(self.iface, "error", "Please enter your password.")
             is_valid_input = False
 
 
         # URL field has data in
         if is_valid_input == True:
-            if self.dlg.arches_server_input.text() != "":
+            if self.dlg.archesServerInput.text() != "":
                 # format URL
-                formatted_url = format_url(self.dlg.arches_server_input.text())
-
-                self.dlg.connection_status.setText("Connecting...")
+                formatted_url = format_url(self.dlg.archesServerInput.text())
 
                 # Adding arches connection to task queue
                 arches_connection = ConnectionProcess(url=formatted_url, 
-                                                      username=self.dlg.username_input.text(), 
-                                                      password=self.dlg.password_input.text(),
+                                                      username=self.dlg.usernameInput.text(), 
+                                                      password=self.dlg.passwordInput.text(),
                                                       arch_obj=self)
                 QgsApplication.taskManager().addTask(arches_connection)
 
