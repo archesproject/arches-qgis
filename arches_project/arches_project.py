@@ -57,6 +57,7 @@ from .core.arches.resources import ArchesResources
 
 from .core.views.stylesheets import PluginStylesheets
 from .core.views.logging import enable_logging
+from .core.views.components.missing_credentials import missing_credentials
 
 from .core.utils.format_url import format_url
 from .core.utils.spinner import triggerSpinner
@@ -102,9 +103,8 @@ class ArchesProject:
         # Check if plugin was started the first time in current QGIS session
         # Must be set in initGui() to survive plugin reloads
         self.first_start = None
-        
-        # Comfirmation additional dialogs 
 
+        # Comfirmation additional dialogs
 
         ## ARCHES PLUGIN SPECIFIC VARIABLES
         # Cache connection details to prevent firing duplicate connections
@@ -120,7 +120,6 @@ class ArchesProject:
                                          "tileid": ""
                                         }
 
-
     # noinspection PyMethodMayBeStatic
     def tr(self, message):
         """Get the translation for a string using Qt translation API.
@@ -135,7 +134,6 @@ class ArchesProject:
         """
         # noinspection PyTypeChecker,PyArgumentList,PyCallByClass
         return QCoreApplication.translate('ArchesProject', message)
-
 
     def add_action(
         self,
@@ -227,7 +225,6 @@ class ArchesProject:
         # will be set False in run()
         self.first_start = True
 
-
     def unload(self):
         """Removes the plugin menu item and icon from QGIS GUI."""
         for action in self.actions:
@@ -235,7 +232,6 @@ class ArchesProject:
                 self.tr(u'&Arches Project'),
                 action)
             self.iface.removeToolBarIcon(action)
-
 
     def run(self):
         """Run method that performs all the real work"""
@@ -292,7 +288,7 @@ class ArchesProject:
             self.dlg.createResModelSelect.setEnabled(False)
             self.dlg.createResFeatureSelect.setEnabled(False)
             self.dlg.addNewRes.setEnabled(False)
-                
+
             # to run when layer is changed in create resource and edit resource tabs
             self.dlg.hidePostgresLayers.setChecked(True)
             self.dlg.createResFeatureSelect.highlighted.connect(lambda: self.update_map_layers(checkbox=self.dlg.hidePostgresLayers))
@@ -312,7 +308,7 @@ class ArchesProject:
             self.dlg.addEditRes.setEnabled(False)
             self.dlg.replaceEditRes.setEnabled(False)
             self.dlg.editResSelectFeatures.setEnabled(False)
-            #self.dlg.selectedResAttributeTable.setRowCount(0)
+            # self.dlg.selectedResAttributeTable.setRowCount(0)
             self.dlg.selectedResAttributeTable.setEnabled(False)
 
             self.dlg.addEditRes.clicked.connect(lambda: self.edit_resource(replace=False))
@@ -324,8 +320,6 @@ class ArchesProject:
             # Check if selected graph has multiple geometry nodes
             self.dlg.createResModelSelect.currentIndexChanged.connect(self.multiple_geometry_node_check)
 
-
-
         # show the dialog
         self.dlg.show()
         # Run the dialog event loop
@@ -335,7 +329,6 @@ class ArchesProject:
             # Do something useful here - delete the line containing pass and
             # substitute with your code.
             pass
-
 
     def map_selection(self):
         """
@@ -355,7 +348,7 @@ class ArchesProject:
         print("layer:",active_layer, "features:",features)
 
         if features:
-            
+
             if len(features) > 1:
                 print("Select one feature")
                 self.dlg.selectedResAttributeTable.setRowCount(0)
@@ -364,7 +357,7 @@ class ArchesProject:
                 else:
                     self.dlg.selectedResUUID.setText("Connect to your Arches instance to edit resources.")
                 return
-            
+
             elif len(features) == 0:
                 print("No feature selected")
                 self.dlg.selectedResAttributeTable.setRowCount(0)
@@ -375,12 +368,12 @@ class ArchesProject:
                 else:
                     self.dlg.selectedResUUID.setText("Connect to your Arches instance to edit resources.")
                 return
-            
+
             else:
                 print("FEATURE SELECTED")
                 for f in features:
                     if "resourceinstanceid" in f.attributeMap():
-                        
+
                         # Initialise attribute table in the plugin window if the geom is recognised as an Arches res
                         # if initialised when arches_token exists then would have to click off and back on to recognise
                         no_rows = len(f.attributes())
@@ -419,15 +412,11 @@ class ArchesProject:
                             self.dlg.addEditRes.setEnabled(False)
                             self.dlg.replaceEditRes.setEnabled(False)
 
-                    
                     else: 
                         if self.arches_token:
                             self.dlg.selectedResUUID.setText("The feature selected is not an Arches resource.")
                         else:
                             self.dlg.selectedResUUID.setText("Connect to your Arches instance to edit resources.")
-
-
-
 
     def update_map_layers(self, checkbox):
         """
@@ -436,15 +425,12 @@ class ArchesProject:
 
         if checkbox.isChecked():
             all_current_layers = [l for l in QgsProject.instance().mapLayers().values() if l.type() == QgsVectorLayer.VectorLayer if str(l.dataProvider().name()) != "postgres"] 
-        
+
         elif not checkbox.isChecked():
             all_current_layers = [l for l in QgsProject.instance().mapLayers().values() if l.type() == QgsVectorLayer.VectorLayer]
 
         if self.layers != all_current_layers:
             self.layers = all_current_layers
-
-
-
 
     def show_hide_psql_layers(self, combobox1, combobox2):
         """
@@ -458,7 +444,6 @@ class ArchesProject:
             c.addItems([layer.name() for layer in self.layers])
             c.blockSignals(False)
 
-   
         if self.dlg.hidePostgresLayers.isChecked():
             self.layers = [l for l in QgsProject.instance().mapLayers().values() if l.type() == QgsVectorLayer.VectorLayer if str(l.dataProvider().name()) != "postgres"]
             change_both_comboboxes(combobox1)
@@ -468,8 +453,6 @@ class ArchesProject:
             self.layers = [l for l in QgsProject.instance().mapLayers().values() if l.type() == QgsVectorLayer.VectorLayer]
             change_both_comboboxes(combobox1)
             change_both_comboboxes(combobox2)
-
-
 
     def multiple_geometry_node_check(self):
         selectedGraphIndex = self.dlg.createResModelSelect.currentIndex()
@@ -487,9 +470,6 @@ class ArchesProject:
                 self.dlg.geometryNodeSelect.clear()
                 self.dlg.geometryNodeSelect.addItems([n["name"] for n in self.geometry_nodes])
                 self.dlg.geometryNodeSelectFrame.show()
-            
-
-
 
     def create_resource(self):
         """Create Resource dialog and functionality"""
@@ -503,8 +483,6 @@ class ArchesProject:
                                                  geometry_nodes=self.geometry_nodes)
         arches_create_resource.create_resource(dlg=self.dlg,
                                                dlg_resource_creation=self.dlg_resource_creation)
-
-
 
     def edit_resource(self, replace):
         """Save geometries to existing resource - either replace or add"""
@@ -522,41 +500,54 @@ class ArchesProject:
                                            dlg_edit_resource_replace=self.dlg_edit_resource_replace, 
                                            dlg_edit_resource_add=self.dlg_edit_resource_add)
 
-
-
     def arches_connection_save(self):
         """
         Connection to Arches project server
         """
-        # reset connection status on button press
-        is_valid_input = True
-        if self.dlg.archesServerInput.text() == "" or str(self.dlg.archesServerInput.text()).isspace() == True:
-            show_message(self.iface, "error", "Please enter the URL to your Arches project.")
-            is_valid_input = False
-        if self.dlg.usernameInput.text() == "":    
-            show_message(self.iface, "error", "Please enter your username.")
-            is_valid_input = False
-        if self.dlg.passwordInput.text() == "":
-            show_message(self.iface, "error", "Please enter your password.")
-            is_valid_input = False
+        connection_information = {
+            "url": {
+                "value": self.dlg.archesServerInput.text().strip(),
+                "input": self.dlg.archesServerInput,
+                "label": self.dlg.archesServerLabel
+                }, 
+            "username": {
+                "value": self.dlg.usernameInput.text().strip(),
+                "input": self.dlg.usernameInput,
+                "label": self.dlg.usernameLabel
+                }, 
+            "password": {
+                "value": self.dlg.passwordInput.text().strip(),
+                "input": self.dlg.passwordInput,
+                "label": self.dlg.passwordLabel
+                }
+        }
 
+        is_valid_input=True
+        for k,v in connection_information.items():
+            if not v["value"]:
+                is_valid_input=False
+                missing_credentials(v["input"], "True")
+                missing_credentials(v["label"], "True")
+            else:
+                missing_credentials(v["label"], "False")
+                missing_credentials(v["input"], "False")
 
         # URL field has data in
         if is_valid_input == True:
-            if self.dlg.archesServerInput.text() != "":
-                # format URL
-                formatted_url = format_url(self.dlg.archesServerInput.text())
+            print(connection_information)
+            # format URL
+            formatted_url = format_url(self.dlg.archesServerInput.text())
 
-                # Adding arches connection to task queue
-                arches_connection = ConnectionProcess(url=formatted_url, 
-                                                      username=self.dlg.usernameInput.text(), 
-                                                      password=self.dlg.passwordInput.text(),
-                                                      arch_obj=self)
-                QgsApplication.taskManager().addTask(arches_connection)
+            # Adding arches connection to task queue
+            arches_connection = ConnectionProcess(url=formatted_url, 
+                                                    username=connection_information["username"]["value"], 
+                                                    password=connection_information["password"]["value"],
+                                                    arch_obj=self)
+            QgsApplication.taskManager().addTask(arches_connection)
 
-                spinner = triggerSpinner(arches_obj=self)
-                spinner.start_spinner()
+            spinner = triggerSpinner(arches_obj=self)
+            spinner.start_spinner()
 
-                # A log message (or print) is required for the task to be run.
-                # It is an existing QGIS issue https://github.com/qgis/QGIS/issues/37655
-                QgsMessageLog.logMessage("Connection task started")
+            # A log message (or print) is required for the task to be run.
+            # It is an existing QGIS issue https://github.com/qgis/QGIS/issues/37655
+            QgsMessageLog.logMessage("Connection task started")

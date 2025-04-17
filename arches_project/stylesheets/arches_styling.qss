@@ -108,10 +108,10 @@ QPushButton#editDialogCancel:hover, QPushButton#createDialogCancel:hover {
 
 QLineEdit {
     background-color: #FFF;
+    border: 1px solid; 
     border-color: #aaa;
     padding: 4px 20px 4px 5px;
 }
-
 
 QGroupBox {
     font-family: 'Open Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif;
@@ -127,4 +127,27 @@ QComboBox {
     padding: 4px 20px 4px 5px;
     selection-background-color: #54abd9;
     selection-color: #FFF;
+}
+
+/* Dynamic login missing credentials */
+QLineEdit#archesServerInput[missingCreds="True"] {
+    border: 2px solid; 
+    border-color: red;
+}
+QLabel#archesServerLabel[missingCreds="True"] {
+    color: red;
+}
+QLineEdit#usernameInput[missingCreds="True"] {
+    border: 2px solid; 
+    border-color: red;
+}
+QLabel#usernameLabel[missingCreds="True"] {
+    color: red;
+}
+QLineEdit#passwordInput[missingCreds="True"] {
+    border: 2px solid; 
+    border-color: red;
+}
+QLabel#passwordLabel[missingCreds="True"] {
+    color: red;
 }
