@@ -172,7 +172,7 @@ class ConnectionProcess(QgsTask):
         clientid = arches_connection.get_client_id()
         
         if not clientid:
-            return True
+            return False
         
         # If client id NOT None then connection has been made
         # check cache first before firing connection again
