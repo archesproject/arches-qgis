@@ -20,6 +20,8 @@ class PluginStylesheets:
         self.on_start = on_start
 
         self.dlg.loading_wheel.hide() # connection wheel label 
+        self.dlg.loginErrorMessageFrame.hide()
+        # self.dlg.errorMessageLabel.hide()
 
         if not self.dlg.useStylesheetCheckbox.isChecked():
             self.default_stylesheet()
