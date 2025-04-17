@@ -170,48 +170,49 @@ class ConnectionProcess(QgsTask):
                                             password=self.password)
 
         clientid = arches_connection.get_client_id()
-        if clientid:
-            # If client id NOT None then connection has been made
-            # check cache first before firing connection again
+        
+        if not clientid:
+            return True
+        
+        # If client id NOT None then connection has been made
+        # check cache first before firing connection again
 
-            # get/update user info on the logged in user
-            self.arch_obj.arches_user_info = {}
+        # get/update user info on the logged in user
+        self.arch_obj.arches_user_info = {}
 
-            self.arch_obj.arches_user_info = arches_connection.get_user_permissions(self.arch_obj.arches_user_info)
+        self.arch_obj.arches_user_info = arches_connection.get_user_permissions(self.arch_obj.arches_user_info)
 
-            # re-fetch graphs before checking cache as updates may have occurred
-            self.arch_obj.arches_graphs_list = []
+        # re-fetch graphs before checking cache as updates may have occurred
+        self.arch_obj.arches_graphs_list = []
 
-            self.arch_obj.arches_graphs_list = arches_connection.get_graphs(self.arch_obj.arches_graphs_list)
+        self.arch_obj.arches_graphs_list = arches_connection.get_graphs(self.arch_obj.arches_graphs_list)
 
-            if self.arch_obj.arches_connection_cache:
-                # IF THE CACHE IS UNCHANGED THEN DON'T REFIRE CONNECTION
-                if (self.arch_obj.dlg.archesServerInput.text() == self.arch_obj.arches_connection_cache["url"] and
-                    self.arch_obj.dlg.usernameInput.text() == self.arch_obj.arches_connection_cache["username"]):
-                    print("Connection reattempt prevented as login details remain unchanged. \nGraphs have been refetched to reflect changed made on Arches.")   
-                    # Re-fetch the graphs with updated list
-                    if self.arch_obj.arches_graphs_list:
-                        self.arch_obj.dlg.createResModelSelect.clear()
-                        self.arch_obj.dlg.createResModelSelect.addItems([graph["name"] for graph in self.arches_graphs_list])
-                    # Re-fill the comboboxes
-                    self.arch_obj.layers = [l for l in QgsProject.instance().mapLayers().values() if l.type() == QgsVectorLayer.VectorLayer if str(l.dataProvider().name()) != "postgres"] 
-                    self.arch_obj.dlg.createResFeatureSelect.clear()
-                    self.arch_obj.dlg.createResFeatureSelect.addItems([layer.name() for layer in self.arch_obj.layers])
-                    self.arch_obj.dlg.editResSelectFeatures.clear()
-                    self.arch_obj.dlg.editResSelectFeatures.addItems([layer.name() for layer in self.arch_obj.layers])
-                    return            
+        if self.arch_obj.arches_connection_cache:
+            # IF THE CACHE IS UNCHANGED THEN DON'T REFIRE CONNECTION
+            if (self.arch_obj.dlg.archesServerInput.text() == self.arch_obj.arches_connection_cache["url"] and
+                self.arch_obj.dlg.usernameInput.text() == self.arch_obj.arches_connection_cache["username"]):
+                print("Connection reattempt prevented as login details remain unchanged. \nGraphs have been refetched to reflect changed made on Arches.")   
+                # Re-fetch the graphs with updated list
+                if self.arch_obj.arches_graphs_list:
+                    self.arch_obj.dlg.createResModelSelect.clear()
+                    self.arch_obj.dlg.createResModelSelect.addItems([graph["name"] for graph in self.arches_graphs_list])
+                # Re-fill the comboboxes
+                self.arch_obj.layers = [l for l in QgsProject.instance().mapLayers().values() if l.type() == QgsVectorLayer.VectorLayer if str(l.dataProvider().name()) != "postgres"] 
+                self.arch_obj.dlg.createResFeatureSelect.clear()
+                self.arch_obj.dlg.createResFeatureSelect.addItems([layer.name() for layer in self.arch_obj.layers])
+                self.arch_obj.dlg.editResSelectFeatures.clear()
+                self.arch_obj.dlg.editResSelectFeatures.addItems([layer.name() for layer in self.arch_obj.layers])
+                return            
 
-            self.arch_obj.arches_token = arches_connection.get_token(clientid, self.arch_obj.arches_token)
+        self.arch_obj.arches_token = arches_connection.get_token(clientid, self.arch_obj.arches_token)
 
-            if self.arch_obj.arches_token:
-                
-                # Store for preventing duplicate connection requests
-                self.arch_obj.arches_connection_cache = {"url": self.arch_obj.dlg.archesServerInput.text(),
-                                                "username": self.arch_obj.dlg.usernameInput.text()}
-                                    
-                return True # return true for all, even if user doesn't have perms as this will be dealt with in finished()
-            else:
-                return False
+        if self.arch_obj.arches_token:
+            
+            # Store for preventing duplicate connection requests
+            self.arch_obj.arches_connection_cache = {"url": self.arch_obj.dlg.archesServerInput.text(),
+                                            "username": self.arch_obj.dlg.usernameInput.text()}
+                                
+            return True # return true for all, even if user doesn't have perms as this will be dealt with in finished()
         else:
             return False
             
