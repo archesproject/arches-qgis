@@ -28,6 +28,9 @@ QLabel#signInDescriptionLabel {
     font-size: 18px;
     font-weight: 300;
 }
+QLabel#loginErrorMessageLabel {
+    color: red;
+}
 
 
 QTextEdit {

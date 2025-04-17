@@ -267,8 +267,14 @@ class ConnectionProcess(QgsTask):
                 ArchesConnection(None,None,None).connection_reset(hard_reset=True,
                                                                 self_obj=self.arch_obj)
                 show_message(self.arch_obj.iface, "Warning", "Login prevented: This user does not have the permissions to create Arches resources.")
+                self.arch_obj.dlg.loginErrorMessageFrame.show()
+                self.arch_obj.dlg.loginErrorMessageLabel.show()
+                self.arch_obj.dlg.loginErrorMessageLabel.setText("Login prevented: This user does not have the permissions to create Arches resources.")
         else:
             show_message(self.arch_obj.iface, "Error", "Failed to connect to Arches instance." )
+            self.arch_obj.dlg.loginErrorMessageFrame.show()
+            self.arch_obj.dlg.loginErrorMessageLabel.show()
+            self.arch_obj.dlg.loginErrorMessageLabel.setText("Failed to connect to Arches instance.")
             ArchesConnection(None,None,None).connection_reset(hard_reset=True,
                                                             self_obj=self.arch_obj)
 

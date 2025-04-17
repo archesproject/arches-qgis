@@ -504,11 +504,12 @@ class ArchesProject:
         """
         Connection to Arches project server
         """
+        self.error_msg = ""
         connection_information = {
-            "url": {
+            "URL": {
                 "value": self.dlg.archesServerInput.text().strip(),
                 "input": self.dlg.archesServerInput,
-                "label": self.dlg.archesServerLabel
+                "label": self.dlg.archesServerLabel,
                 }, 
             "username": {
                 "value": self.dlg.usernameInput.text().strip(),
@@ -523,14 +524,29 @@ class ArchesProject:
         }
 
         is_valid_input=True
+        missing_inputs = []
         for k,v in connection_information.items():
             if not v["value"]:
                 is_valid_input=False
                 missing_credentials(v["input"], "True")
                 missing_credentials(v["label"], "True")
+                missing_inputs.append(k)
             else:
                 missing_credentials(v["label"], "False")
                 missing_credentials(v["input"], "False")
+
+        if missing_inputs:
+            if len(missing_inputs) > 1:
+                self.error_msg = f"Login missing values for {'{} and {}.'.format(', '.join(missing_inputs[:-1]), missing_inputs[-1])}"
+            else:
+                self.error_msg = f"Login missing {missing_inputs[0]}."
+            self.dlg.loginErrorMessageLabel.setText(self.error_msg)
+            self.dlg.loginErrorMessageFrame.show()
+            self.dlg.loginErrorMessageLabel.show()
+        else:
+            self.dlg.loginErrorMessageLabel.setText("")
+            self.dlg.loginErrorMessageFrame.hide()
+            self.dlg.loginErrorMessageLabel.hide()
 
         # URL field has data in
         if is_valid_input == True:
