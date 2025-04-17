@@ -534,16 +534,15 @@ class ArchesProject:
 
         # URL field has data in
         if is_valid_input == True:
-            print(connection_information)
             # format URL
             formatted_url = format_url(self.dlg.archesServerInput.text())
 
             # Adding arches connection to task queue
-            arches_connection = ConnectionProcess(url=formatted_url, 
+            self.arches_connection = ConnectionProcess(url=formatted_url,
                                                     username=connection_information["username"]["value"], 
                                                     password=connection_information["password"]["value"],
                                                     arch_obj=self)
-            QgsApplication.taskManager().addTask(arches_connection)
+            QgsApplication.taskManager().addTask(self.arches_connection)
 
             spinner = triggerSpinner(arches_obj=self)
             spinner.start_spinner()
