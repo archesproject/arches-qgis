@@ -125,8 +125,7 @@ class ArchesConnection():
             self_obj.dlg.archesServerInput.setText("")
             self_obj.dlg.usernameInput.setText("")
             self_obj.dlg.passwordInput.setText("")
-            self_obj.dlg.displayUser.setText("")
-            self_obj.dlg.displayArchesURL.setText("")
+            self_obj.dlg.displayTextLabel.setText("")
             # Replace login tab with logged in tab
             self_obj.dlg.tabWidget.setTabVisible(0, True)
             self_obj.dlg.tabWidget.setTabVisible(1, False)
@@ -224,9 +223,8 @@ class ConnectionProcess(QgsTask):
             self.arch_obj.dlg.tabWidget.setTabVisible(1, True)
             self.arch_obj.dlg.tabWidget.setCurrentIndex(1)
 
-            self.arch_obj.dlg.displayUser.setText(f"You are logged in as user: {self.arch_obj.dlg.usernameInput.text()}")
-            self.arch_obj.dlg.displayArchesURL.setText(f"Visit your Arches instance: {self.url}")
-            self.arch_obj.dlg.displayArchesURL.setOpenExternalLinks(True) #TODO: doesnt work
+            self.arch_obj.dlg.displayTextLabel.setText(f"Connected to {self.url} as {self.arch_obj.dlg.usernameInput.text()}.")
+            # self.arch_obj.dlg.displayUrlLabel.setOpenExternalLinks(True) #TODO: doesnt work
 
         def update_create_resources_tab():
             self.arch_obj.dlg.createResModelSelect.clear()

@@ -276,7 +276,7 @@ class ArchesProject:
 
             # Connection to Arches instance
             self.dlg.btnConnect.clicked.connect(self.arches_connection_save)
-            self.dlg.btnReset.clicked.connect(lambda: ArchesConnection(None, None, None).
+            self.dlg.btnLogout.clicked.connect(lambda: ArchesConnection(None, None, None).
                                               connection_reset(hard_reset=True,
                                                                 self_obj=self,
                                                                 manual_logout=True))

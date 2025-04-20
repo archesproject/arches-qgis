@@ -40,7 +40,7 @@ class PluginStylesheets:
         self.dlg_edit_resource_replace.setStyleSheet("")
         # remove icons from buttons
         self.dlg.btnConnect.setIcon(QIcon(""))
-        self.dlg.btnReset.setIcon(QIcon(""))
+        self.dlg.btnLogout.setIcon(QIcon(""))
         self.dlg.addNewRes.setIcon(QIcon(""))
         self.dlg.addEditRes.setIcon(QIcon(""))
         self.dlg.replaceEditRes.setIcon(QIcon(""))
@@ -92,9 +92,9 @@ class PluginStylesheets:
             self.dlg.btnConnect.setIconSize(QSize(12,12))
             self.dlg.btnConnect.setCursor(QCursor(Qt.PointingHandCursor))
 
-            self.dlg.btnReset.setIcon(QIcon(os.path.join(self.plugin_dir, "icons", "ion-arrow-undo.svg")))
-            self.dlg.btnReset.setIconSize(QSize(12,12))
-            self.dlg.btnReset.setCursor(QCursor(Qt.PointingHandCursor))
+            self.dlg.btnLogout.setIcon(QIcon(os.path.join(self.plugin_dir, "icons", "ion-arrow-undo.svg")))
+            self.dlg.btnLogout.setIconSize(QSize(12,12))
+            self.dlg.btnLogout.setCursor(QCursor(Qt.PointingHandCursor))
 
             self.dlg.addNewRes.setIcon(QIcon(os.path.join(self.plugin_dir, "icons", "mdi-pencil.svg")))
             self.dlg.addNewRes.setIconSize(QSize(12,12))
