@@ -560,6 +560,9 @@ class ArchesProject:
                                                     arch_obj=self)
             QgsApplication.taskManager().addTask(self.arches_connection)
 
+            # #24 Tasks are required to be assigned to self, otherwise finished() won't run
+            # https://github.com/qgis/QGIS/issues/59464#issuecomment-2640165772
+
             spinner = triggerSpinner(arches_obj=self)
             spinner.start_spinner()
 
