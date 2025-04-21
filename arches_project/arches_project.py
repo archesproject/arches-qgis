@@ -51,8 +51,7 @@ from .ui.create_resource_confirmation_dialog import CreateResourceConfirmation
 from .ui.edit_resource_add_confirmation_dialog import EditResourceAddConfirmation
 from .ui.edit_resource_replace_confirmation_dialog import EditResourceReplaceConfirmation
 
-from .core.arches.connection import ArchesConnection
-from .core.arches.connection import ConnectionProcess
+from .core.arches.connection import ArchesConnection, ConnectionProcess
 from .core.arches.resources import ArchesResources
 
 from .core.views.stylesheets import PluginStylesheets
