@@ -1,4 +1,5 @@
 from ..utils.geometry_conversion import Geometries
+from ..utils.qgis_messaging import show_message
 
 import requests
 
@@ -44,7 +45,7 @@ class ArchesResources:
 
 
 
-    def create_resource(self, dlg, dlg_resource_creation):
+    def create_resource(self, dlg, dlg_resource_creation, iface):
         """
         Create Resource dialog and functionality
         """
@@ -57,16 +58,18 @@ class ArchesResources:
                                                 geometry_collection=geomcoll,
                                                 geometry_format=None,
                                                 arches_operation="create")
-                    print(results, self.arches_token)
                     dlg.createResOutputBox.setText("""Successfully created a new resource with the selected geometry.
                                                         \nTo continue the creation of your new resource, navigate to...\n%s/resource/%s""" % 
                                                     (self.arches_token["formatted_url"], results["resourceinstance_id"]))
+                    show_message(iface, "Success", "A new Arches resource has been created.")
                     dlg_resource_creation.close()
                 except:
                     dlg.createResOutputBox.setText("Resource creation FAILED.")
+                    show_message(iface, "Error", "Resource creation failed.", duration=-1)
                     dlg_resource_creation.close()
             else:
                 dlg.createResOutputBox.setText("This user does not have permission to create data for the geometry nodegroup in this resource model. An Arches resource has not been created.")
+                show_message(iface, "Error", "The user does not have permission to create data.", duration=-1)
                 dlg_resource_creation.close()
 
         def close_dialog():
@@ -109,9 +112,10 @@ class ArchesResources:
     def edit_resource(self, 
                       replace, 
                       arches_selected_resource,
-                      dlg, 
-                      dlg_edit_resource_replace, 
-                      dlg_edit_resource_add):
+                      dlg,
+                      dlg_edit_resource_replace,
+                      dlg_edit_resource_add,
+                      iface):
         """
         Save geometries to existing resource - either replace or add
         """
@@ -127,8 +131,10 @@ class ArchesResources:
                     dialog.close()
                 except:
                     print(f"Couldn't {operation_type} geometry in resource")
+                    show_message(iface, "error", f"Couldn't {operation_type} geometry in resource", duration=-1)
                     dialog.close()
             else:
+                show_message(iface, "error", "This user does not have permission to update data for the geometry nodegroup in this resource model", duration=-1)
                 print("This user does not have permission to update data for the geometry nodegroup in this resource model.")
                 dialog.close()
 

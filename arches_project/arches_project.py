@@ -481,7 +481,8 @@ class ArchesProject:
                                                  arches_user_info=self.arches_user_info,
                                                  geometry_nodes=self.geometry_nodes)
         arches_create_resource.create_resource(dlg=self.dlg,
-                                               dlg_resource_creation=self.dlg_resource_creation)
+                                               dlg_resource_creation=self.dlg_resource_creation,
+                                               iface=self.iface)
 
     def edit_resource(self, replace):
         """Save geometries to existing resource - either replace or add"""
@@ -497,7 +498,8 @@ class ArchesProject:
                                            arches_selected_resource=self.arches_selected_resource,                                            
                                            dlg=self.dlg,
                                            dlg_edit_resource_replace=self.dlg_edit_resource_replace, 
-                                           dlg_edit_resource_add=self.dlg_edit_resource_add)
+                                           dlg_edit_resource_add=self.dlg_edit_resource_add,
+                                           iface=self.iface)
 
     def arches_connection_save(self):
         """
@@ -556,7 +558,7 @@ class ArchesProject:
             self.arches_connection = ConnectionProcess(url=formatted_url,
                                                     username=connection_information["username"]["value"], 
                                                     password=connection_information["password"]["value"],
-                                                    arch_obj=self)
+                                                    archesproject=self)
             QgsApplication.taskManager().addTask(self.arches_connection)
 
             # #24 Tasks are required to be assigned to self, otherwise finished() won't run
