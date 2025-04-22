@@ -170,9 +170,6 @@ class ConnectionProcess(QgsTask):
         if not clientid:
             return False
         
-        # If client id NOT None then connection has been made
-        # check cache first before firing connection again
-
         # get/update user info on the logged in user
         self.archesproject.arches_user_info = {}
 
@@ -183,34 +180,16 @@ class ConnectionProcess(QgsTask):
 
         self.archesproject.arches_graphs_list = arches_connection.get_graphs(self.archesproject.arches_graphs_list)
 
-        if self.archesproject.arches_connection_cache:
-            # IF THE CACHE IS UNCHANGED THEN DON'T REFIRE CONNECTION
-            if (self.archesproject.dlg.archesServerInput.text() == self.archesproject.arches_connection_cache["url"] and
-                self.archesproject.dlg.usernameInput.text() == self.archesproject.arches_connection_cache["username"]):
-                print("Connection reattempt prevented as login details remain unchanged. \nGraphs have been refetched to reflect changed made on Arches.")   
-                # Re-fetch the graphs with updated list
-                if self.archesproject.arches_graphs_list:
-                    self.archesproject.dlg.createResModelSelect.clear()
-                    self.archesproject.dlg.createResModelSelect.addItems([graph["name"] for graph in self.arches_graphs_list])
-                # Re-fill the comboboxes
-                self.archesproject.layers = [l for l in QgsProject.instance().mapLayers().values() if l.type() == QgsVectorLayer.VectorLayer if str(l.dataProvider().name()) != "postgres"] 
-                self.archesproject.dlg.createResFeatureSelect.clear()
-                self.archesproject.dlg.createResFeatureSelect.addItems([layer.name() for layer in self.archesproject.layers])
-                self.archesproject.dlg.editResSelectFeatures.clear()
-                self.archesproject.dlg.editResSelectFeatures.addItems([layer.name() for layer in self.archesproject.layers])
-                return            
-
         self.archesproject.arches_token = arches_connection.get_token(clientid, self.archesproject.arches_token)
 
-        if self.archesproject.arches_token:
-            
-            # Store for preventing duplicate connection requests
-            self.archesproject.arches_connection_cache = {"url": self.archesproject.dlg.archesServerInput.text(),
-                                            "username": self.archesproject.dlg.usernameInput.text()}
-                                
-            return True # return true for all, even if user doesn't have perms as this will be dealt with in finished()
-        else:
+        if not self.archesproject.arches_token:
             return False
+
+        # Store for preventing duplicate connection requests
+        self.archesproject.arches_connection_cache = {"url": self.archesproject.dlg.archesServerInput.text(),
+                                        "username": self.archesproject.dlg.usernameInput.text()}
+                            
+        return True # return true for all, even if user doesn't have perms as this will be dealt with in finished()
             
 
     def finished(self, result):
