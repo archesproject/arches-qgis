@@ -296,9 +296,6 @@ class ArchesProject:
             self.dlg.hidePostgresLayers.stateChanged.connect(lambda: self.show_hide_psql_layers(combobox1=self.dlg.createResFeatureSelect,
                                                                                                 combobox2=self.dlg.editResSelectFeatures))
 
-            # to run when graph is changed in create resource
-            # self.dlg.createResModelSelect.currentIndexChanged.connect(self.update_graph_options)
-
             # click add button - should bring up new dialog for confirmation
             self.dlg.addNewRes.clicked.connect(self.create_resource)
 
@@ -307,7 +304,6 @@ class ArchesProject:
             self.dlg.addEditRes.setEnabled(False)
             self.dlg.replaceEditRes.setEnabled(False)
             self.dlg.editResSelectFeatures.setEnabled(False)
-            # self.dlg.selectedResAttributeTable.setRowCount(0)
             self.dlg.selectedResAttributeTable.setEnabled(False)
 
             self.dlg.addEditRes.clicked.connect(lambda: self.edit_resource(replace=False))
@@ -549,9 +545,7 @@ class ArchesProject:
             self.dlg.loginErrorMessageFrame.hide()
             self.dlg.loginErrorMessageLabel.hide()
 
-        # URL field has data in
         if is_valid_input == True:
-            # format URL
             formatted_url = format_url(self.dlg.archesServerInput.text())
 
             # Adding arches connection to task queue

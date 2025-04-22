@@ -21,7 +21,6 @@ class PluginStylesheets:
 
         self.dlg.loading_wheel.hide() # connection wheel label 
         self.dlg.loginErrorMessageFrame.hide()
-        # self.dlg.errorMessageLabel.hide()
 
         if not self.dlg.useStylesheetCheckbox.isChecked():
             self.default_stylesheet()
@@ -76,10 +75,6 @@ class PluginStylesheets:
             stylesheet_path = os.path.join(self.plugin_dir, "stylesheets", "arches_styling.qss")
             with open(stylesheet_path, "r") as f:
                 arches_styling = f.read()
-
-            # self.dlg.setAutoFillBackground(False)
-            # self.dlg.setContentsMargins(0,0,0,0)
-            # # self.dlg.setStyleSheet("QDialog{background-color: green;}")
 
             self.dlg.setStyleSheet(arches_styling)
             self.dlg_resource_creation.setStyleSheet(arches_styling)
