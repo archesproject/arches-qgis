@@ -103,7 +103,7 @@ class ArchesProject:
         # Must be set in initGui() to survive plugin reloads
         self.first_start = None
 
-        # Comfirmation additional dialogs
+        # Confirmation additional dialogs
 
         ## ARCHES PLUGIN SPECIFIC VARIABLES
         # Cache connection details to prevent firing duplicate connections
@@ -538,7 +538,7 @@ class ArchesProject:
 
         if missing_inputs:
             if len(missing_inputs) > 1:
-                self.error_msg = f"Login missing values for {'{} and {}.'.format(', '.join(missing_inputs[:-1]), missing_inputs[-1])}"
+                self.error_msg = f"Login missing values for {', '.join(missing_inputs[:-1])} and {missing_inputs[-1]}."
             else:
                 self.error_msg = f"Login missing {missing_inputs[0]}."
             self.dlg.loginErrorMessageLabel.setText(self.error_msg)
@@ -561,7 +561,7 @@ class ArchesProject:
                                                     archesproject=self)
             QgsApplication.taskManager().addTask(self.arches_connection)
 
-            # #24 Tasks are required to be assigned to self, otherwise finished() won't run
+            #24 Tasks must be assigned to self, otherwise finished() won't run
             # https://github.com/qgis/QGIS/issues/59464#issuecomment-2640165772
 
             spinner = triggerSpinner(arches_obj=self)
