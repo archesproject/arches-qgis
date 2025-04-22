@@ -30,7 +30,6 @@ class ArchesConnection():
             clientid = response.json()["clientid"]
             return clientid
         except:
-            # self.dlg.connection_status.setText("Failed to connect.\n- Check URL, username and password are correct.\n- Check the Arches instance is running.\n- Check the instance has a registered Oauth application.")
             return None
 
 
@@ -70,10 +69,8 @@ class ArchesConnection():
             if "error" in arches_token.keys():
                 error_msg = arches_token["error"]
                 arches_token = {} # reset token to empty
-                #self.dlg.connection_status.setText(f"Error connecting to token: {error_msg}.")
             return arches_token
         except:
-            #self.dlg.connection_status.setText("Can't get Arches oauth2 token.")
             return arches_token
 
 
@@ -224,7 +221,7 @@ class ConnectionProcess(QgsTask):
             self.archesproject.dlg.tabWidget.setCurrentIndex(1)
 
             self.archesproject.dlg.displayTextLabel.setText(f"Connected to {self.url} as {self.archesproject.dlg.usernameInput.text()}.")
-            # self.archesproject.dlg.displayUrlLabel.setOpenExternalLinks(True) #TODO: doesnt work
+            # self.archesproject.dlg.displayUrlLabel.setOpenExternalLinks(True) #TODO
 
         def update_create_resources_tab():
             self.archesproject.dlg.createResModelSelect.clear()
