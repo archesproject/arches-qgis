@@ -1,6 +1,7 @@
 import requests
 from datetime import datetime
 import os
+from ..views.logged_in import LoggedIn
 from ..utils.qgis_messaging import show_message
 
 from qgis.core import (QgsProject, 
@@ -40,15 +41,22 @@ class ArchesConnection():
                 'password': (None, self.password),
             }
             response = requests.post(f"{self.url}/auth/user_profile", data=files)
+            print(response.json())
             arches_user_info["deletable_nodegroups"] = response.json()["deletable_nodegroups"]
             arches_user_info["editable_nodegroups"] = response.json()["editable_nodegroups"]
             arches_user_info["groups"] = response.json()["groups"]
             arches_user_info["is_active"] = response.json()["is_active"]
+            arches_user_info["date_joined"] = response.json()["date_joined"]
+            arches_user_info["first_name"] = response.json()["first_name"]
+            arches_user_info["last_name"] = response.json()["last_name"]
         except:
             arches_user_info["deletable_nodegroups"] = None
             arches_user_info["editable_nodegroups"] = None
             arches_user_info["is_active"] = None
             arches_user_info["groups"] = []
+            arches_user_info["date_joined"] = None
+            arches_user_info["first_name"] = None
+            arches_user_info["last_name"] = None
         return arches_user_info
 
 
@@ -122,7 +130,7 @@ class ArchesConnection():
             self_obj.dlg.archesServerInput.setText("")
             self_obj.dlg.usernameInput.setText("")
             self_obj.dlg.passwordInput.setText("")
-            self_obj.dlg.displayTextLabel.setText("")
+            # self_obj.dlg.displayTextLabel.setText("")
             # Replace login tab with logged in tab
             self_obj.dlg.tabWidget.setTabVisible(0, True)
             self_obj.dlg.tabWidget.setTabVisible(1, False)
@@ -199,7 +207,12 @@ class ConnectionProcess(QgsTask):
             self.archesproject.dlg.tabWidget.setTabVisible(1, True)
             self.archesproject.dlg.tabWidget.setCurrentIndex(1)
 
-            self.archesproject.dlg.displayTextLabel.setText(f"Connected to {self.url} as {self.archesproject.dlg.usernameInput.text()}.")
+            logged_in_tab = LoggedIn(dlg = self.archesproject.dlg,
+                                     username = self.username,
+                                     url = self.url,
+                                     arches_user_info = self.archesproject.arches_user_info)
+            logged_in_tab.update_logged_in_view()
+            # self.archesproject.dlg.displayTextLabel.setText(f"Connected to {self.url} as {self.archesproject.dlg.usernameInput.text()}.")
             # self.archesproject.dlg.displayUrlLabel.setOpenExternalLinks(True) #TODO
 
         def update_create_resources_tab():
