@@ -31,6 +31,14 @@ QLabel#signInDescriptionLabel, QLabel#displayTextLabel {
 QLabel#loginErrorMessageLabel {
     color: red;
 }
+QLabel#displayFullNameLabel {
+    font-size: 25px;
+    font-weight: 300;
+}
+QLabel#displayUsernameLabel {
+    font-size: 15px;
+    font-weight: 300;
+}
 
 
 QTextEdit {
@@ -153,4 +161,9 @@ QLineEdit#passwordInput[missingCreds="True"] {
 }
 QLabel#passwordLabel[missingCreds="True"] {
     color: red;
+}
+
+QLabel#userProfileLabel {
+    border-radius: 50px;
+    background-color: #d4d4d4;
 }
