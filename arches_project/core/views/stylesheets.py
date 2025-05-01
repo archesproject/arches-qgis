@@ -70,7 +70,7 @@ class PluginStylesheets:
 
 
     def arches_stylesheet(self):
-        # try:
+        try:
             self.dlg.useStylesheetCheckbox.setChecked(True)
             stylesheet_path = os.path.join(self.plugin_dir, "stylesheets", "arches_styling.qss")
             with open(stylesheet_path, "r") as f:
@@ -153,14 +153,12 @@ class PluginStylesheets:
             self.dlg.tabWidget.setIconSize(QSize(16,16))
             self.dlg.tabWidget.setTabText(5, "")
             
-            self.dlg.userProfileLabel.setFixedSize(100, 100)
-            user_profile_pixmap = QPixmap(os.path.join(self.plugin_dir, "icons", "ion-user.svg"))
-            user_profile_pixmap = user_profile_pixmap.scaled(64, 64, Qt.KeepAspectRatio)
-            self.dlg.userProfileLabel.setPixmap(QPixmap(os.path.join(self.plugin_dir, "icons", "ion-user.svg")).scaled(64, 64, Qt.KeepAspectRatio))
+            self.dlg.userProfileLabel.setFixedSize(80, 80)
+            self.dlg.userProfileLabel.setPixmap(QPixmap(os.path.join(self.plugin_dir, "icons", "ion-user.svg")).scaled(50, 50, Qt.KeepAspectRatio))
             self.dlg.loginSuccessFrame.hide()
 
-        # except:
-        #     # Prevent the use of the Arches stylesheet if error occurs
-        #     self.default_stylesheet()
-        #     self.dlg.useStylesheetCheckbox.setEnabled(False)
-        #     self.dlg.useStylesheetCheckbox.setChecked(False)
+        except:
+            # Prevent the use of the Arches stylesheet if error occurs
+            self.default_stylesheet()
+            self.dlg.useStylesheetCheckbox.setEnabled(False)
+            self.dlg.useStylesheetCheckbox.setChecked(False)

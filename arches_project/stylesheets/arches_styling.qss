@@ -164,6 +164,6 @@ QLabel#passwordLabel[missingCreds="True"] {
 }
 
 QLabel#userProfileLabel {
-    border-radius: 50px;
+    border-radius: 40px;
     background-color: #d4d4d4;
 }

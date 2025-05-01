@@ -130,7 +130,10 @@ class ArchesConnection():
             self_obj.dlg.archesServerInput.setText("")
             self_obj.dlg.usernameInput.setText("")
             self_obj.dlg.passwordInput.setText("")
-            # self_obj.dlg.displayTextLabel.setText("")
+            # Reset logged in values
+            self_obj.dlg.displayFullNameLabel.setText("")
+            self_obj.dlg.displayConnectionInfoLabel.setText("")
+            self_obj.dlg.displayUsernameLabel.setText("")
             # Replace login tab with logged in tab
             self_obj.dlg.tabWidget.setTabVisible(0, True)
             self_obj.dlg.tabWidget.setTabVisible(1, False)
