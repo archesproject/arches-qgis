@@ -8,8 +8,7 @@ class Geometries():
     def __init__(self, selectedLayer):
         self.selectedLayer = selectedLayer
         self.selected_layer_crs = selectedLayer.crs()
-        self.arches_crs = QgsCoordinateReferenceSystem(4326)
-        # note that qgscoordinatereferencesystem is deprecated
+        self.arches_crs = QgsCoordinateReferenceSystem.fromEpsgId(4326)
 
     def coordinate_transform(self, geom):
         if self.selected_layer_crs != self.arches_crs:
