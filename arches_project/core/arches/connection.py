@@ -41,7 +41,6 @@ class ArchesConnection():
                 'password': (None, self.password),
             }
             response = requests.post(f"{self.url}/auth/user_profile", data=files)
-            print(response.json())
             arches_user_info["deletable_nodegroups"] = response.json()["deletable_nodegroups"]
             arches_user_info["editable_nodegroups"] = response.json()["editable_nodegroups"]
             arches_user_info["groups"] = response.json()["groups"]
