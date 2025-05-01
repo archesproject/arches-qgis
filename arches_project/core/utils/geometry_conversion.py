@@ -1,7 +1,6 @@
 from qgis.core import (QgsProject,
                        QgsCoordinateReferenceSystem,
                        QgsCoordinateTransform,
-                       QgsCoordinateTransformContext,
                        )
 
 class Geometries():
