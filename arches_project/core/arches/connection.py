@@ -77,7 +77,7 @@ class ArchesConnection():
     def get_graphs(self, arches_graphs_list):
         try:
             response = requests.get(f"{self.url}/graphs/")
-            graphids = [x["graphid"] for x in response.json() if x["graphid"] != "ff623370-fa12-11e6-b98b-6c4008b05c4c"] # sys settings
+            graphids = [x["graphid"] for x in response.json() if x["graphid"] != "ff623370-fa12-11e6-b98b-6c4008b05c4c" and x["isresource"]]
 
             for graph in graphids:
                 geometry_node_data = {}
