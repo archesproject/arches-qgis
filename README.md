@@ -11,14 +11,20 @@ If you encounter any issues, don't hesitate to create a new GitHub issue or cont
 1. A running Arches instance, accessible via a public domain or IP.
 2. An Arches user login with permissions to enter data or create resources.
 3. A registered oauth application and client ID entered into settings.py (or settings_local.py) - see the [following documentation link](https://arches.readthedocs.io/en/stable/developing/reference/api/#register-an-oauth-application) for more information on registering oauth2 applications.  
-4. If you wish to edit existing Arches resources, a database connection with spatial views added as QGIS layers is required.
+4. If you wish to edit existing Arches resources, a database connection with [spatial views](https://arches.readthedocs.io/en/stable/administering/spatial-views/#spatial-views-preview) added as QGIS layers is required.
 
-## Installation via QGIS repository
+## Installation via the QGIS Plugins Repository
 Since the plugin is experimental, to install the plugin through the QGIS plugins repository you will need to ensure that experimental plugins are enabled.
+### Installation from within QGIS
 1. Navigate to the Plugins tab, then "Manage and Install Plugins".
 2. Navigate to "Settings".
 3. Tick "Show also Experimental Plugins".
 Once enabled, head back to all plugins, search for "Arches Project" and hit "Install Experimental Plugin".
+### Installation from the QGIS plugins website
+All QGIS plugins can be viewed and downloaded from the [QGIS website](https://plugins.qgis.org/plugins/)
+1. Search for the "Arches Project" plugin on the website, or go directly here https://plugins.qgis.org/plugins/arches_project/.
+2. Download the plugin zip.
+3. Extract the folder, and move it to your local QGIS installation path (see below).
 
 ## Installation via GitHub
 1. Find your local path for the QGIS installation:
