@@ -30,3 +30,9 @@ git clone https://github.com/archesproject/arches-qgis.git
 ```
 3. Head to the QGIS Plugins tab and select "Manage and Install Plugins".
 4. Search for and select "Arches Project" from the list of all plugins.
+
+## Tips for developing
+If you wish to develop with the QGIS Arches plugin, below are some helpful tips that will help, and make life easier.
+- Installation via GitHub is the easiest method to develop.  This can be done by git cloning in the plugins path (shown above) and (optionally) creating a symbolic link to somewhere much easier to find e.g. your home directory.
+- The QGIS plugin "Plugin Reloader" is incredibly useful for reloading plugins to reflect code changes.  This can be found on the QGIS plugins repository, and configured to reload specific plugins with Ctrl+F5.
+- If you wish to develop UI elements, you'll need Qt Creator installed: https://doc.qt.io/qtcreator/.
