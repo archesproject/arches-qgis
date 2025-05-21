@@ -128,6 +128,7 @@ class ArchesResources:
                                                     geometry_collection=geomcoll,
                                                     geometry_format=None,
                                                     arches_operation=operation_type)
+                    show_message(iface, "Success", f"Resource geometry {operation_type} was successful.")
                     dialog.close()
                 except:
                     print(f"Couldn't {operation_type} geometry in resource")
