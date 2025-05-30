@@ -3,6 +3,7 @@ from datetime import datetime
 import os
 from ..views.logged_in import LoggedIn
 from ..utils.qgis_messaging import show_message
+from ..utils.spinner import triggerSpinner
 
 from qgis.core import (QgsProject, 
                        QgsVectorLayer,
@@ -11,7 +12,7 @@ from qgis.core import (QgsProject,
                        QgsMessageLog, 
                        Qgis
                        )
-from ..utils.spinner import triggerSpinner
+from PyQt5.QtCore import pyqtSignal
 
 class ArchesConnection():
     """ Class for Arches APIs """
@@ -163,6 +164,10 @@ class ArchesConnection():
 
 class ConnectionProcess(QgsTask):
     """ Connecting to Arches via QGIS task and updating the UI """
+    login_updates = pyqtSignal(str)
+    complete = pyqtSignal()
+
+
     def __init__(self, url, username, password, archesproject):
         super().__init__()
         self.url = url
@@ -184,6 +189,7 @@ class ConnectionProcess(QgsTask):
         self.archesproject.arches_user_info = {}
 
         self.archesproject.arches_user_info = arches_connection.get_user_permissions(self.archesproject.arches_user_info)
+        self.login_updates.emit("Permissions acquired")
 
         # re-fetch graphs before checking cache as updates may have occurred
         self.archesproject.arches_graphs_list = []
