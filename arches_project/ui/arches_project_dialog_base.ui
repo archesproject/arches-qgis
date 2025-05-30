@@ -25,16 +25,89 @@
   </property>
   <layout class="QVBoxLayout" name="verticalLayout_15">
    <item>
-    <widget class="QLabel" name="loading_wheel">
-     <property name="enabled">
-      <bool>true</bool>
+    <spacer name="verticalSpacer_8">
+     <property name="orientation">
+      <enum>Qt::Vertical</enum>
      </property>
-     <property name="text">
-      <string>loading_wheel</string>
+     <property name="sizeHint" stdset="0">
+      <size>
+       <width>20</width>
+       <height>40</height>
+      </size>
      </property>
-     <property name="alignment">
-      <set>Qt::AlignCenter</set>
+    </spacer>
+   </item>
+   <item>
+    <widget class="QFrame" name="loadingWheelFrame">
+     <property name="frameShape">
+      <enum>QFrame::NoFrame</enum>
      </property>
+     <property name="frameShadow">
+      <enum>QFrame::Raised</enum>
+     </property>
+     <layout class="QHBoxLayout" name="horizontalLayout_6">
+      <item>
+       <widget class="QLabel" name="loadingWheel">
+        <property name="enabled">
+         <bool>true</bool>
+        </property>
+        <property name="text">
+         <string>loadingWheel</string>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignCenter</set>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </widget>
+   </item>
+   <item>
+    <widget class="QFrame" name="frame_4">
+     <property name="frameShape">
+      <enum>QFrame::NoFrame</enum>
+     </property>
+     <property name="frameShadow">
+      <enum>QFrame::Raised</enum>
+     </property>
+     <layout class="QVBoxLayout" name="verticalLayout_43">
+      <item>
+       <spacer name="verticalSpacer_9">
+        <property name="orientation">
+         <enum>Qt::Vertical</enum>
+        </property>
+        <property name="sizeHint" stdset="0">
+         <size>
+          <width>20</width>
+          <height>20</height>
+         </size>
+        </property>
+       </spacer>
+      </item>
+      <item>
+       <widget class="QLabel" name="updateText">
+        <property name="text">
+         <string>updateText</string>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignBottom|Qt::AlignHCenter</set>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <spacer name="verticalSpacer_6">
+        <property name="orientation">
+         <enum>Qt::Vertical</enum>
+        </property>
+        <property name="sizeHint" stdset="0">
+         <size>
+          <width>20</width>
+          <height>40</height>
+         </size>
+        </property>
+       </spacer>
+      </item>
+     </layout>
     </widget>
    </item>
    <item>
@@ -82,8 +155,8 @@
            <rect>
             <x>0</x>
             <y>0</y>
-            <width>520</width>
-            <height>612</height>
+            <width>506</width>
+            <height>435</height>
            </rect>
           </property>
           <layout class="QVBoxLayout" name="verticalLayout_3">
@@ -359,7 +432,7 @@
             <x>0</x>
             <y>0</y>
             <width>520</width>
-            <height>612</height>
+            <height>386</height>
            </rect>
           </property>
           <layout class="QVBoxLayout" name="verticalLayout_28">
@@ -598,8 +671,8 @@
            <rect>
             <x>0</x>
             <y>0</y>
-            <width>518</width>
-            <height>610</height>
+            <width>504</width>
+            <height>495</height>
            </rect>
           </property>
           <layout class="QVBoxLayout" name="verticalLayout_11">
@@ -821,7 +894,7 @@
             <x>0</x>
             <y>0</y>
             <width>518</width>
-            <height>610</height>
+            <height>384</height>
            </rect>
           </property>
           <layout class="QVBoxLayout" name="verticalLayout_13">
@@ -992,7 +1065,7 @@
             <x>0</x>
             <y>0</y>
             <width>518</width>
-            <height>610</height>
+            <height>384</height>
            </rect>
           </property>
           <layout class="QHBoxLayout" name="horizontalLayout_4">
@@ -1112,7 +1185,7 @@
             <x>0</x>
             <y>0</y>
             <width>518</width>
-            <height>610</height>
+            <height>384</height>
            </rect>
           </property>
           <layout class="QVBoxLayout" name="verticalLayout_35">
