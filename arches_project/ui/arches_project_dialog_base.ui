@@ -25,17 +25,29 @@
   </property>
   <layout class="QVBoxLayout" name="verticalLayout_15">
    <item>
-    <spacer name="verticalSpacer_8">
-     <property name="orientation">
-      <enum>Qt::Vertical</enum>
+    <widget class="QFrame" name="loadingWheelVerticalSpacerFrame">
+     <property name="frameShape">
+      <enum>QFrame::NoFrame</enum>
      </property>
-     <property name="sizeHint" stdset="0">
-      <size>
-       <width>20</width>
-       <height>40</height>
-      </size>
+     <property name="frameShadow">
+      <enum>QFrame::Raised</enum>
      </property>
-    </spacer>
+     <layout class="QVBoxLayout" name="verticalLayout_42">
+      <item>
+       <spacer name="loadingWheelVerticalSpacer">
+        <property name="orientation">
+         <enum>Qt::Vertical</enum>
+        </property>
+        <property name="sizeHint" stdset="0">
+         <size>
+          <width>20</width>
+          <height>40</height>
+         </size>
+        </property>
+       </spacer>
+      </item>
+     </layout>
+    </widget>
    </item>
    <item>
     <widget class="QFrame" name="loadingWheelFrame">
@@ -63,7 +75,7 @@
     </widget>
    </item>
    <item>
-    <widget class="QFrame" name="frame_4">
+    <widget class="QFrame" name="updateTextFrame">
      <property name="frameShape">
       <enum>QFrame::NoFrame</enum>
      </property>
@@ -72,7 +84,7 @@
      </property>
      <layout class="QVBoxLayout" name="verticalLayout_43">
       <item>
-       <spacer name="verticalSpacer_9">
+       <spacer name="updateTextSpacer2">
         <property name="orientation">
          <enum>Qt::Vertical</enum>
         </property>
@@ -95,7 +107,7 @@
        </widget>
       </item>
       <item>
-       <spacer name="verticalSpacer_6">
+       <spacer name="updateTextSpacer1">
         <property name="orientation">
          <enum>Qt::Vertical</enum>
         </property>
