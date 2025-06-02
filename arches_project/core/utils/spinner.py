@@ -48,7 +48,14 @@ class triggerSpinner(QtWidgets.QWidget):
     def reveal_spinner(self):
         self.arches_obj.dlg.tabWidget.hide()
         self.arches_obj.dlg.loadingWheel.show()
+        self.arches_obj.dlg.updateTextFrame.show()
+        self.arches_obj.dlg.loginErrorMessageFrame.show()
+        self.arches_obj.dlg.loadingWheelVerticalSpacerFrame.show()
 
     def hide_spinner(self):
         self.arches_obj.dlg.tabWidget.show()
         self.arches_obj.dlg.loadingWheel.hide()
+        self.arches_obj.dlg.updateTextFrame.hide()
+        self.arches_obj.dlg.loginErrorMessageFrame.hide()
+        self.arches_obj.dlg.loadingWheelVerticalSpacerFrame.hide()
+

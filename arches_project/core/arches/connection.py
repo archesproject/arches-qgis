@@ -1,7 +1,7 @@
 import requests
 from datetime import datetime
 import os
-from ..views.logged_in import LoggedIn
+from ..views.login import LoggedIn
 from ..utils.qgis_messaging import show_message
 from ..utils.spinner import triggerSpinner
 

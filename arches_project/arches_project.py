@@ -48,7 +48,7 @@ from .core.arches.resources import ArchesResources
 from .core.views.stylesheets import PluginStylesheets
 from .core.views.logging import enable_logging
 from .core.views.components.missing_credentials import missing_credentials
-from .core.views.components.update_login_progress import UpdateLogin
+from .core.views.login import UpdateLogin
 
 from .core.utils.format_url import format_url
 from .core.utils.spinner import triggerSpinner
