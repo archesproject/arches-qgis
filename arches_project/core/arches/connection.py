@@ -82,12 +82,13 @@ class ArchesConnection():
             return arches_token
 
 
-    def get_graphs(self, arches_graphs_list):
+    def get_graphs(self, arches_graphs_list, login_updates):
         try:
             response = requests.get(f"{self.url}/graphs/")
             graphids = [x["graphid"] for x in response.json() if x["graphid"] != "ff623370-fa12-11e6-b98b-6c4008b05c4c" and x["isresource"]]
+            login_updates.emit("Fetching Graphs ...")
 
-            for graph in graphids:
+            for x, graph in enumerate(graphids):
                 geometry_node_data = {}
                 contains_geom = False
                 geom_node_count = 0
@@ -95,6 +96,7 @@ class ArchesConnection():
                 req = requests.get(f"{self.url}/graphs/{graph}")
 
                 if req.json()["graph"]["publication_id"]:   # if graph is published
+                    login_updates.emit(f"Fetching Graphs ({x+1}/{len(graphids)})")
                     for nodes in req.json()["graph"]["nodes"]:
                         if nodes["datatype"] == "geojson-feature-collection":
                             contains_geom = True
@@ -184,7 +186,8 @@ class ConnectionProcess(QgsTask):
         
         if not clientid:
             return False
-        
+        self.login_updates.emit("ClientID matched")
+
         # get/update user info on the logged in user
         self.archesproject.arches_user_info = {}
 
@@ -194,12 +197,14 @@ class ConnectionProcess(QgsTask):
         # re-fetch graphs before checking cache as updates may have occurred
         self.archesproject.arches_graphs_list = []
 
-        self.archesproject.arches_graphs_list = arches_connection.get_graphs(self.archesproject.arches_graphs_list)
+        if 2 in self.archesproject.arches_user_info["groups"]:
+            self.archesproject.arches_graphs_list = arches_connection.get_graphs(self.archesproject.arches_graphs_list, self.login_updates)
 
         self.archesproject.arches_token = arches_connection.get_token(clientid, self.archesproject.arches_token)
 
         if not self.archesproject.arches_token:
             return False
+        self.login_updates.emit("Token acquired")
 
         # Store for preventing duplicate connection requests
         self.archesproject.arches_connection_cache = {"url": self.archesproject.dlg.archesServerInput.text(),
