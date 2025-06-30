@@ -26,15 +26,25 @@ class LoggedIn:
 
 
 class UpdateLogin:
-    def __init__(self, dlg_label):
+    def __init__(self, dlg_label, step=0, substep=0):
         self.updateTextLabel = dlg_label
+        self.step = step
+        self.substep = substep
 
     def update_login_progress(self, text):
         """
         Simple function just used as a signal connection to update the loading ui with helpful info, 
         as a spinning wheel look like no progress is being made. 
+
+        Must hard-code x number of steps in order to get percentage completion.
+        1. clientid
+        2. permissions
+        3. graphs
+        4. token
         """
         self.updateTextLabel.setText(text)
+        self.step+=1
+        print(self.step)
 
 
 class LoginProgress:
