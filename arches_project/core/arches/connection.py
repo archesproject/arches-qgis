@@ -5,12 +5,10 @@ from ..views.login import LoggedIn
 from ..utils.qgis_messaging import show_message
 from ..utils.spinner import triggerSpinner
 
-from qgis.core import (QgsProject, 
+from qgis.core import (QgsProject,
                        QgsVectorLayer,
-                       QgsApplication, 
-                       QgsTask, 
-                       QgsMessageLog, 
-                       Qgis
+                       QgsTask,
+                       QgsMessageLog,
                        )
 from PyQt5.QtCore import pyqtSignal
 
@@ -82,11 +80,12 @@ class ArchesConnection():
             return arches_token
 
 
-    def get_graphs(self, arches_graphs_list, login_updates):
+    def get_graphs(self, arches_graphs_list, login_updates, percent_progress):
         try:
             response = requests.get(f"{self.url}/graphs/")
             graphids = [x["graphid"] for x in response.json() if x["graphid"] != "ff623370-fa12-11e6-b98b-6c4008b05c4c" and x["isresource"]]
-            login_updates.emit("Fetching Graphs ...")
+            login_updates.emit("Fetching graphs ...")
+            percent_progress.emit(True,0,0)
 
             for x, graph in enumerate(graphids):
                 geometry_node_data = {}
@@ -96,7 +95,7 @@ class ArchesConnection():
                 req = requests.get(f"{self.url}/graphs/{graph}")
 
                 if req.json()["graph"]["publication_id"]:   # if graph is published
-                    login_updates.emit(f"Fetching Graphs ({x+1}/{len(graphids)})")
+                    login_updates.emit(f"Fetching graphs ... ({x+1}/{len(graphids)})")
                     for nodes in req.json()["graph"]["nodes"]:
                         if nodes["datatype"] == "geojson-feature-collection":
                             contains_geom = True
@@ -115,6 +114,7 @@ class ArchesConnection():
                             "geometry_node_data": geometry_node_data,
                             "multiple_geometry_nodes": multiple
                         })
+                        percent_progress.emit(False, x+1, len(graphids))
         except:
             pass
         return arches_graphs_list
@@ -167,6 +167,7 @@ class ArchesConnection():
 class ConnectionProcess(QgsTask):
     """ Connecting to Arches via QGIS task and updating the UI """
     login_updates = pyqtSignal(str)
+    percent_progress = pyqtSignal(bool, int, int)
     complete = pyqtSignal()
 
 
@@ -182,29 +183,32 @@ class ConnectionProcess(QgsTask):
                                             username=self.username,
                                             password=self.password)
 
+        self.login_updates.emit("Fetching client id ...")
         clientid = arches_connection.get_client_id()
-        
+        self.percent_progress.emit(True, 0,0)
         if not clientid:
             return False
-        self.login_updates.emit("ClientID matched")
 
         # get/update user info on the logged in user
         self.archesproject.arches_user_info = {}
-
+        self.login_updates.emit("Fetching user permissions ...")
         self.archesproject.arches_user_info = arches_connection.get_user_permissions(self.archesproject.arches_user_info)
-        self.login_updates.emit("Permissions acquired")
+        self.percent_progress.emit(True,0,0)
 
         # re-fetch graphs before checking cache as updates may have occurred
         self.archesproject.arches_graphs_list = []
 
         if 2 in self.archesproject.arches_user_info["groups"]:
-            self.archesproject.arches_graphs_list = arches_connection.get_graphs(self.archesproject.arches_graphs_list, self.login_updates)
+            self.archesproject.arches_graphs_list = arches_connection.get_graphs(self.archesproject.arches_graphs_list, 
+                                                                                 self.login_updates,
+                                                                                 self.percent_progress)
 
         self.archesproject.arches_token = arches_connection.get_token(clientid, self.archesproject.arches_token)
 
+        self.login_updates.emit("Fetching Oauth token ...")
         if not self.archesproject.arches_token:
             return False
-        self.login_updates.emit("Token acquired")
+        self.percent_progress.emit(True,0,0)
 
         # Store for preventing duplicate connection requests
         self.archesproject.arches_connection_cache = {"url": self.archesproject.dlg.archesServerInput.text(),
@@ -254,8 +258,12 @@ class ConnectionProcess(QgsTask):
         triggerSpinner(arches_obj=self.archesproject).hide_spinner()
 
         if result:
+            self.login_updates.emit("Login complete")
+            self.percent_progress.emit(True, 0,0)
+
             if 2 in self.archesproject.arches_user_info["groups"]:
                 # THIS IS THE RESOURCE EDITOR PERMISSION
+                # This must be in result, in order to display that login failed due to permissions rather than other
 
                 # get all vector layers
                 self.archesproject.layers = [l for l in QgsProject.instance().mapLayers().values() if l.type() == QgsVectorLayer.VectorLayer if str(l.dataProvider().name()) != "postgres"] 

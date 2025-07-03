@@ -26,28 +26,36 @@ class LoggedIn:
 
 
 class UpdateLogin:
-    def __init__(self, dlg_label, step=0, substep=0):
+    def __init__(self, dlg_label, step=0):
         self.updateTextLabel = dlg_label
+        self.total_number_steps=5
+        self.percentage_chunks=(1/self.total_number_steps)*100
+        self.percent_progress=0
         self.step = step
-        self.substep = substep
 
     def update_login_progress(self, text):
         """
         Simple function just used as a signal connection to update the loading ui with helpful info, 
         as a spinning wheel look like no progress is being made. 
-
-        Must hard-code x number of steps in order to get percentage completion.
-        1. clientid
-        2. permissions
-        3. graphs
-        4. token
         """
         self.updateTextLabel.setText(text)
-        self.step+=1
-        print(self.step)
 
+    def update_percent(self, main, inner_iter=None, inner_total=None):
+        """
+        Must hard-code x number of steps in order to get percentage completion.
+        1. clientid 20
+        2. permissions 40
+        3. graphs 60
+        4. token 80
+        5. complete 100
+        """
+        if main:
+            self.step +=1
+            self.percent_progress = (self.step/self.total_number_steps)*100
+            self.updateTextLabel.setText(f"{round(self.percent_progress)}%")
 
-class LoginProgress:
-    """
-    Percentage progress for login - dynamic based on x no. graphs
-    """
+        if inner_iter and inner_total:
+            sub_percent_progress = self.percent_progress+(self.percentage_chunks/inner_total)*inner_iter
+            print(inner_iter, sub_percent_progress)
+            self.updateTextLabel.setText(f"{round(sub_percent_progress)}%")
+

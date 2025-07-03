@@ -546,7 +546,9 @@ class ArchesProject:
                                                     password=connection_information["password"]["value"],
                                                     archesproject=self)
             self.login_text_updater = UpdateLogin(self.dlg.updateText)
+            self.login_percent_updater = UpdateLogin(self.dlg.percentProgressText)
             self.arches_connection.login_updates.connect(self.login_text_updater.update_login_progress)
+            self.arches_connection.percent_progress.connect(self.login_percent_updater.update_percent)
             QgsApplication.taskManager().addTask(self.arches_connection)
 
             #24 Tasks must be assigned to self, otherwise finished() won't run
