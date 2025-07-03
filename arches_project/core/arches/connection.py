@@ -198,10 +198,13 @@ class ConnectionProcess(QgsTask):
         # re-fetch graphs before checking cache as updates may have occurred
         self.archesproject.arches_graphs_list = []
 
-        if 2 in self.archesproject.arches_user_info["groups"]:
-            self.archesproject.arches_graphs_list = arches_connection.get_graphs(self.archesproject.arches_graphs_list, 
-                                                                                 self.login_updates,
-                                                                                 self.percent_progress)
+        if 2 not in self.archesproject.arches_user_info["groups"]:
+            # if user does not have permissions return early and deal with in finished()
+            return True
+
+        self.archesproject.arches_graphs_list = arches_connection.get_graphs(self.archesproject.arches_graphs_list,
+                                                                                self.login_updates,
+                                                                                self.percent_progress)
 
         self.archesproject.arches_token = arches_connection.get_token(clientid, self.archesproject.arches_token)
 
@@ -214,7 +217,7 @@ class ConnectionProcess(QgsTask):
         self.archesproject.arches_connection_cache = {"url": self.archesproject.dlg.archesServerInput.text(),
                                         "username": self.archesproject.dlg.usernameInput.text()}
                             
-        return True # return true for all, even if user doesn't have perms as this will be dealt with in finished()
+        return True
             
 
     def finished(self, result):
@@ -258,9 +261,6 @@ class ConnectionProcess(QgsTask):
         triggerSpinner(arches_obj=self.archesproject).hide_spinner()
 
         if result:
-            self.login_updates.emit("Login complete")
-            self.percent_progress.emit(True, 0,0)
-
             if 2 in self.archesproject.arches_user_info["groups"]:
                 # THIS IS THE RESOURCE EDITOR PERMISSION
                 # This must be in result, in order to display that login failed due to permissions rather than other

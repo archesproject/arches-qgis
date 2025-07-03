@@ -28,12 +28,10 @@ class LoggedIn:
 class UpdateLogin:
     def __init__(self, dlg_label, step=0):
         self.updateTextLabel = dlg_label
-        self.total_number_steps=5
+        self.total_number_steps=4
         self.percentage_chunks=(1/self.total_number_steps)*100
         self.percent_progress=0
         self.step = step
-        self.updateTextLabel.setText("0%")
-        self.updateTextLabel.setText("")
 
     def update_login_progress(self, text):
         """
@@ -45,11 +43,10 @@ class UpdateLogin:
     def update_percent(self, main, inner_iter=None, inner_total=None):
         """
         Must hard-code x number of steps in order to get percentage completion.
-        1. clientid 20
-        2. permissions 40
-        3. graphs 60
-        4. token 80
-        5. complete 100
+        1. clientid 25
+        2. permissions 50
+        3. graphs 75
+        4. token 100
         """
         if main:
             self.step +=1
@@ -59,4 +56,3 @@ class UpdateLogin:
         if inner_iter and inner_total:
             sub_percent_progress = self.percent_progress+(self.percentage_chunks/inner_total)*inner_iter
             self.updateTextLabel.setText(f"{round(sub_percent_progress)}%")
-
