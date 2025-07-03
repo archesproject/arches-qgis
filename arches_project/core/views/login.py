@@ -32,6 +32,8 @@ class UpdateLogin:
         self.percentage_chunks=(1/self.total_number_steps)*100
         self.percent_progress=0
         self.step = step
+        self.updateTextLabel.setText("0%")
+        self.updateTextLabel.setText("")
 
     def update_login_progress(self, text):
         """
@@ -56,6 +58,5 @@ class UpdateLogin:
 
         if inner_iter and inner_total:
             sub_percent_progress = self.percent_progress+(self.percentage_chunks/inner_total)*inner_iter
-            print(inner_iter, sub_percent_progress)
             self.updateTextLabel.setText(f"{round(sub_percent_progress)}%")
 
