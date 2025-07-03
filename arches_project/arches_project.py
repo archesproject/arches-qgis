@@ -547,6 +547,8 @@ class ArchesProject:
                                                     archesproject=self)
             self.login_text_updater = UpdateLogin(self.dlg.updateText)
             self.login_percent_updater = UpdateLogin(self.dlg.percentProgressText)
+            self.dlg.updateText.setText("")
+            self.dlg.percentProgressText.setText("0%")
             self.arches_connection.login_updates.connect(self.login_text_updater.update_login_progress)
             self.arches_connection.percent_progress.connect(self.login_percent_updater.update_percent)
             QgsApplication.taskManager().addTask(self.arches_connection)
