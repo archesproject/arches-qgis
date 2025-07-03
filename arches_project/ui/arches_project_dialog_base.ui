@@ -107,6 +107,16 @@
        </widget>
       </item>
       <item>
+       <widget class="QLabel" name="percentProgressText">
+        <property name="text">
+         <string>percentText</string>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignCenter</set>
+        </property>
+       </widget>
+      </item>
+      <item>
        <spacer name="updateTextSpacer1">
         <property name="orientation">
          <enum>Qt::Vertical</enum>
@@ -167,7 +177,7 @@
            <rect>
             <x>0</x>
             <y>0</y>
-            <width>506</width>
+            <width>520</width>
             <height>435</height>
            </rect>
           </property>
@@ -683,7 +693,7 @@
            <rect>
             <x>0</x>
             <y>0</y>
-            <width>504</width>
+            <width>518</width>
             <height>495</height>
            </rect>
           </property>
