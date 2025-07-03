@@ -33,6 +33,12 @@
       <enum>QFrame::Raised</enum>
      </property>
      <layout class="QVBoxLayout" name="verticalLayout_42">
+      <property name="topMargin">
+       <number>0</number>
+      </property>
+      <property name="bottomMargin">
+       <number>0</number>
+      </property>
       <item>
        <spacer name="loadingWheelVerticalSpacer">
         <property name="orientation">
@@ -58,6 +64,12 @@
       <enum>QFrame::Raised</enum>
      </property>
      <layout class="QHBoxLayout" name="horizontalLayout_6">
+      <property name="topMargin">
+       <number>0</number>
+      </property>
+      <property name="bottomMargin">
+       <number>0</number>
+      </property>
       <item>
        <widget class="QLabel" name="loadingWheel">
         <property name="enabled">
@@ -83,6 +95,12 @@
       <enum>QFrame::Raised</enum>
      </property>
      <layout class="QVBoxLayout" name="verticalLayout_43">
+      <property name="topMargin">
+       <number>0</number>
+      </property>
+      <property name="bottomMargin">
+       <number>0</number>
+      </property>
       <item>
        <spacer name="updateTextSpacer2">
         <property name="orientation">
@@ -177,7 +195,7 @@
            <rect>
             <x>0</x>
             <y>0</y>
-            <width>520</width>
+            <width>506</width>
             <height>435</height>
            </rect>
           </property>
@@ -693,7 +711,7 @@
            <rect>
             <x>0</x>
             <y>0</y>
-            <width>518</width>
+            <width>504</width>
             <height>495</height>
            </rect>
           </property>
