@@ -82,9 +82,9 @@ class ArchesConnection():
 
     def get_graphs(self, arches_graphs_list, login_updates, percent_progress):
         try:
+            login_updates.emit("Fetching graphs ...")
             response = requests.get(f"{self.url}/graphs/")
             graphids = [x["graphid"] for x in response.json() if x["graphid"] != "ff623370-fa12-11e6-b98b-6c4008b05c4c" and x["isresource"]]
-            login_updates.emit("Fetching graphs ...")
             percent_progress.emit(True,0,0)
 
             for x, graph in enumerate(graphids):
@@ -114,7 +114,7 @@ class ArchesConnection():
                             "geometry_node_data": geometry_node_data,
                             "multiple_geometry_nodes": multiple
                         })
-                        percent_progress.emit(False, x+1, len(graphids))
+                    percent_progress.emit(False, x+1, len(graphids))
         except:
             pass
         return arches_graphs_list
