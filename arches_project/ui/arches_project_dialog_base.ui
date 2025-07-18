@@ -48,7 +48,7 @@
       </font>
      </property>
      <property name="currentIndex">
-      <number>1</number>
+      <number>0</number>
      </property>
      <property name="usesScrollButtons">
       <bool>true</bool>
@@ -185,12 +185,16 @@
                  <item>
                   <widget class="QLabel" name="archesServerLabel">
                    <property name="text">
-                    <string>Arches Server e.g. http://arches-server.com</string>
+                    <string>Arches Server</string>
                    </property>
                   </widget>
                  </item>
                  <item>
-                  <widget class="QLineEdit" name="archesServerInput"/>
+                  <widget class="QLineEdit" name="archesServerInput">
+                   <property name="placeholderText">
+                    <string>e.g. http://arches-server.com[/language]</string>
+                   </property>
+                  </widget>
                  </item>
                 </layout>
                </widget>
@@ -215,7 +219,11 @@
                   </widget>
                  </item>
                  <item>
-                  <widget class="QLineEdit" name="usernameInput"/>
+                  <widget class="QLineEdit" name="usernameInput">
+                   <property name="placeholderText">
+                    <string>e.g. admin</string>
+                   </property>
+                  </widget>
                  </item>
                 </layout>
                </widget>
