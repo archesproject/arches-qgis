@@ -1,0 +1,7 @@
+services:
+  qgis:
+    container_name: qgis_tests
+    image: qgis/qgis:latest
+    volumes:
+      - ./:/tests_directory
+
