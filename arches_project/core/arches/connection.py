@@ -146,7 +146,7 @@ class ArchesConnection():
         # Reset Create Resource tab as no longer useable
         self_obj.dlg.createResModelSelect.setEnabled(False)
         self_obj.dlg.createResFeatureSelect.setEnabled(False)
-        self_obj.dlg.addNewRes.setEnabled(False)
+        self_obj.dlg.createResButton.setEnabled(False)
         self_obj.dlg.createResOutputBox.setText("")
         ## Set "Edit Resource" to false to begin with
         self_obj.dlg.addEditRes.setEnabled(False)
@@ -226,7 +226,7 @@ class ConnectionProcess(QgsTask):
             if self.archesproject.arches_graphs_list:
                 self.archesproject.dlg.createResModelSelect.setEnabled(True)
                 self.archesproject.dlg.createResModelSelect.addItems([graph["name"] for graph in self.archesproject.arches_graphs_list])
-                self.archesproject.dlg.addNewRes.setEnabled(True)
+                self.archesproject.dlg.createResButton.setEnabled(True)
 
         def update_edit_resources_tab():
             self.archesproject.dlg.addEditRes.setEnabled(False)

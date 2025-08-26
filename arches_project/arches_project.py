@@ -284,9 +284,8 @@ class ArchesProject:
             self.iface.mapCanvas().selectionChanged.connect(self.map_selection)
 
             ## Set "Create resource" to false to begin with and only update once Arches connection made
-            self.dlg.createResModelSelect.setEnabled(False)
-            self.dlg.createResFeatureSelect.setEnabled(False)
-            self.dlg.addNewRes.setEnabled(False)
+            self.dlg.createResModelSelectCombo.setEnabled(False)
+            self.dlg.createResButton.setEnabled(False)
 
             # to run when layer is changed in create resource and edit resource tabs
             self.dlg.hidePostgresLayers.setChecked(True)
@@ -297,7 +296,7 @@ class ArchesProject:
                                                                                                 combobox2=self.dlg.editResSelectFeatures))
 
             # click add button - should bring up new dialog for confirmation
-            self.dlg.addNewRes.clicked.connect(self.create_resource)
+            self.dlg.createResButton.clicked.connect(self.create_resource)
 
             ## Set "Edit Resource" to false to begin with
             self.dlg.selectedResUUID.setText("Connect to your Arches instance to edit resources.")
@@ -310,7 +309,7 @@ class ArchesProject:
             self.dlg.replaceEditRes.clicked.connect(lambda: self.edit_resource(replace=True))
 
             # Hide multiple geometry node selection by default
-            self.dlg.geometryNodeSelectFrame.hide()
+            self.dlg.createResNodeSelectFrame.hide()
 
             # Check if selected graph has multiple geometry nodes
             self.dlg.createResModelSelect.currentIndexChanged.connect(self.multiple_geometry_node_check)
