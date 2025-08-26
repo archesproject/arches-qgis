@@ -1,11 +1,12 @@
 from ..utils.geometry_conversion import Geometries
 from ..utils.qgis_messaging import show_message
+from datetime import datetime
 
 import requests
 
 class ArchesResources:
-    def __init__(self, nodeid, tileid, arches_token, layers, arches_graphs_list, geometry_nodes, arches_user_info):
-        ## Should probably just pass self into this rather than each var
+    def __init__(self, nodeid, tileid, arches_token, layers, arches_graphs_list, geometry_nodes, arches_user_info, archesproject):
+        ## TODO - refactor to pull these variables from self.archesproject instead
         self.nodeid = nodeid
         self.tileid = tileid
         self.arches_token = arches_token
@@ -13,8 +14,7 @@ class ArchesResources:
         self.arches_graphs_list = arches_graphs_list
         self.geometry_nodes = geometry_nodes
         self.arches_user_info = arches_user_info
-
-
+        self.archesproject = archesproject
 
     def save_to_arches(self, tileid, nodeid, geometry_collection, geometry_format, arches_operation):
         """
@@ -29,18 +29,27 @@ class ArchesResources:
                     'format': (None, geometry_format),
                     'operation': (None, arches_operation),
                 }
-                headers = {"Authorization": "Bearer %s" % (self.arches_token["access_token"])}
-                response = requests.post("%s/api/node_value/" % (self.arches_token["formatted_url"]), headers=headers, data=files)
+                
+                headers = {"Authorization": "Bearer %s" % (self.archesproject.arches_token["access_token"])}
+                response = requests.post(f"{self.archesproject.arches_token['formatted_url']}/api/node_value/", headers=headers, data=files)
+
+                if response.status_code == 403: # if the response code is 403, refresh the token and try again
+                    self.refresh_token(self.archesproject.clientid, self.archesproject.arches_token)
+                    headers = {"Authorization": "Bearer %s" % (self.archesproject.arches_token["access_token"])}
+                    response = requests.post(f"{self.archesproject.arches_token['formatted_url']}/api/node_value/", headers=headers, data=files)
+                    
                 if response.ok == True:
+                    print('RESPONSE OK!')
                     arches_created_resource = {"nodegroup_id": response.json()["nodegroup_id"],
                                                 "resourceinstance_id": response.json()["resourceinstance_id"],
                                                 "tile_id": response.json()["tileid"]}
                     return arches_created_resource
+                
                 else:
-                    print("Resource creation faiiled with response code:%s" % (response.status_code))
+                    print("Resource creation failed with response code:%s" % (response.status_code))
                     return None
-            except:
-                print("Cannot create new resource")
+            except Exception as e:
+                print(f"Cannot create new resource: {e}")
         return None
 
 
@@ -190,3 +199,21 @@ class ArchesResources:
                 dlg_edit_resource_add.editDialogCancel.clicked.connect(lambda: close_dialog(dialog=dlg_edit_resource_add))
                 # Show confirmation dialog
                 dlg_edit_resource_add.show()
+
+    def refresh_token(self, clientid, old_arches_token):
+        try:
+            files = {
+            'grant_type': (None, "refresh_token"),
+            'client_id': (None, clientid),
+            'refresh_token': (None, old_arches_token['refresh_token']),
+            }
+
+            response = requests.post(self.arches_token["formatted_url"] +"/o/token/", data=files, timeout=10)
+            new_arches_token = response.json()
+            new_arches_token["formatted_url"] = old_arches_token['formatted_url']
+            new_arches_token["time"] = str(datetime.now())
+
+            self.archesproject.arches_token = new_arches_token
+
+        except Exception as e:
+            print(f"Token refresh failed: {e}")

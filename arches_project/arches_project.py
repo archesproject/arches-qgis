@@ -468,14 +468,14 @@ class ArchesProject:
 
     def create_resource(self):
         """Create Resource dialog and functionality"""
-
         arches_create_resource = ArchesResources(nodeid=None, # filled by selectedNode
                                                  tileid=None,
                                                  arches_token=self.arches_token, 
                                                  arches_graphs_list=self.arches_graphs_list,
                                                  layers=self.layers,
                                                  arches_user_info=self.arches_user_info,
-                                                 geometry_nodes=self.geometry_nodes)
+                                                 geometry_nodes=self.geometry_nodes,
+                                                 archesproject=self)
         arches_create_resource.create_resource(dlg=self.dlg,
                                                dlg_resource_creation=self.dlg_resource_creation,
                                                iface=self.iface)

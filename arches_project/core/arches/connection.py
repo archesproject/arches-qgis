@@ -176,6 +176,7 @@ class ConnectionProcess(QgsTask):
                                             password=self.password)
 
         clientid = arches_connection.get_client_id()
+        self.archesproject.clientid = clientid
         
         if not clientid:
             return False
