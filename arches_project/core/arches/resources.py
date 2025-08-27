@@ -39,7 +39,6 @@ class ArchesResources:
                     response = requests.post(f"{self.archesproject.arches_token['formatted_url']}/api/node_value/", headers=headers, data=files)
                     
                 if response.ok == True:
-                    print('RESPONSE OK!')
                     arches_created_resource = {"nodegroup_id": response.json()["nodegroup_id"],
                                                 "resourceinstance_id": response.json()["resourceinstance_id"],
                                                 "tile_id": response.json()["tileid"]}
