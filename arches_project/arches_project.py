@@ -489,7 +489,8 @@ class ArchesProject:
                                                arches_graphs_list=self.arches_graphs_list,
                                                layers=self.layers,
                                                arches_user_info=self.arches_user_info,
-                                               geometry_nodes=self.geometry_nodes)
+                                               geometry_nodes=self.geometry_nodes,
+                                               archesproject=self)
         arches_edit_resource.edit_resource(replace=replace,
                                            arches_selected_resource=self.arches_selected_resource,                                            
                                            dlg=self.dlg,
