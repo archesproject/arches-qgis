@@ -5,22 +5,16 @@ from datetime import datetime
 import requests
 
 class ArchesResources:
-    def __init__(self, nodeid, tileid, arches_token, layers, arches_graphs_list, geometry_nodes, arches_user_info, archesproject):
-        ## TODO - refactor to pull these variables from self.archesproject instead
+    def __init__(self, nodeid, tileid, archesproject):
         self.nodeid = nodeid
         self.tileid = tileid
-        self.arches_token = arches_token
-        self.layers = layers
-        self.arches_graphs_list = arches_graphs_list
-        self.geometry_nodes = geometry_nodes
-        self.arches_user_info = arches_user_info
         self.archesproject = archesproject
 
     def save_to_arches(self, tileid, nodeid, geometry_collection, geometry_format, arches_operation):
         """
         Save data to arches resource
         """
-        if self.arches_token:
+        if self.archesproject.arches_token:
             try:
                 files = {
                     'tileid': (None, tileid),
@@ -59,7 +53,7 @@ class ArchesResources:
         """
 
         def send_new_resource_to_arches():
-            if selectedNode["nodegroup_id"] in self.arches_user_info["editable_nodegroups"]:
+            if selectedNode["nodegroup_id"] in self.archesproject.arches_user_info["editable_nodegroups"]:
                 try:
                     results = self.save_to_arches(tileid=self.tileid,
                                                 nodeid = selectedNode["node_id"],
@@ -68,7 +62,7 @@ class ArchesResources:
                                                 arches_operation="create")
                     dlg.createResOutputBox.setText("""Successfully created a new resource with the selected geometry.
                                                         \nTo continue the creation of your new resource, navigate to...\n%s/resource/%s""" % 
-                                                    (self.arches_token["formatted_url"], results["resourceinstance_id"]))
+                                                    (self.archesproject.arches_token["formatted_url"], results["resourceinstance_id"]))
                     show_message(iface, "Success", "A new Arches resource has been created.")
                     dlg_resource_creation.close()
                 except:
@@ -85,13 +79,13 @@ class ArchesResources:
 
         # Get info on current layer and selected graph
         selectedLayerIndex = dlg.createResFeatureSelect.currentIndex()
-        selectedLayer = self.layers[selectedLayerIndex]
+        selectedLayer = self.archesproject.layers[selectedLayerIndex]
         selectedGraphIndex = dlg.createResModelSelect.currentIndex()
-        selectedGraph = self.arches_graphs_list[selectedGraphIndex]
+        selectedGraph = self.archesproject.arches_graphs_list[selectedGraphIndex]
 
         if selectedGraph["multiple_geometry_nodes"] == True:
             selectedNodeIndex = dlg.geometryNodeSelect.currentIndex()
-            selectedNode = self.geometry_nodes[selectedNodeIndex]
+            selectedNode = self.archesproject.geometry_nodes[selectedNodeIndex]
 
         elif selectedGraph["multiple_geometry_nodes"] == False:
             node_id = list(selectedGraph["geometry_node_data"].keys())[0]
@@ -129,7 +123,7 @@ class ArchesResources:
         """
 
         def send_edited_data_to_arches(operation_type, dialog):
-            if nodegroup_value in self.arches_user_info["editable_nodegroups"]:
+            if nodegroup_value in self.archesproject.arches_user_info["editable_nodegroups"]:
                 try:
                     results = self.save_to_arches(tileid=self.tileid,
                                                     nodeid = self.nodeid,
@@ -153,13 +147,13 @@ class ArchesResources:
 
         if arches_selected_resource:
             selectedLayerIndex = dlg.editResSelectFeatures.currentIndex()
-            selectedLayer = self.layers[selectedLayerIndex]
+            selectedLayer = self.archesproject.layers[selectedLayerIndex]
 
             geom_convert = Geometries(selectedLayer)
             geomcoll, geometry_type_dict = geom_convert.geometry_conversion()
 
             # Get nodegroup from graph
-            for graph in self.arches_graphs_list:
+            for graph in self.archesproject.layers.archesproject.arches_graphs_list:
                 for k,v in graph["geometry_node_data"].items():
                     if k == arches_selected_resource["nodeid"]:
                         nodegroup_value = v["nodegroup_id"]
@@ -207,7 +201,7 @@ class ArchesResources:
             'refresh_token': (None, old_arches_token['refresh_token']),
             }
 
-            response = requests.post(self.arches_token["formatted_url"] +"/o/token/", data=files, timeout=10)
+            response = requests.post(self.archesproject.arches_token["formatted_url"] +"/o/token/", data=files, timeout=10)
             new_arches_token = response.json()
             new_arches_token["formatted_url"] = old_arches_token['formatted_url']
             new_arches_token["time"] = str(datetime.now())
