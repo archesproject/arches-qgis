@@ -1,5 +1,6 @@
 from ..utils.geometry_conversion import Geometries
 from ..utils.qgis_messaging import show_message
+from ..utils.refresh_token import refresh_token
 from datetime import datetime
 
 import requests
@@ -28,7 +29,7 @@ class ArchesResources:
                 response = requests.post(f"{self.archesproject.arches_token['formatted_url']}/api/node_value/", headers=headers, data=files)
 
                 if self.archesproject.arches_token["expires_at"] < datetime.now():
-                    self.refresh_token(self.archesproject.clientid, self.archesproject.arches_token)
+                    refresh_token(self.archesproject)
                     headers = {"Authorization": "Bearer %s" % (self.archesproject.arches_token["access_token"])}
                     response = requests.post(f"{self.archesproject.arches_token['formatted_url']}/api/node_value/", headers=headers, data=files)
                     
@@ -193,20 +194,3 @@ class ArchesResources:
                 # Show confirmation dialog
                 dlg_edit_resource_add.show()
 
-    def refresh_token(self, clientid, old_arches_token):
-        try:
-            files = {
-            'grant_type': (None, "refresh_token"),
-            'client_id': (None, clientid),
-            'refresh_token': (None, old_arches_token['refresh_token']),
-            }
-
-            response = requests.post(self.archesproject.arches_token["formatted_url"] +"/o/token/", data=files, timeout=10)
-            new_arches_token = response.json()
-            new_arches_token["formatted_url"] = old_arches_token['formatted_url']
-            new_arches_token["time"] = str(datetime.now())
-
-            self.archesproject.arches_token = new_arches_token
-
-        except Exception as e:
-            print(f"Token refresh failed: {e}")
