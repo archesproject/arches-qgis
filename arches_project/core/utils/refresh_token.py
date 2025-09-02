@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import datetime, timedelta
 import requests
 
 def refresh_token(archesproject):
@@ -14,7 +14,8 @@ def refresh_token(archesproject):
         response = requests.post(old_arches_token["formatted_url"] +"/o/token/", data=files, timeout=10)
         new_arches_token = response.json()
         new_arches_token["formatted_url"] = old_arches_token['formatted_url']
-        new_arches_token["time"] = str(datetime.now())
+        new_arches_token["time"] = datetime.now()
+        new_arches_token["expires_at"] = new_arches_token["time"] + timedelta(seconds=new_arches_token["expires_in"])
 
         archesproject.arches_token = new_arches_token
 
