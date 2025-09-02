@@ -70,7 +70,7 @@ class ArchesConnection():
             response = requests.post(self.url+"/o/token/", data=files)
             arches_token = response.json()
             arches_token["formatted_url"] = self.url
-            arches_token["time"] = str(datetime.now())
+            arches_token["time"] = datetime.now()
 
             # If the token has an error status in it then break
             if "error" in arches_token.keys():
