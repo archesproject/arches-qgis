@@ -27,7 +27,7 @@ class ArchesResources:
                 headers = {"Authorization": "Bearer %s" % (self.archesproject.arches_token["access_token"])}
                 response = requests.post(f"{self.archesproject.arches_token['formatted_url']}/api/node_value/", headers=headers, data=files)
 
-                if response.status_code == 403: # if the response code is 403, refresh the token and try again
+                if self.archesproject.arches_token["expires_at"] < datetime.now():
                     self.refresh_token(self.archesproject.clientid, self.archesproject.arches_token)
                     headers = {"Authorization": "Bearer %s" % (self.archesproject.arches_token["access_token"])}
                     response = requests.post(f"{self.archesproject.arches_token['formatted_url']}/api/node_value/", headers=headers, data=files)
