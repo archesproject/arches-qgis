@@ -1,5 +1,5 @@
 import requests
-from datetime import datetime
+from datetime import datetime, timedelta
 import os
 from ..views.logged_in import LoggedIn
 from ..utils.qgis_messaging import show_message
@@ -71,6 +71,7 @@ class ArchesConnection():
             arches_token = response.json()
             arches_token["formatted_url"] = self.url
             arches_token["time"] = datetime.now()
+            arches_token["expires_at"] = arches_token["time"] + timedelta(seconds=arches_token["expires_in"])
 
             # If the token has an error status in it then break
             if "error" in arches_token.keys():
