@@ -78,7 +78,9 @@ class ArchesConnection():
                 error_msg = arches_token["error"]
                 arches_token = {} # reset token to empty
             return arches_token
-        except:
+        
+        except Exception as e:
+            print(f"New token request failed: {e}")
             return arches_token
 
 
