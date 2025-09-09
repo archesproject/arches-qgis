@@ -1,0 +1,11 @@
+FROM qgis/qgis:latest
+
+ENV QGIS_PLUGINPATH=/root/.local/share/QGIS/QGIS3/profiles/default/python/plugins
+
+COPY ../arches_project $QGIS_PLUGINPATH/arches_project
+
+WORKDIR $QGIS_PLUGINPATH/arches_project
+
+ENTRYPOINT qgis
+
+# RUN qgis_setup.sh arches_project

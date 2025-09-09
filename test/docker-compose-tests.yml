@@ -1,0 +1,16 @@
+services:
+  qgis:
+    container_name: qgis_tests
+    # image: qgis/qgis:latest
+    # build: 
+    #   context: ..
+    #   dockerfile: ./test/dockerfile
+    # volumes:
+    #   - ../arches_project/tests/:/tests_directory
+    # entrypoint: ["tail", "-f", "/dev/null"]  
+
+    image: qgis/qgis:latest
+    volumes:
+      - /tmp/.X11-unix:/tmp/.X11-unix
+      - ../arches_project:/tests_directory
+    entrypoint: ["tail", "-f", "/dev/null"]  
