@@ -12,4 +12,4 @@ __pycache__/
 
 # QtCreator related
 arches_project/ui/build/
-arches_project/ui/.pro.user
+arches_project/ui/arches_project_ui.pro.user

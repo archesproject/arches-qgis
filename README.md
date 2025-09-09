@@ -52,5 +52,5 @@ Offline, version-specific packages for Qt and QtCreator can be downloaded here: 
 QtCreator uses Qt6 out the box, so you'll need to use the Qt Mainentance Tool to install the archived version of Qt 5.15.
 Once installed, add the new version of Qt as a kit in the QtCreator preferences, see the documentation for more information: https://doc.qt.io/qtcreator/creator-targets.html.
 
-Open a new project in QtCreator by selecting the .pro file found in `arches_project/ui/.pro`, and Qt 5.15.   
+Open a new project in QtCreator by selecting the .pro file found in `arches_project/ui/arches_project_ui.pro`, and Qt 5.15.   
 This .pro file will load all plugin `.ui` files into the project tree found in the Edit tab (on the left side of QtCreator) where they can be easily opened and switched between. 
