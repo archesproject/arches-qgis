@@ -49,8 +49,10 @@ If you wish to develop UI elements for the arches-qgis plugin you'll need to ins
 It's recommended to install Qt and QtCreator using the online installer found here: https://www.qt.io/download-qt-installer-oss. Bundled is a Maintenance Tool that makes updating, and installing/uninstalling additional components very easy.  
 Offline, version-specific packages for Qt and QtCreator can be downloaded here: https://www.qt.io/offline-installers.
 
-QtCreator uses Qt6 out the box, so you'll need to use the Qt Mainentance Tool to install the archived version of Qt 5.15.
-Expand Qt 5.15.2 and ensure only MinGW 8.1.0 is checked.
+QtCreator uses Qt6 out the box, so you'll need to use the Qt Mainentance Tool to install the archived version of Qt 5.15.   
+- In the top right "Show" dropdown ensure that "Archive" is selected in order to see all historical versions of Qt. 
+- Locate and expand Qt 5.15.2, and ensure only the "MinGW 8.1.0" compiler is checked.    
+
 Once installed, add the new version of Qt as a kit in the QtCreator preferences, see the documentation for more information: https://doc.qt.io/qtcreator/creator-targets.html.
 
 Open a new project in QtCreator by selecting the .pro file found in `arches_project/ui/arches_project_ui.pro`, and Qt 5.15.   
