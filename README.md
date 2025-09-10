@@ -43,7 +43,8 @@ If you wish to develop with the QGIS Arches plugin, below are some helpful tips 
 - The QGIS plugin "Plugin Reloader" is incredibly useful for reloading plugins to reflect code changes.  This can be found on the QGIS plugins repository, and configured to reload specific plugins with Ctrl+F5.
 
 ### Developing the user interface
-QGIS uses PyQt as the framework for UI, specifically Qt 5.15.
+QGIS uses PyQt as the framework for UI, specifically Qt 5.15.   
+**Note:** Qt 5.15 binaries do not appear to be available for ARM Macs. The following instructions should work for Windows and Linux users.
 
 If you wish to develop UI elements for the arches-qgis plugin you'll need to install [Qt Creator](https://doc.qt.io/qtcreator/), an IDE for Qt applications.   
 It's recommended to install Qt and QtCreator using the online installer found here: https://www.qt.io/download-qt-installer-oss. Bundled is a Maintenance Tool that makes updating, and installing/uninstalling additional components very easy.  
