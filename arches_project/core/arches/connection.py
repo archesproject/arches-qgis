@@ -79,7 +79,7 @@ class ArchesConnection():
             return arches_token
         
         except Exception as e:
-            print(f"New token request failed: {e}")
+            print(f"Failed to get OAuth token: {e}")
             return arches_token
 
 
