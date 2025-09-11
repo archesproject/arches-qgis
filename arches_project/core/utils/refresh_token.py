@@ -22,4 +22,4 @@ def refresh_token(archesproject):
         archesproject.arches_token = arches_token
 
     except Exception as e:
-        print(f"Token refresh failed: {e}")
+        print(f"Failed to get OAuth token: {e}")
