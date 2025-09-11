@@ -2,22 +2,24 @@ from datetime import datetime, timedelta
 import requests
 
 def refresh_token(archesproject):
-    old_arches_token = archesproject.arches_token
+    arches_token = archesproject.arches_token
 
     try:
         files = {
         'grant_type': (None, "refresh_token"),
         'client_id': (None, archesproject.clientid),
-        'refresh_token': (None, old_arches_token['refresh_token']),
+        'refresh_token': (None, arches_token['refresh_token']),
         }
 
-        response = requests.post(old_arches_token["formatted_url"] +"/o/token/", data=files, timeout=10)
-        new_arches_token = response.json()
-        new_arches_token["formatted_url"] = old_arches_token['formatted_url']
-        new_arches_token["time"] = datetime.now()
-        new_arches_token["expires_at"] = new_arches_token["time"] + timedelta(seconds=new_arches_token["expires_in"])
+        response = requests.post(arches_token["formatted_url"] +"/o/token/", data=files, timeout=10)
+        refreshed_token = response.json()
 
-        archesproject.arches_token = new_arches_token
+        arches_token["time"] = datetime.now()
+        arches_token['access_token'] = refreshed_token['access_token']
+        arches_token["refresh_token"] = refreshed_token["refresh_token"]
+        arches_token["expires_at"] = arches_token["time"] + timedelta(seconds=refreshed_token["expires_in"])
+
+        archesproject.arches_token = arches_token
 
     except Exception as e:
         print(f"Token refresh failed: {e}")
