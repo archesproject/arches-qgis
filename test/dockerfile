@@ -1,11 +1,24 @@
 FROM qgis/qgis:latest
 
-ENV QGIS_PLUGINPATH=/root/.local/share/QGIS/QGIS3/profiles/default/python/plugins
+# set up plugin path
+# ENV QGIS_PLUGINPATH=/root/.local/share/QGIS/QGIS3/profiles/default/python/plugins
+ENV QGIS_PLUGINPATH=/QGIS/build/output/python/plugins
+ENV PYTHONPATH=$PYTHONPATH:/arches_project/tests:$PLUGIN_DIR
 
+# copy arches_project plugin to plugin path
 COPY ../arches_project $QGIS_PLUGINPATH/arches_project
 
 WORKDIR $QGIS_PLUGINPATH/arches_project
 
-ENTRYPOINT qgis
+ENV XDG_RUNTIME_DIR=/tmp
 
-# RUN qgis_setup.sh arches_project
+RUN python3 -m venv /opt/env \
+    && . /opt/env/bin/activate \
+    && pip install black==24.4.2
+
+# Run code formatting/style checks
+#RUN black .
+
+
+# Run integration tests by using the test script
+# RUN xvfb-run qgis_testrunner.sh integration_test
