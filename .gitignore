@@ -6,3 +6,10 @@ env3.11/
 __pycache__/
 *.py[cod]
 *$py.class
+
+# Other
+.vscode
+
+# QtCreator related
+arches_project/ui/build/
+arches_project/ui/arches_project_ui.pro.user

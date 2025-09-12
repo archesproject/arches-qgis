@@ -25,16 +25,129 @@
   </property>
   <layout class="QVBoxLayout" name="verticalLayout_15">
    <item>
-    <widget class="QLabel" name="loading_wheel">
-     <property name="enabled">
-      <bool>true</bool>
+    <widget class="QFrame" name="loadingWheelVerticalSpacerFrame">
+     <property name="frameShape">
+      <enum>QFrame::NoFrame</enum>
      </property>
-     <property name="text">
-      <string>loading_wheel</string>
+     <property name="frameShadow">
+      <enum>QFrame::Raised</enum>
      </property>
-     <property name="alignment">
-      <set>Qt::AlignCenter</set>
+     <layout class="QVBoxLayout" name="verticalLayout_42">
+      <property name="topMargin">
+       <number>0</number>
+      </property>
+      <property name="bottomMargin">
+       <number>0</number>
+      </property>
+      <item>
+       <spacer name="loadingWheelVerticalSpacer">
+        <property name="orientation">
+         <enum>Qt::Vertical</enum>
+        </property>
+        <property name="sizeHint" stdset="0">
+         <size>
+          <width>20</width>
+          <height>40</height>
+         </size>
+        </property>
+       </spacer>
+      </item>
+     </layout>
+    </widget>
+   </item>
+   <item>
+    <widget class="QFrame" name="loadingWheelFrame">
+     <property name="frameShape">
+      <enum>QFrame::NoFrame</enum>
      </property>
+     <property name="frameShadow">
+      <enum>QFrame::Raised</enum>
+     </property>
+     <layout class="QHBoxLayout" name="horizontalLayout_6">
+      <property name="topMargin">
+       <number>0</number>
+      </property>
+      <property name="bottomMargin">
+       <number>0</number>
+      </property>
+      <item>
+       <widget class="QLabel" name="loadingWheel">
+        <property name="enabled">
+         <bool>true</bool>
+        </property>
+        <property name="text">
+         <string>loadingWheel</string>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignCenter</set>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </widget>
+   </item>
+   <item>
+    <widget class="QFrame" name="updateTextFrame">
+     <property name="frameShape">
+      <enum>QFrame::NoFrame</enum>
+     </property>
+     <property name="frameShadow">
+      <enum>QFrame::Raised</enum>
+     </property>
+     <layout class="QVBoxLayout" name="verticalLayout_43">
+      <property name="topMargin">
+       <number>0</number>
+      </property>
+      <property name="bottomMargin">
+       <number>0</number>
+      </property>
+      <item>
+       <spacer name="updateTextSpacer2">
+        <property name="orientation">
+         <enum>Qt::Vertical</enum>
+        </property>
+        <property name="sizeHint" stdset="0">
+         <size>
+          <width>20</width>
+          <height>20</height>
+         </size>
+        </property>
+       </spacer>
+      </item>
+      <item>
+       <widget class="QLabel" name="updateText">
+        <property name="text">
+         <string>updateText</string>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignBottom|Qt::AlignHCenter</set>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QLabel" name="percentProgressText">
+        <property name="text">
+         <string>percentText</string>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignCenter</set>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <spacer name="updateTextSpacer1">
+        <property name="orientation">
+         <enum>Qt::Vertical</enum>
+        </property>
+        <property name="sizeHint" stdset="0">
+         <size>
+          <width>20</width>
+          <height>40</height>
+         </size>
+        </property>
+       </spacer>
+      </item>
+     </layout>
     </widget>
    </item>
    <item>
@@ -48,7 +161,7 @@
       </font>
      </property>
      <property name="currentIndex">
-      <number>1</number>
+      <number>0</number>
      </property>
      <property name="usesScrollButtons">
       <bool>true</bool>
@@ -82,8 +195,8 @@
            <rect>
             <x>0</x>
             <y>0</y>
-            <width>520</width>
-            <height>612</height>
+            <width>506</width>
+            <height>435</height>
            </rect>
           </property>
           <layout class="QVBoxLayout" name="verticalLayout_3">
@@ -185,12 +298,16 @@
                  <item>
                   <widget class="QLabel" name="archesServerLabel">
                    <property name="text">
-                    <string>Arches Server e.g. http://arches-server.com</string>
+                    <string>Arches Server</string>
                    </property>
                   </widget>
                  </item>
                  <item>
-                  <widget class="QLineEdit" name="archesServerInput"/>
+                  <widget class="QLineEdit" name="archesServerInput">
+                   <property name="placeholderText">
+                    <string>e.g. http://arches-server.com[/language]</string>
+                   </property>
+                  </widget>
                  </item>
                 </layout>
                </widget>
@@ -215,7 +332,11 @@
                   </widget>
                  </item>
                  <item>
-                  <widget class="QLineEdit" name="usernameInput"/>
+                  <widget class="QLineEdit" name="usernameInput">
+                   <property name="placeholderText">
+                    <string>e.g. admin</string>
+                   </property>
+                  </widget>
                  </item>
                 </layout>
                </widget>
@@ -359,7 +480,7 @@
             <x>0</x>
             <y>0</y>
             <width>520</width>
-            <height>612</height>
+            <height>386</height>
            </rect>
           </property>
           <layout class="QVBoxLayout" name="verticalLayout_28">
@@ -598,8 +719,8 @@
            <rect>
             <x>0</x>
             <y>0</y>
-            <width>518</width>
-            <height>610</height>
+            <width>504</width>
+            <height>495</height>
            </rect>
           </property>
           <layout class="QVBoxLayout" name="verticalLayout_11">
@@ -821,7 +942,7 @@
             <x>0</x>
             <y>0</y>
             <width>518</width>
-            <height>610</height>
+            <height>384</height>
            </rect>
           </property>
           <layout class="QVBoxLayout" name="verticalLayout_13">
@@ -992,7 +1113,7 @@
             <x>0</x>
             <y>0</y>
             <width>518</width>
-            <height>610</height>
+            <height>384</height>
            </rect>
           </property>
           <layout class="QHBoxLayout" name="horizontalLayout_4">
@@ -1112,7 +1233,7 @@
             <x>0</x>
             <y>0</y>
             <width>518</width>
-            <height>610</height>
+            <height>384</height>
            </rect>
           </property>
           <layout class="QVBoxLayout" name="verticalLayout_35">

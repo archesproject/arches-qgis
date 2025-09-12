@@ -37,8 +37,24 @@ git clone https://github.com/archesproject/arches-qgis.git
 3. Head to the QGIS Plugins tab and select "Manage and Install Plugins".
 4. Search for and select "Arches Project" from the list of all plugins.
 
-## Tips for developing
+## Information for developers
 If you wish to develop with the QGIS Arches plugin, below are some helpful tips that will help, and make life easier.
 - Installation via GitHub is the easiest method to develop.  This can be done by git cloning in the plugins path (shown above) and (optionally) creating a symbolic link to somewhere much easier to find e.g. your home directory.
 - The QGIS plugin "Plugin Reloader" is incredibly useful for reloading plugins to reflect code changes.  This can be found on the QGIS plugins repository, and configured to reload specific plugins with Ctrl+F5.
-- If you wish to develop UI elements, you'll need Qt Creator installed: https://doc.qt.io/qtcreator/.
+
+### Developing the user interface
+QGIS uses PyQt as the framework for UI, specifically Qt 5.15.   
+**Note:** Qt 5.15 binaries do not appear to be available for ARM Macs. The following instructions should work for Windows and Linux users.
+
+If you wish to develop UI elements for the arches-qgis plugin you'll need to install [Qt Creator](https://doc.qt.io/qtcreator/), an IDE for Qt applications.   
+It's recommended to install Qt and QtCreator using the online installer found here: https://www.qt.io/download-qt-installer-oss. Bundled is a Maintenance Tool that makes updating, and installing/uninstalling additional components very easy.  
+Offline, version-specific packages for Qt and QtCreator can be downloaded here: https://www.qt.io/offline-installers.
+
+QtCreator uses Qt6 out the box, so you'll need to use the Qt Mainentance Tool to install the archived version of Qt 5.15.   
+- In the top right "Show" dropdown ensure that "Archive" is selected in order to see all historical versions of Qt. 
+- Locate and expand Qt 5.15.2, and ensure only the "MinGW 8.1.0" compiler is checked.    
+
+Once installed, add the new version of Qt as a kit in the QtCreator preferences, see the documentation for more information: https://doc.qt.io/qtcreator/creator-targets.html.
+
+Open a new project in QtCreator by selecting the .pro file found in `arches_project/ui/arches_project_ui.pro`, and Qt 5.15.   
+This .pro file will load all plugin `.ui` files into the project tree found in the Edit tab (on the left side of QtCreator) where they can be easily opened and switched between. 
