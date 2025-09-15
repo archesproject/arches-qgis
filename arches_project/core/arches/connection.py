@@ -1,5 +1,5 @@
 import requests
-from datetime import datetime
+from datetime import datetime, timedelta
 import os
 from ..views.login import LoggedIn
 from ..utils.qgis_messaging import show_message
@@ -69,14 +69,17 @@ class ArchesConnection():
             response = requests.post(self.url+"/o/token/", data=files)
             arches_token = response.json()
             arches_token["formatted_url"] = self.url
-            arches_token["time"] = str(datetime.now())
+            arches_token["time"] = datetime.now()
+            arches_token["expires_at"] = arches_token["time"] + timedelta(seconds=arches_token["expires_in"])
 
             # If the token has an error status in it then break
             if "error" in arches_token.keys():
                 error_msg = arches_token["error"]
                 arches_token = {} # reset token to empty
             return arches_token
-        except:
+        
+        except Exception as e:
+            print(f"Failed to get OAuth token: {e}")
             return arches_token
 
 
@@ -185,6 +188,7 @@ class ConnectionProcess(QgsTask):
 
         self.login_updates.emit("Fetching client id ...")
         clientid = arches_connection.get_client_id()
+        self.archesproject.clientid = clientid
         self.percent_progress.emit(True, 0,0)
         if not clientid:
             return False
