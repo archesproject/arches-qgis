@@ -257,13 +257,13 @@ setup-qgis-docker:
 	docker exec -it qgis-testing-environment sh -c "apt-get update && apt-get install -y pre-commit python3-coverage"
 	docker exec -it qgis-testing-environment sh -c "git config --global --add safe.directory /tests_directory"
 
-stop-qgis-docker:
+shutdown-qgis-docker:
 	docker stop qgis-testing-environment
 	docker rm qgis-testing-environment
 
 run-tests:
-	docker exec -it qgis-testing-environment sh -c "cd /tests_directory/arches_project \
-	&& python3 -m coverage run -m unittest discover \
+	docker exec -it qgis-testing-environment sh -c "cd /tests_directory \
+	&& python3 -m coverage run -m unittest discover arches_project/tests \
 	&& python3 -m coverage report -m"
 
 run-formatting:

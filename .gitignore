@@ -1,15 +1,12 @@
-# Virtual environments
-env/
-env3.11/
-
-# Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
 *$py.class
-
-# Other
+.coverage
+coverage
 .vscode
 
-# QtCreator related
+env/
+env3.11/
+
 arches_project/ui/build/
 arches_project/ui/arches_project_ui.pro.user
