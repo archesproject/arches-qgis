@@ -1,4 +1,5 @@
-import os.path as path
-# import unittest
+from qgis import utils
 
-print("TEST")
+def run_all():
+    print('Hello QGIS!')
+    print('Ran OK')
