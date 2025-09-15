@@ -22,23 +22,14 @@
  ***************************************************************************/
 """
 from PyQt5.QtCore import Qt
-from qgis.PyQt.QtCore import QSettings, QTranslator, QCoreApplication, QDir
-from qgis.PyQt.QtGui import QIcon, QFontDatabase, QPixmap, QCursor, QTransform
-from qgis.PyQt.QtWidgets import QAction, QTableView, QTableWidgetItem, QApplication
+from qgis.PyQt.QtCore import QSettings, QTranslator, QCoreApplication
+from qgis.PyQt.QtGui import QIcon
+from qgis.PyQt.QtWidgets import QAction, QTableWidgetItem
 from qgis.core import (QgsProject, 
                        QgsVectorLayer, 
-                       QgsVectorLayerCache, 
-                       QgsWkbTypes,
-                       QgsTask,
-                       QgsTaskManager,
                        QgsMessageLog,
                        QgsApplication
                        )
-from qgis.gui import (QgsAttributeTableView, 
-                      QgsAttributeTableModel, 
-                      QgsAttributeTableFilterModel,
-                      QgsMapLayerComboBox
-                      )
 
 # Initialize Qt resources from file resources.py
 from .resources import *
@@ -57,6 +48,7 @@ from .core.arches.resources import ArchesResources
 from .core.views.stylesheets import PluginStylesheets
 from .core.views.logging import enable_logging
 from .core.views.components.missing_credentials import missing_credentials
+from .core.views.login import UpdateLogin
 
 from .core.utils.format_url import format_url
 from .core.utils.spinner import triggerSpinner
@@ -552,6 +544,12 @@ class ArchesProject:
                                                     username=connection_information["username"]["value"], 
                                                     password=connection_information["password"]["value"],
                                                     archesproject=self)
+            self.login_text_updater = UpdateLogin(self.dlg.updateText)
+            self.login_percent_updater = UpdateLogin(self.dlg.percentProgressText)
+            self.dlg.updateText.setText("")
+            self.dlg.percentProgressText.setText("0%")
+            self.arches_connection.login_updates.connect(self.login_text_updater.update_login_progress)
+            self.arches_connection.percent_progress.connect(self.login_percent_updater.update_percent)
             QgsApplication.taskManager().addTask(self.arches_connection)
 
             #24 Tasks must be assigned to self, otherwise finished() won't run

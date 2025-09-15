@@ -19,8 +19,11 @@ class PluginStylesheets:
         self.plugin_dir = plugin_dir
         self.on_start = on_start
 
-        self.dlg.loading_wheel.hide() # connection wheel label 
+        # hide loading wheel adjustments
+        self.dlg.loadingWheel.hide() # connection wheel label
+        self.dlg.updateTextFrame.hide()
         self.dlg.loginErrorMessageFrame.hide()
+        self.dlg.loadingWheelVerticalSpacerFrame.hide()
 
         if not self.dlg.useStylesheetCheckbox.isChecked():
             self.default_stylesheet()
