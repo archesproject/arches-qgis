@@ -154,7 +154,7 @@ class ArchesResources:
             geomcoll, geometry_type_dict = geom_convert.geometry_conversion()
 
             # Get nodegroup from graph
-            for graph in self.archesproject.layers.archesproject.arches_graphs_list:
+            for graph in self.archesproject.arches_graphs_list:
                 for k,v in graph["geometry_node_data"].items():
                     if k == arches_selected_resource["nodeid"]:
                         nodegroup_value = v["nodegroup_id"]
