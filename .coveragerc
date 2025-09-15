@@ -1,0 +1,16 @@
+[run]
+source = /tests_directory/arches_project
+    
+data_file = coverage/python/.coverage
+
+[report]
+show_missing = true
+
+[html]
+directory = coverage/python/htmlcov
+
+[xml]
+output = coverage/python/coverage.xml
+
+[json]
+output = coverage/python/coverage.json
