@@ -224,6 +224,19 @@ class ArchesProject:
                 action)
             self.iface.removeToolBarIcon(action)
 
+    def reset_tabs(self):
+        """Resets the tabs to just the login screen and settings"""
+        self.removedTabs = []
+
+        for i in reversed(range(self.dlg.tabWidget.count())):
+                tab = self.dlg.tabWidget.widget(i)
+                tabName = self.dlg.tabWidget.widget(i).objectName()
+                icon = self.dlg.tabWidget.tabIcon(i)
+
+                if tabName not in ["connection", "settings"]:
+                    self.removedTabs.append({"tab": tab, "index": i, "icon": icon, "label": tabName})
+                    self.dlg.tabWidget.removeTab(i)
+
     def run(self):
         """Run method that performs all the real work"""
 
@@ -258,16 +271,7 @@ class ArchesProject:
             # Set tab index to 0 always
             self.dlg.tabWidget.setCurrentIndex(0)
 
-            self.removedTabs = []
-
-            for i in reversed(range(self.dlg.tabWidget.count())):
-                tab = self.dlg.tabWidget.widget(i)
-                tabName = self.dlg.tabWidget.widget(i).objectName()
-                icon = self.dlg.tabWidget.tabIcon(i)
-
-                if tabName not in ["connection", "settings"]:
-                    self.removedTabs.append({"tab": tab, "index": i, "icon": icon, "label": tabName})
-                    self.dlg.tabWidget.removeTab(i)
+            self.reset_tabs()
 
             self.dlg.enableLoggingCheckbox.stateChanged.connect(enable_logging)
 
