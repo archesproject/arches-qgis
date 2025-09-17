@@ -257,8 +257,17 @@ class ArchesProject:
 
             # Set tab index to 0 always
             self.dlg.tabWidget.setCurrentIndex(0)
-            self.dlg.tabWidget.setTabVisible(1, False)
-            self.dlg.tabWidget.setTabVisible(5, False)
+
+            self.removedTabs = []
+
+            for i in reversed(range(self.dlg.tabWidget.count())):
+                tab = self.dlg.tabWidget.widget(i)
+                tabName = self.dlg.tabWidget.widget(i).objectName()
+                icon = self.dlg.tabWidget.tabIcon(i)
+
+                if tabName not in ["connection", "settings"]:
+                    self.removedTabs.append({"tab": tab, "index": i, "icon": icon, "label": tabName})
+                    self.dlg.tabWidget.removeTab(i)
 
             self.dlg.enableLoggingCheckbox.stateChanged.connect(enable_logging)
 
@@ -553,3 +562,10 @@ class ArchesProject:
             # A log message (or print) is required for the task to be run.
             # It is an existing QGIS issue https://github.com/qgis/QGIS/issues/37655
             QgsMessageLog.logMessage("Connection task started")
+
+        for tab in reversed(self.removedTabs):
+            self.dlg.tabWidget.insertTab(tab["index"], tab["tab"], tab["icon"], "")
+
+        self.dlg.tabWidget.setTabEnabled(0, False)
+    
+
