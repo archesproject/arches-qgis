@@ -224,7 +224,7 @@ class ArchesProject:
                 action)
             self.iface.removeToolBarIcon(action)
 
-    def reset_tabs(self):
+    def remove_tabs(self):
         """Resets the tabs to just the login screen and settings"""
         self.removedTabs = []
 
@@ -268,10 +268,11 @@ class ArchesProject:
             ## Have everything called in here so multiple connections aren't made when plugin button pressed
             # This way only one connection is made at a time
 
+            # Remove most tabs until connected
+            self.remove_tabs()
+
             # Set tab index to 0 always
             self.dlg.tabWidget.setCurrentIndex(0)
-
-            self.reset_tabs()
 
             self.dlg.enableLoggingCheckbox.stateChanged.connect(enable_logging)
 
@@ -567,9 +568,16 @@ class ArchesProject:
             # It is an existing QGIS issue https://github.com/qgis/QGIS/issues/37655
             QgsMessageLog.logMessage("Connection task started")
 
+        # Re-add previously removed tabs
         for tab in reversed(self.removedTabs):
             self.dlg.tabWidget.insertTab(tab["index"], tab["tab"], tab["icon"], "")
 
-        self.dlg.tabWidget.setTabEnabled(0, False)
-    
+        # Remove login tab
+        self.removedTabs = [{
+            "tab": self.dlg.tabWidget.widget(0),
+            "index": 0,
+            "icon": self.dlg.tabWidget.tabIcon(0),
+            "label": self.dlg.tabWidget.widget(0).objectName()
+        }]
 
+        self.dlg.tabWidget.removeTab(0)
