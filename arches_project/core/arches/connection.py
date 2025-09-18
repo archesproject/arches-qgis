@@ -139,9 +139,10 @@ class ArchesConnection():
             self_obj.dlg.displayFullNameLabel.setText("")
             self_obj.dlg.displayConnectionInfoLabel.setText("")
             self_obj.dlg.displayUsernameLabel.setText("")
-            # Replace login tab with logged in tab
-            self_obj.dlg.tabWidget.setTabVisible(0, True)
-            self_obj.dlg.tabWidget.setTabVisible(1, False)
+            # Re-add login tab and remove most other tabs
+            for tab in reversed(self_obj.removedTabs):
+                self_obj.dlg.tabWidget.insertTab(tab["index"], tab["tab"], tab["icon"], "")
+            self_obj.remove_tabs()
             self_obj.dlg.tabWidget.setCurrentIndex(0)
 
         # Reset stored data
@@ -226,11 +227,6 @@ class ConnectionProcess(QgsTask):
 
     def finished(self, result):
         def update_login_tab():
-            # Replace login tab with logged in tab
-            self.archesproject.dlg.tabWidget.setTabVisible(0, False)
-            self.archesproject.dlg.tabWidget.setTabVisible(1, True)
-            self.archesproject.dlg.tabWidget.setCurrentIndex(1)
-
             logged_in_tab = LoggedIn(dlg = self.archesproject.dlg,
                                      username = self.username,
                                      url = self.url,
