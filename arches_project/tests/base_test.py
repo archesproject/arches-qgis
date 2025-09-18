@@ -42,9 +42,6 @@ class ArchesQGISTestCase(unittest.TestCase):
                           self.arches_project.plugin_dir, 
                           True)
         
-        # settings=QSettings()
-        # settings.setValue('locale/userLocale', 'en')
-        # print(settings().value('locale/userLocale'))
 
     def tearDown(self):
         """
