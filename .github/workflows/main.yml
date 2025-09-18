@@ -11,9 +11,9 @@ jobs:
 
     strategy:
       fail-fast: false
-      matrix:
-        qgis_version: 3.40.10 
-        # hardcoded in makefile
+      # matrix:
+        # qgis_version: [3.40.10, ]
+        # hardcoded in makefile - needs changing for multiple versions
 
     steps:
       - name: Checkout
