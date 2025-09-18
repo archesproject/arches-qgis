@@ -13,8 +13,9 @@ from qgis.core import (
     QgsTask,
     QgsMessageLog,
 )
-from PyQt5.QtCore import pyqtSignal
 
+from qgis.PyQt.QtCore import QSettings
+from PyQt5.QtCore import pyqtSignal
 
 class ArchesConnection:
     """Class for Arches APIs"""
@@ -207,6 +208,9 @@ class ConnectionProcess(QgsTask):
         self.plugin_dir = plugin_dir
 
     def run(self):
+        # Store url for future autocomplete
+        QSettings().setValue("url", self.url)
+        
         arches_connection = ArchesConnection(
             url=self.url, username=self.username, password=self.password
         )
