@@ -1,0 +1,31 @@
+name: CI Plugin Tests
+
+on: 
+  # push: -- just run on PRs for now
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  tests:
+    runs-on: ubuntu-latest
+
+    strategy:
+      fail-fast: false
+      matrix:
+        qgis_version: 3.40.10 
+        # hardcoded in makefile
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup QGIS environment
+        run: make setup-qgis-docker
+
+      - name: Run plugin tests
+        run: make run-tests
+
+      - name: Run black formatting
+        run: make run-formatting
+
+      
