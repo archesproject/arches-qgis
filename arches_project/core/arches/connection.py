@@ -208,9 +208,6 @@ class ConnectionProcess(QgsTask):
         self.plugin_dir = plugin_dir
 
     def run(self):
-        # Store url for future autocomplete
-        QSettings().setValue("url", self.url)
-        
         arches_connection = ArchesConnection(
             url=self.url, username=self.username, password=self.password
         )
@@ -256,6 +253,18 @@ class ConnectionProcess(QgsTask):
             "url": self.dlg.archesServerInput.text(),
             "username": self.dlg.usernameInput.text(),
         }
+
+        # Store url for future autocomplete
+
+        saved_urls = QSettings().value("server/addresses", [])
+        
+        if self.url not in saved_urls:
+            saved_urls.append(self.url)
+
+            if len(saved_urls) > 5:
+                del saved_urls[0]
+            
+            QSettings().setValue("url", saved_urls)
 
         return True
 
