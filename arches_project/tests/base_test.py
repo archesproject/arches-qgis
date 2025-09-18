@@ -8,6 +8,8 @@ from arches_project.ui.edit_resource_replace_confirmation_dialog import EditReso
 from arches_project.arches_project import ArchesProject
 from arches_project.core.views.stylesheets import PluginStylesheets
 
+from qgis.PyQt.QtCore import QSettings
+
 from utils.utilities import get_qgis_app
 CANVAS, PARENT, IFACE, QGIS_APP = get_qgis_app()
 
@@ -22,7 +24,12 @@ class ArchesQGISTestCase(unittest.TestCase):
 
 
     def setUp(self):
-        """Runs before each test."""
+        """
+        Runs before each test.
+        """
+
+        QSettings().setValue('locale/userLocale', 'en')
+
         self.dlg = ArchesProjectDialog()            
         self.dlg_resource_creation = CreateResourceConfirmation()
         self.dlg_edit_resource_add = EditResourceAddConfirmation()
@@ -34,11 +41,18 @@ class ArchesQGISTestCase(unittest.TestCase):
                           self.dlg_edit_resource_replace, 
                           self.arches_project.plugin_dir, 
                           True)
+        
+        # settings=QSettings()
+        # settings.setValue('locale/userLocale', 'en')
+        # print(settings().value('locale/userLocale'))
 
     def tearDown(self):
-        """Runs after each test."""
+        """
+        Runs after each test.
+        """
         self.dlg = None
         self.dlg_resource_creation = None
         self.dlg_edit_resource_add = None
         self.dlg_edit_resource_replace = None
         self.arches_project = None
+        QSettings().setValue('locale/userLocale', None)
