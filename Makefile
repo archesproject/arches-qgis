@@ -249,22 +249,22 @@ SETUP=true
 setup-qgis-docker:
 	docker run -dt --name qgis-testing-environment -v .:/tests_directory -e QT_QPA_PLATFORM="offscreen" qgis/qgis:3.40.10
 	sleep 10 
-	docker exec -it qgis-testing-environment sh -c "cp -a /tests_directory/test/scripts/. /usr/bin/"
-	docker exec -it qgis-testing-environment sh -c "/tests_directory/test/scripts/qgis_setup.sh arches_project"
-	docker exec -it qgis-testing-environment sh -c "rm -f  /root/.local/share/QGIS/QGIS3/profiles/default/python/plugins/arches_project"
-	docker exec -it qgis-testing-environment sh -c "ln -s /tests_directory/ /root/.local/share/QGIS/QGIS3/profiles/default/python/plugins/arches_project"
-# 	docker exec -it qgis-testing-environment sh -c "cd /tests_directory && qgis_testrunner.sh tests.plugin_tests"
-	docker exec -it qgis-testing-environment sh -c "apt-get update && apt-get install -y pre-commit python3-coverage"
-	docker exec -it qgis-testing-environment sh -c "git config --global --add safe.directory /tests_directory"
+	docker exec qgis-testing-environment bash -c "cp -a /tests_directory/test/scripts/. /usr/bin/"
+	docker exec qgis-testing-environment bash -c "/tests_directory/test/scripts/qgis_setup.sh arches_project"
+	docker exec qgis-testing-environment bash -c "rm -f  /root/.local/share/QGIS/QGIS3/profiles/default/python/plugins/arches_project"
+	docker exec qgis-testing-environment bash -c "ln -s /tests_directory/ /root/.local/share/QGIS/QGIS3/profiles/default/python/plugins/arches_project"
+# 	docker exec qgis-testing-environment bash -c "cd /tests_directory && qgis_testrunner.sh tests.plugin_tests"
+	docker exec qgis-testing-environment bash -c "apt-get update && apt-get install -y pre-commit python3-coverage"
+	docker exec qgis-testing-environment bash -c "git config --global --add safe.directory /tests_directory"
 
 shutdown-qgis-docker:
 	docker stop qgis-testing-environment
 	docker rm qgis-testing-environment
 
 run-tests:
-	docker exec -it qgis-testing-environment sh -c "cd /tests_directory \
+	docker exec qgis-testing-environment bash -c "cd /tests_directory \
 	&& python3 -m coverage run -m unittest discover arches_project/tests \
 	&& python3 -m coverage report -m"
 
 run-formatting:
-	docker exec -it qgis-testing-environment sh -c "cd /tests_directory/arches_project && pre-commit run --all-files --verbose"
+	docker exec qgis-testing-environment bash -c "cd /tests_directory/arches_project && pre-commit run --all-files --verbose"
