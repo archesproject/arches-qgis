@@ -58,3 +58,23 @@ Once installed, add the new version of Qt as a kit in the QtCreator preferences,
 
 Open a new project in QtCreator by selecting the .pro file found in `arches_project/ui/arches_project_ui.pro`, and Qt 5.15.   
 This .pro file will load all plugin `.ui` files into the project tree found in the Edit tab (on the left side of QtCreator) where they can be easily opened and switched between. 
+
+## Testing
+The Arches QGIS plugin includes tests found in `arches_project/tests/`.    
+The `test/` directory contains scripts for setting up the testing environment.   
+
+In order to test the QGIS plugin, an interactive QGIS environment needs to be set up to load the plugin and test the functionality.
+Since the majority of the plugin requires the Arches API, a test Arches environment also needs to be set up. This is a work in progress 
+
+
+### Setting up the QGIS testing environment.
+Requirements:
+- Docker needs to be installed. If not, install here: https://docs.docker.com/engine/install/ubuntu/
+
+1. Run `make setup-qgis-docker` to set up the QGIS docker container (named "qgis-testing-environment").
+
+2. Run `make run-tests` to run all unit tests.
+
+3. Run `make run-formatting` to run black formatting.
+
+4. Run `make shutdown-qgis-docker` to stop and remove the docker container from your local system.
