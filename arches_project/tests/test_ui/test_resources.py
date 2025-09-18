@@ -14,31 +14,18 @@ __copyright__ = 'Copyright 2023, Knowledge Integration'
 
 import unittest
 
+from arches_project.tests.base_test import ArchesQGISTestCase
+
 from qgis.PyQt.QtGui import QIcon
 
 
 
-class ArchesProjectDialogTest(unittest.TestCase):
+class ArchesProjectDialogTest(ArchesQGISTestCase):
     """Test rerources work."""
-
-    def setUp(self):
-        """Runs before each test."""
-        pass
-
-    def tearDown(self):
-        """Runs after each test."""
-        pass
 
     def test_icon_png(self):
         """Test we can click OK."""
         path = ':/plugins/ArchesProject/arches.png'
         icon = QIcon(path)
         self.assertFalse(icon.isNull())
-
-if __name__ == "__main__":
-    suite = unittest.makeSuite(ArchesProjectResourcesTest)
-    runner = unittest.TextTestRunner(verbosity=2)
-    runner.run(suite)
-
-
 
