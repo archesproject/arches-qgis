@@ -110,8 +110,8 @@ class ArchesProjectDialog(QtWidgets.QDialog, FORM_CLASS):
         # Hide multiple geometry node selection by default
         self.geometryNodeSelectFrame.hide()
 
-        # # load saved urls to auto completer
-        self.load_saved_urls()
+        # load saved credentials to auto completer
+        self.load_saved_credentials()
 
         # Connection to Arches instance
         self.arches_connection = ArchesConnectionView(
@@ -155,14 +155,25 @@ class ArchesProjectDialog(QtWidgets.QDialog, FORM_CLASS):
             )
         )
 
-    def load_saved_urls(self):
-        """Loads saved urls to the autocomplete"""
+    def load_saved_credentials(self):
+        """Loads saved urls and usernames to the autocomplete"""
         saved_urls = QSettings().value("urls", [])
-        if len(saved_urls) > 0:
-            completer = QCompleter(saved_urls, self.archesServerInput)
-            completer.setCaseSensitivity(Qt.CaseInsensitive)
-            completer.setCompletionMode(QCompleter.PopupCompletion)
-            self.archesServerInput.setCompleter(completer)
+        saved_usernames = QSettings().value("usernames", [])
 
-            hover_popup = HoverListView()
-            completer.setPopup(hover_popup)
+        if len(saved_urls) > 0:
+            arches_server_completer = QCompleter(saved_urls, self.archesServerInput)
+            arches_server_completer.setCaseSensitivity(Qt.CaseInsensitive)
+            arches_server_completer.setCompletionMode(QCompleter.PopupCompletion)
+            self.archesServerInput.setCompleter(arches_server_completer)
+
+            arches_server_hover_popup = HoverListView()
+            arches_server_completer.setPopup(arches_server_hover_popup)
+
+        if len(saved_usernames) > 0:
+            username_completer = QCompleter(saved_usernames, self.usernameInput)
+            username_completer.setCaseSensitivity(Qt.CaseInsensitive)
+            username_completer.setCompletionMode(QCompleter.PopupCompletion)
+            self.usernameInput.setCompleter(username_completer)
+
+            username_hover_popup = HoverListView()
+            username_completer.setPopup(username_hover_popup)

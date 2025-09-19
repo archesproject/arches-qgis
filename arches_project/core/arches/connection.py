@@ -182,8 +182,8 @@ class ArchesConnection:
         )
         # Hide multiple nodegroup dropdown
         dlg.geometryNodeSelect.setEnabled(False)
-        # Reload saved urls for the autocomplete
-        dlg.load_saved_urls()
+        # Reload saved credentials for the autocompletes
+        dlg.load_saved_credentials()
 
         if manual_logout:
             show_message(
