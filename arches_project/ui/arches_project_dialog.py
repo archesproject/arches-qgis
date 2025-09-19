@@ -35,6 +35,7 @@ from arches_project.core.views.components.multiple_graph_nodes import (
 from arches_project.core.views.resources import ResourcesView
 from arches_project.core.views.connection import ArchesConnectionView
 
+from arches_project.widgets.hover_list_view import HoverListView
 from PyQt5.QtCore import Qt
 from qgis.PyQt import uic
 from qgis.PyQt import QtWidgets
@@ -109,12 +110,8 @@ class ArchesProjectDialog(QtWidgets.QDialog, FORM_CLASS):
         # Hide multiple geometry node selection by default
         self.geometryNodeSelectFrame.hide()
 
-        # load saved urls to auto completer
-        saved_urls = QSettings().value("urls", "[]")
-        completer = QCompleter(saved_urls, self.archesServerInput)
-        completer.setCaseSensitivity(Qt.CaseInsensitive)
-        completer.setCompletionMode(QCompleter.PopupCompletion)
-        self.archesServerInput.setCompleter(completer)
+        # # load saved urls to auto completer
+        self.load_saved_urls()
 
         # Connection to Arches instance
         self.arches_connection = ArchesConnectionView(
@@ -157,3 +154,15 @@ class ArchesProjectDialog(QtWidgets.QDialog, FORM_CLASS):
                 dlg_resource_confirmation=self.dlg_resource_confirmation,
             )
         )
+
+    def load_saved_urls(self):
+        """Loads saved urls to the autocomplete"""
+        saved_urls = QSettings().value("urls", [])
+        if len(saved_urls) > 0:
+            completer = QCompleter(saved_urls, self.archesServerInput)
+            completer.setCaseSensitivity(Qt.CaseInsensitive)
+            completer.setCompletionMode(QCompleter.PopupCompletion)
+            self.archesServerInput.setCompleter(completer)
+
+            hover_popup = HoverListView()
+            completer.setPopup(hover_popup)
