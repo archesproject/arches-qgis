@@ -259,6 +259,7 @@ class ConnectionProcess(QgsTask):
         # Store url for future autocomplete
 
         saved_urls = QSettings().value("urls", [])
+        saved_usernames = QSettings().value("usernames", [])
         
         if self.url not in saved_urls:
             saved_urls.append(self.url)
@@ -268,6 +269,14 @@ class ConnectionProcess(QgsTask):
             
             QSettings().setValue("urls", saved_urls)
 
+        if self.username not in saved_usernames:
+            saved_usernames.append(self.username)
+
+            if len(saved_usernames) > 5:
+                del saved_usernames[0]
+            
+            QSettings().setValue("usernames", saved_usernames)
+                            
         return True
 
     def finished(self, result):
