@@ -182,6 +182,8 @@ class ArchesConnection:
         )
         # Hide multiple nodegroup dropdown
         dlg.geometryNodeSelect.setEnabled(False)
+        # Reload saved urls for the autocomplete
+        dlg.load_saved_urls()
 
         if manual_logout:
             show_message(
@@ -265,7 +267,7 @@ class ConnectionProcess(QgsTask):
                 del saved_urls[0]
             
             QSettings().setValue("urls", saved_urls)
-                            
+
         return True
 
     def finished(self, result):
