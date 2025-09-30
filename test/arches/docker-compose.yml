@@ -1,0 +1,66 @@
+services:
+
+  arches-testing:
+    container_name: arches-qgis-arches
+    env_file:
+      - ./.env
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+      args:
+        ARCHES_PROJECT: ${ARCHES_PROJECT}
+        ARCHES_VERSION: ${ARCHES_VERSION}
+        PYTHON_VERSION: ${PYTHON_VERSION}
+        DJANGO_PORT: ${DJANGO_PORT}
+    environment:
+      - ARCHES_PROJECT=${ARCHES_PROJECT}
+      - ARCHES_VERSION=${ARCHES_VERSION}
+      - PYTHON_VERSION=${PYTHON_VERSION}
+      - DJANGO_PORT=${DJANGO_PORT}
+    depends_on:
+      - arches-qgis-postgres
+      - arches-qgis-elasticsearch
+    ports:
+      - ${DJANGO_PORT}:${DJANGO_PORT}
+      - 5678:5678
+    command:
+      - run_arches
+    networks:
+      - arches-qgis-network
+
+  arches-qgis-postgres:
+    container_name: arches-qgis-postgres
+    image: postgis/postgis:14-3.2
+    environment:
+      - POSTGRES_USER=${PGUSERNAME}
+      - POSTGRES_PASSWORD=${PGPASSWORD}
+      - POSTGRES_MULTIPLE_EXTENSIONS=postgis,postgis_topology
+    restart: always
+    volumes:
+        - ./init-unix.sql:/docker-entrypoint-initdb.d/init.sql # to set up the DB template
+    ports:
+      - ${PGPORT_HOST}:${PGPORT_CONTAINER}
+    env_file:
+      - ./.env
+    networks:
+      - arches-qgis-network
+
+  arches-qgis-elasticsearch:
+    container_name: arches-qgis-elasticsearch
+    image: elasticsearch:8.5.3
+    restart: always
+    environment:
+      - xpack.security.enabled=false
+      - discovery.type=single-node
+      - "ES_JAVA_OPTS=-Xms400m -Xmx400m"
+    ports:
+      - ${ESPORT_HOST}:${ESPORT_CONTAINER}
+    env_file:
+      - ./.env
+    networks:
+      - arches-qgis-network
+
+networks:
+  arches-qgis-network:
+    driver: bridge
+    name: arches-qgis-network

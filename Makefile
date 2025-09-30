@@ -268,3 +268,9 @@ run-tests:
 
 run-formatting:
 	docker exec qgis-testing-environment bash -c "cd /tests_directory/arches_project && pre-commit run --all-files --verbose"
+
+setup-arches-docker:
+	cd ./test/arches && docker compose up -d --build
+
+shutdown-arches-docker:
+	cd ./test/arches && docker compose down -v
