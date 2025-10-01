@@ -135,6 +135,8 @@ RUN rm -f package-lock.json
 RUN npm install
 
 COPY ./settings_local.py ${APP_ROOT}/${ARCHES_PROJECT}/settings_local.py
+COPY ./project_setup.py ${APP_ROOT}/${ARCHES_PROJECT}/management/commands/project_setup.py
+
 
 # Make sure the entry point is available and lacks weird characters
 # that don't work in a Linux OS

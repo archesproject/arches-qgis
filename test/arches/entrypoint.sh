@@ -95,6 +95,8 @@ init_arches() {
 	fi
 }
 
+#### Misc
+
 #### Run commands
 
 run_migrations() {
@@ -123,9 +125,18 @@ run_django_server() {
 	exec sh -c "pip install debugpy -t /tmp && python3 /tmp/debugpy --listen 0.0.0.0:5678 manage.py runserver 0.0.0.0:${DJANGO_PORT}"
 }
 
+run_project_commands() {
+	echo ""
+	echo "----- *** RUNNING MANAGEMENT COMMANDS TO SET UP PROJECT *** -----"
+	echo ""
+	cd ${APP_FOLDER}
+	python3 manage.py project_setup
+}
+
 #### Main commands
 run_arches() {
 	init_arches
+	run_project_commands
 	run_django_server
 }
 
