@@ -34,3 +34,5 @@ DATABASES = {
         "POSTGIS_TEMPLATE": "template_postgis",
     }
 }
+
+OAUTH_CLIENT_ID = "ZmRsVUmUtwas8lmgX40PmgAQacESxxv9EPQdIm8S"
