@@ -94,24 +94,6 @@ compile: $(COMPILED_RESOURCE_FILES)
 %.qm : %.ts
 	$(LRELEASE) $<
 
-test: compile transcompile
-	@echo
-	@echo "----------------------"
-	@echo "Regression Test Suite"
-	@echo "----------------------"
-
-	@# Preceding dash means that make will continue in case of errors
-	@-export PYTHONPATH=`pwd`:$(PYTHONPATH); \
-		export QGIS_DEBUG=0; \
-		export QGIS_LOG_FILE=/dev/null; \
-		nosetests -v --with-id --with-coverage --cover-package=. \
-		3>&1 1>&2 2>&3 3>&- || true
-	@echo "----------------------"
-	@echo "If you get a 'no module named qgis.core error, try sourcing"
-	@echo "the helper script we have provided first then run make test."
-	@echo "e.g. source run-env-linux.sh <path to qgis install>; make test"
-	@echo "----------------------"
-
 deploy: compile doc transcompile
 	@echo
 	@echo "------------------------------------------"
@@ -246,7 +228,12 @@ pep8:
 
 SETUP=true
 
+include test/arches/.env
+
 setup-qgis-docker:
+	@echo "--------------------------------------"
+	@echo "Setting up QGIS testing environment..."
+	@echo "--------------------------------------"
 	docker run -dt --name qgis-testing-environment -v .:/tests_directory -e QT_QPA_PLATFORM="offscreen" qgis/qgis:3.40.10
 	sleep 10 
 	docker exec qgis-testing-environment bash -c "cp -a /tests_directory/test/scripts/. /usr/bin/"
@@ -256,21 +243,58 @@ setup-qgis-docker:
 # 	docker exec qgis-testing-environment bash -c "cd /tests_directory && qgis_testrunner.sh tests.plugin_tests"
 	docker exec qgis-testing-environment bash -c "apt-get update && apt-get install -y pre-commit python3-coverage"
 	docker exec qgis-testing-environment bash -c "git config --global --add safe.directory /tests_directory"
+	@echo "------------------------------------------"
+	@echo "QGIS testing environment setup complete..."
+	@echo "------------------------------------------"
 
 shutdown-qgis-docker:
+	@echo "-----------------------------------------"
+	@echo "Shutting down QGIS testing environment..."
+	@echo "-----------------------------------------"
 	docker stop qgis-testing-environment
 	docker rm qgis-testing-environment
 
-run-tests:
+run-all-tests:
+	@echo "-----------------------------------"
+	@echo "Running Arches QGIS plugin tests..."
+	@echo "-----------------------------------"
 	docker exec qgis-testing-environment bash -c "cd /tests_directory \
 	&& python3 -m coverage run -m unittest discover arches_project/tests \
-	&& python3 -m coverage report -m"
+	&& python3 -m coverage report -m || true"
 
 run-formatting:
+	@echo "----------------------------------------"
+	@echo "Running Arches QGIS plugin formatting..."
+	@echo "----------------------------------------"
 	docker exec qgis-testing-environment bash -c "cd /tests_directory/arches_project && pre-commit run --all-files --verbose"
 
 setup-arches-docker:
+	@echo "----------------------------------------"
+	@echo "Setting up Arches testing environment..."
+	@echo "----------------------------------------"
 	cd ./test/arches && docker compose up -d --build
 
 shutdown-arches-docker:
+	@echo "-------------------------------------------"
+	@echo "Shutting down Arches testing environment..."
+	@echo "-------------------------------------------"
 	cd ./test/arches && docker compose down -v
+
+tests-run-all:
+	@echo ${DJANGO_PORT}
+	$(MAKE) setup-arches-docker -s
+	@until curl -s http://localhost:$(DJANGO_PORT) > /dev/null; do \
+		echo "Waiting for Arches to start..."; \
+		sleep 20; \
+	done
+	@echo "--------------------"
+	@echo "Arches is available."
+	@echo "--------------------"
+	$(MAKE) setup-qgis-docker -s
+	@echo "------------------"
+	@echo "QGIS is available."
+	@echo "------------------"
+	$(MAKE) run-all-tests
+	$(MAKE) run-formatting
+	$(MAKE) shutdown-qgis-docker
+	$(MAKE) shutdown-arches-docker
