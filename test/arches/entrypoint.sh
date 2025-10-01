@@ -15,13 +15,6 @@ if [[ -d ${APP_FOLDER} ]]; then
 	cd ${APP_FOLDER}
 fi
 
-YARN_MODULES_FOLDER=${PACKAGE_JSON_FOLDER}/$(awk \
-	-F '--install.modules-folder' '{print $2}' ${PACKAGE_JSON_FOLDER}/.yarnrc \
-	| awk '{print $1}' \
-	| tr -d $'\r' \
-	| tr -d '"' \
-	| sed -e "s/^\.\///g")
-
 #Utility functions that check db status
 wait_for_db() {
 	echo "Testing if database server is up..."
@@ -102,67 +95,6 @@ init_arches() {
 	fi
 }
 
-create_arches_project_only(){
-	echo ""
-	echo "----- Creating '${ARCHES_PROJECT}'... -----"
-	echo ""
-
-
-	cd ${WEB_ROOT}
-	python3 ${WEB_ROOT}/arches/arches/install/arches-admin startproject ${ARCHES_PROJECT}
-	APP_FOLDER=${WEB_ROOT}/${ARCHES_PROJECT}
-
-	copy_settings_local
-	rename_default_arches_templates
-	
-
-}
-
-rename_default_arches_templates() {
-	echo "Renaming default Arches project templates..."
-	cd ${APP_FOLDER}/${ARCHES_PROJECT}/templates
-	find . -type f -exec bash -c 'mv "$1" "${1}.default"' - '{}' \;
-}
-
-create_arches_project() {
-	echo "Checking if Arches project "${ARCHES_PROJECT}" exists..."
-	if [[ ! -d ${APP_FOLDER}/${ARCHES_PROJECT} ]] || [[ ! "$(ls ${APP_FOLDER}/${ARCHES_PROJECT})" ]]; then
-		echo ""
-		echo "----- Creating '${ARCHES_PROJECT}'... -----"
-		echo ""
-		create_arches_project_only
-		run_setup_db
-
-		exit_code=$?
-		if [[ ${exit_code} != 0 ]]; then
-			echo "Something went wrong when creating your Arches project: ${ARCHES_PROJECT}."
-			echo "Exiting..."
-			exit ${exit_code}
-		fi
-	else
-		echo "Custom Arches project '${ARCHES_PROJECT}' exists."
-	fi
-}
-
-# Yarn
-install_yarn_components() {
-	if [[ ! -d ${YARN_MODULES_FOLDER} ]] || [[ ! "$(ls ${YARN_MODULES_FOLDER})" ]]; then
-		echo "Yarn modules do not exist, installing..."
-		cd ${PACKAGE_JSON_FOLDER}
-		yarn install
-	fi
-}
-
-#### Misc
-copy_settings_local() {
-	echo "Copying ${AHER_ROOT}/docker/aher_project/docker files to ${APP_FOLDER}/${ARCHES_PROJECT}..."
-	# yes | cp ${AHER_ROOT}/docker/aher_project/docker/settings_local.py ${APP_FOLDER}/${ARCHES_PROJECT}/settings_local.py
-	# yes | cp ${AHER_ROOT}/docker/aher_project/docker/settings.py ${APP_FOLDER}/${ARCHES_PROJECT}/settings.py
-	# yes | cp ${AHER_ROOT}/docker/aher_project/docker/urls.py ${APP_FOLDER}/${ARCHES_PROJECT}/urls.py
-	# yes | cp ${AHER_ROOT}/docker/aher_project/docker/package.json ${APP_FOLDER}/${ARCHES_PROJECT}/package.json
-	
-}
-
 #### Run commands
 
 run_migrations() {
@@ -191,44 +123,15 @@ run_django_server() {
 	exec sh -c "pip install debugpy -t /tmp && python3 /tmp/debugpy --listen 0.0.0.0:5678 manage.py runserver 0.0.0.0:${DJANGO_PORT}"
 }
 
-run_livereload_server() {
-	echo ""
-	echo "----- *** RUNNING LIVERELOAD SERVER *** -----"
-	echo ""
-	cd ${APP_FOLDER}
-    echo "Running livereload"
-    exec sh -c "python3 manage.py developer livereload --livereloadhost 0.0.0.0"
-}
-
-activate_virtualenv() {
-	. ${WEB_ROOT}/ENV/bin/activate
-}
-
 #### Main commands
 run_arches() {
 	init_arches
-	install_yarn_components
 	run_django_server
 }
 
-#### Main commands
-run_livereload() {
-	run_livereload_server
-}
-
-run_webpack() {
-	echo ""
-	echo "----- *** RUNNING WEBPACK DEVELOPMENT SERVER *** -----"
-	echo ""
-	cd ${APP_FOLDER}
-    echo "Running Webpack"
-	exec sh -c "wait-for-it aherproject:${DJANGO_PORT} -t 1200 && cd /web_root/aher_project/aher_project && yarn install && yarn start"
-}
 
 ### Starting point ###
 
-# trying not to use virtualenv???
-# activate_virtualenv
 
 # Use -gt 1 to consume two arguments per pass in the loop
 # (e.g. each argument has a corresponding value to go with it).
@@ -254,25 +157,9 @@ do
 			wait_for_db
 			run_arches
 		;;
-		run_livereload)
-			run_livereload_server
-		;;
-		run_webpack)
-			run_webpack
-		;;
-		run_tests)
-			wait_for_db
-			run_tests
-		;;
 		run_migrations)
 			wait_for_db
 			run_migrations
-		;;
-		create_project)
-			create_arches_project_only
-		;;
-		help|-h)
-			display_help
 		;;
 		*)
             cd ${APP_FOLDER}
