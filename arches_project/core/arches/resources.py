@@ -107,8 +107,8 @@ class ArchesResources:
         dlg_resource_creation.show()
 
         # Push button responses    
-        dlg_resource_creation.createDialogCreate.clicked.connect(send_new_resource_to_arches)
-        dlg_resource_creation.createDialogCancel.clicked.connect(close_dialog)
+        dlg_resource_creation.confirmDialogConfirm.clicked.connect(send_new_resource_to_arches)
+        dlg_resource_creation.confirmDialogCancel.clicked.connect(close_dialog)
 
 
 
@@ -169,11 +169,11 @@ class ArchesResources:
                 for k,v in geometry_type_dict.items():
                     dlg_edit_resource_replace.infoText.append(f"{k}: {v}")
 
-                dlg_edit_resource_replace.editDialogCreate.disconnect()
-                dlg_edit_resource_replace.editDialogCreate.clicked.connect(lambda: send_edited_data_to_arches(operation_type="create",
+                dlg_edit_resource_replace.confirmDialogConfirm.disconnect()
+                dlg_edit_resource_replace.confirmDialogConfirm.clicked.connect(lambda: send_edited_data_to_arches(operation_type="create",
                                                                                         dialog=dlg_edit_resource_replace))
-                dlg_edit_resource_replace.editDialogCancel.disconnect()
-                dlg_edit_resource_replace.editDialogCancel.clicked.connect(lambda: close_dialog(dialog=dlg_edit_resource_replace))
+                dlg_edit_resource_replace.confirmDialogCancel.disconnect()
+                dlg_edit_resource_replace.confirmDialogCancel.clicked.connect(lambda: close_dialog(dialog=dlg_edit_resource_replace))
                 # Show confirmation dialog
                 dlg_edit_resource_replace.show()
 
@@ -186,11 +186,11 @@ class ArchesResources:
                 for k,v in geometry_type_dict.items():
                     dlg_edit_resource_add.infoText.append(f"{k}: {v}")
 
-                dlg_edit_resource_add.editDialogCreate.disconnect()
-                dlg_edit_resource_add.editDialogCreate.clicked.connect(lambda: send_edited_data_to_arches(operation_type="append",
+                dlg_edit_resource_add.confirmDialogConfirm.disconnect()
+                dlg_edit_resource_add.confirmDialogConfirm.clicked.connect(lambda: send_edited_data_to_arches(operation_type="append",
                                                                                     dialog=dlg_edit_resource_add))
-                dlg_edit_resource_add.editDialogCancel.disconnect()
-                dlg_edit_resource_add.editDialogCancel.clicked.connect(lambda: close_dialog(dialog=dlg_edit_resource_add))
+                dlg_edit_resource_add.confirmDialogCancel.disconnect()
+                dlg_edit_resource_add.confirmDialogCancel.clicked.connect(lambda: close_dialog(dialog=dlg_edit_resource_add))
                 # Show confirmation dialog
                 dlg_edit_resource_add.show()
 

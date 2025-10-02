@@ -95,23 +95,23 @@ QPushButton#btnConnect:hover {
     background-color: #337ab7;
     border-color: #2e6da4;
 }
-QPushButton#btnLogout, QPushButton#addNewRes, QPushButton#addEditRes, QPushButton#replaceEditRes, QPushButton#connectedLogoutBtn, QPushButton#createDialogCreate, QPushButton#editDialogCreate {
+QPushButton#btnLogout, QPushButton#addNewRes, QPushButton#addEditRes, QPushButton#replaceEditRes, QPushButton#connectedLogoutBtn, QPushButton#confirmDialogConfirm {
     background-color: #3acaa1;
     border-color: #42cca5;
 }
-QPushButton#btnLogout:disabled, QPushButton#addNewRes:disabled, QPushButton#addEditRes:disabled, QPushButton#replaceEditRes:disabled, QPushButton#connectedLogoutBtn:disabled, QPushButton#createDialogCreate:disabled, QPushButton#editDialogCreate:disabled {
+QPushButton#btnLogout:disabled, QPushButton#addNewRes:disabled, QPushButton#addEditRes:disabled, QPushButton#replaceEditRes:disabled, QPushButton#connectedLogoutBtn:disabled, QPushButton#confirmDialogConfirm:disabled {
     background-color: #89c4b4;
     border-color: #8bcbb9;
 }
-QPushButton#btnLogout:hover, QPushButton#addNewRes:hover, QPushButton#addEditRes:hover, QPushButton#replaceEditRes:hover, QPushButton#connectedLogoutBtn:hover, QPushButton#createDialogCreate:hover, QPushButton#editDialogCreate:hover {
+QPushButton#btnLogout:hover, QPushButton#addNewRes:hover, QPushButton#addEditRes:hover, QPushButton#replaceEditRes:hover, QPushButton#connectedLogoutBtn:hover, QPushButton#confirmDialogConfirm:hover {
     background-color: #22b78c;
     border-color: #1d9d78;
 }
-QPushButton#editDialogCancel, QPushButton#createDialogCancel {
+QPushButton#confirmDialogCancel {
     background-color: #f75d3f;
     border-color: #E53211;
 }
-QPushButton#editDialogCancel:hover, QPushButton#createDialogCancel:hover {
+QPushButton#confirmDialogCancel:hover {
     background-color: #f53610;
     border-color: #fc2f09;
 }

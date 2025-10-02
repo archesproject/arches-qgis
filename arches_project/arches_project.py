@@ -38,6 +38,7 @@ from .resources import *
 from .ui.arches_project_dialog import ArchesProjectDialog
 
 # Import the confirmation dialogs
+from .ui.resource_confirmation_dialog import ResourceConfirmation
 from .ui.create_resource_confirmation_dialog import CreateResourceConfirmation
 from .ui.edit_resource_add_confirmation_dialog import EditResourceAddConfirmation
 from .ui.edit_resource_replace_confirmation_dialog import EditResourceReplaceConfirmation
@@ -231,10 +232,10 @@ class ArchesProject:
         # Only create GUI ONCE in callback, so that it will only load when the plugin is started
         if self.first_start == True:
             self.first_start = False
-            self.dlg = ArchesProjectDialog()            
-            self.dlg_resource_creation = CreateResourceConfirmation()
-            self.dlg_edit_resource_add = EditResourceAddConfirmation()
-            self.dlg_edit_resource_replace = EditResourceReplaceConfirmation()
+            self.dlg = ArchesProjectDialog()
+            self.dlg_resource_creation = ResourceConfirmation("CreateX", "CREATE an Arches resourceX")          
+            self.dlg_edit_resource_add = ResourceConfirmation("AddX", "ADD geometries")
+            self.dlg_edit_resource_replace = ResourceConfirmation("ReplaceX", "ADD geometries")
 
             # Setup Arches Stylesheet
             PluginStylesheets(dlg = self.dlg,
