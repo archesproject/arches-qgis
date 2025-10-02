@@ -9,7 +9,7 @@ FORM_CLASS, _ = uic.loadUiType(os.path.join(
 
 
 class ResourceConfirmation(QtWidgets.QDialog, FORM_CLASS):
-    def __init__(self, action, action_description, parent=None):
+    def __init__(self, parent=None):
         """Constructor."""
         super(ResourceConfirmation, self).__init__(parent)
         # Set up the user interface from Designer through FORM_CLASS.
@@ -18,7 +18,4 @@ class ResourceConfirmation(QtWidgets.QDialog, FORM_CLASS):
         # http://qt-project.org/doc/qt-4.8/designer-using-a-ui-file.html
         # #widgets-and-dialogs-with-auto-connect
         self.setupUi(self)
-        self.confirmDialogConfirm.setText(action)
-        self.messageLabel.setText("Are you sure you want to " + action_description + "?")
-
         

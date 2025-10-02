@@ -233,7 +233,7 @@ class ArchesProject:
         if self.first_start == True:
             self.first_start = False
             self.dlg = ArchesProjectDialog()
-            self.dlg_resource_confirmation = ResourceConfirmation("ACTION", "MESSAGE")          
+            self.dlg_resource_confirmation = ResourceConfirmation()          
 
             # Setup Arches Stylesheet
             PluginStylesheets(dlg = self.dlg,
