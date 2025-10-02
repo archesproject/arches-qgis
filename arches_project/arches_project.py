@@ -233,23 +233,17 @@ class ArchesProject:
         if self.first_start == True:
             self.first_start = False
             self.dlg = ArchesProjectDialog()
-            self.dlg_resource_creation = ResourceConfirmation("CreateX", "CREATE an Arches resourceX")          
-            self.dlg_edit_resource_add = ResourceConfirmation("AddX", "ADD geometries")
-            self.dlg_edit_resource_replace = ResourceConfirmation("ReplaceX", "ADD geometries")
+            self.dlg_resource_confirmation = ResourceConfirmation("ACTION", "MESSAGE")          
 
             # Setup Arches Stylesheet
             PluginStylesheets(dlg = self.dlg,
-                              dlg_resource_creation = self.dlg_resource_creation,
-                              dlg_edit_resource_add = self.dlg_edit_resource_add,
-                              dlg_edit_resource_replace = self.dlg_edit_resource_replace,
+                              dlg_resource_confirmation = self.dlg_resource_confirmation,
                               on_start = True,
                               plugin_dir = self.plugin_dir)
             # if stylesheet is disabled
             self.dlg.useStylesheetCheckbox.stateChanged.connect(
                 lambda: PluginStylesheets(dlg = self.dlg,
-                                          dlg_resource_creation = self.dlg_resource_creation,
-                                          dlg_edit_resource_add = self.dlg_edit_resource_add,
-                                          dlg_edit_resource_replace = self.dlg_edit_resource_replace,
+                                          dlg_resource_confirmation = self.dlg_resource_confirmation,
                                           on_start = False,
                                           plugin_dir = self.plugin_dir))
 
@@ -465,7 +459,7 @@ class ArchesProject:
                                                  tileid=None,
                                                  archesproject=self)
         arches_create_resource.create_resource(dlg=self.dlg,
-                                               dlg_resource_creation=self.dlg_resource_creation,
+                                               dlg_resource_confirmation=self.dlg_resource_confirmation,
                                                iface=self.iface)
 
     def edit_resource(self, replace):
@@ -477,8 +471,7 @@ class ArchesProject:
         arches_edit_resource.edit_resource(replace=replace,
                                            arches_selected_resource=self.arches_selected_resource,                                            
                                            dlg=self.dlg,
-                                           dlg_edit_resource_replace=self.dlg_edit_resource_replace, 
-                                           dlg_edit_resource_add=self.dlg_edit_resource_add,
+                                           dlg_resource_confirmation=self.dlg_resource_confirmation,
                                            iface=self.iface)
 
     def arches_connection_save(self):

@@ -6,16 +6,12 @@ import os
 
 class PluginStylesheets:
     def __init__(self, 
-                 dlg, 
-                 dlg_resource_creation, 
-                 dlg_edit_resource_add,
-                 dlg_edit_resource_replace,
+                 dlg,
+                 dlg_resource_confirmation, 
                  plugin_dir,
                  on_start):
         self.dlg = dlg
-        self.dlg_resource_creation = dlg_resource_creation
-        self.dlg_edit_resource_add = dlg_edit_resource_add
-        self.dlg_edit_resource_replace = dlg_edit_resource_replace
+        self.dlg_resource_confirmation = dlg_resource_confirmation
         self.plugin_dir = plugin_dir
         self.on_start = on_start
 
@@ -37,21 +33,15 @@ class PluginStylesheets:
     def default_stylesheet(self):
         # reset stylesheets
         self.dlg.setStyleSheet("")
-        self.dlg_resource_creation.setStyleSheet("")
-        self.dlg_edit_resource_add.setStyleSheet("")
-        self.dlg_edit_resource_replace.setStyleSheet("")
+        self.dlg_resource_confirmation.setStyleSheet("")
         # remove icons from buttons
         self.dlg.btnConnect.setIcon(QIcon(""))
         self.dlg.btnLogout.setIcon(QIcon(""))
         self.dlg.addNewRes.setIcon(QIcon(""))
         self.dlg.addEditRes.setIcon(QIcon(""))
         self.dlg.replaceEditRes.setIcon(QIcon(""))
-        self.dlg_resource_creation.confirmDialogCancel.setIcon(QIcon(""))
-        self.dlg_resource_creation.confirmDialogConfirm.setIcon(QIcon(""))
-        self.dlg_edit_resource_add.confirmDialogCancel.setIcon(QIcon(""))
-        self.dlg_edit_resource_add.confirmDialogConfirm.setIcon(QIcon(""))
-        self.dlg_edit_resource_replace.confirmDialogCancel.setIcon(QIcon(""))
-        self.dlg_edit_resource_replace.confirmDialogConfirm.setIcon(QIcon(""))
+        self.dlg_resource_confirmation.confirmDialogCancel.setIcon(QIcon(""))
+        self.dlg_resource_confirmation.confirmDialogConfirm.setIcon(QIcon(""))
         # nav bar
         # TODO: don't like the fact I have to add the exact strings (from qtcreator) back to the tab titles, seems like could be a better method...
         self.dlg.tabWidget.setStyleSheet(" QTabWidget {qproperty-tabPosition: North;} ")
@@ -80,9 +70,7 @@ class PluginStylesheets:
                 arches_styling = f.read()
 
             self.dlg.setStyleSheet(arches_styling)
-            self.dlg_resource_creation.setStyleSheet(arches_styling)
-            self.dlg_edit_resource_add.setStyleSheet(arches_styling)
-            self.dlg_edit_resource_replace.setStyleSheet(arches_styling)
+            self.dlg_resource_confirmation.setStyleSheet(arches_styling)
 
             QDir.addSearchPath('images', os.path.join(self.plugin_dir, "icons"))
 
@@ -106,29 +94,13 @@ class PluginStylesheets:
             self.dlg.replaceEditRes.setIconSize(QSize(12,12))
             self.dlg.replaceEditRes.setCursor(QCursor(Qt.PointingHandCursor))
 
-            self.dlg_resource_creation.confirmDialogCancel.setIcon(QIcon(os.path.join(self.plugin_dir, "icons", "fa-times.svg")))
-            self.dlg_resource_creation.confirmDialogCancel.setIconSize(QSize(12,12))
-            self.dlg_resource_creation.confirmDialogCancel.setCursor(QCursor(Qt.PointingHandCursor))
+            self.dlg_resource_confirmation.confirmDialogCancel.setIcon(QIcon(os.path.join(self.plugin_dir, "icons", "fa-times.svg")))
+            self.dlg_resource_confirmation.confirmDialogCancel.setIconSize(QSize(12,12))
+            self.dlg_resource_confirmation.confirmDialogCancel.setCursor(QCursor(Qt.PointingHandCursor))
 
-            self.dlg_resource_creation.confirmDialogConfirm.setIcon(QIcon(os.path.join(self.plugin_dir, "icons", "fa-plus.svg")))
-            self.dlg_resource_creation.confirmDialogConfirm.setIconSize(QSize(12,12))
-            self.dlg_resource_creation.confirmDialogConfirm.setCursor(QCursor(Qt.PointingHandCursor))
-
-            self.dlg_edit_resource_add.confirmDialogCancel.setIcon(QIcon(os.path.join(self.plugin_dir, "icons", "fa-times.svg")))
-            self.dlg_edit_resource_add.confirmDialogCancel.setIconSize(QSize(12,12))
-            self.dlg_edit_resource_add.confirmDialogCancel.setCursor(QCursor(Qt.PointingHandCursor))
-
-            self.dlg_edit_resource_add.confirmDialogConfirm.setIcon(QIcon(os.path.join(self.plugin_dir, "icons", "fa-plus.svg")))
-            self.dlg_edit_resource_add.confirmDialogConfirm.setIconSize(QSize(12,12))
-            self.dlg_edit_resource_add.confirmDialogConfirm.setCursor(QCursor(Qt.PointingHandCursor))
-
-            self.dlg_edit_resource_replace.confirmDialogCancel.setIcon(QIcon(os.path.join(self.plugin_dir, "icons", "fa-times.svg")))
-            self.dlg_edit_resource_replace.confirmDialogCancel.setIconSize(QSize(12,12))
-            self.dlg_edit_resource_replace.confirmDialogCancel.setCursor(QCursor(Qt.PointingHandCursor))
-
-            self.dlg_edit_resource_replace.confirmDialogConfirm.setIcon(QIcon(os.path.join(self.plugin_dir, "icons", "fa-times.svg")))
-            self.dlg_edit_resource_replace.confirmDialogConfirm.setIconSize(QSize(12,12))
-            self.dlg_edit_resource_replace.confirmDialogConfirm.setCursor(QCursor(Qt.PointingHandCursor))
+            self.dlg_resource_confirmation.confirmDialogConfirm.setIcon(QIcon(os.path.join(self.plugin_dir, "icons", "fa-plus.svg")))
+            self.dlg_resource_confirmation.confirmDialogConfirm.setIconSize(QSize(12,12))
+            self.dlg_resource_confirmation.confirmDialogConfirm.setCursor(QCursor(Qt.PointingHandCursor))
 
             self.dlg.tabWidget.setDocumentMode(True)
 

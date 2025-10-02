@@ -48,7 +48,7 @@ class ArchesResources:
 
 
 
-    def create_resource(self, dlg, dlg_resource_creation, iface):
+    def create_resource(self, dlg, dlg_resource_confirmation, iface):
         """
         Create Resource dialog and functionality
         """
@@ -65,18 +65,18 @@ class ArchesResources:
                                                         \nTo continue the creation of your new resource, navigate to...\n%s/resource/%s""" % 
                                                     (self.archesproject.arches_token["formatted_url"], results["resourceinstance_id"]))
                     show_message(iface, "Success", "A new Arches resource has been created.")
-                    dlg_resource_creation.close()
+                    dlg_resource_confirmation.close()
                 except:
                     dlg.createResOutputBox.setText("Resource creation FAILED.")
                     show_message(iface, "Error", "Resource creation failed.", duration=-1)
-                    dlg_resource_creation.close()
+                    dlg_resource_confirmation.close()
             else:
                 dlg.createResOutputBox.setText("This user does not have permission to create data for the geometry nodegroup in this resource model. An Arches resource has not been created.")
                 show_message(iface, "Error", "The user does not have permission to create data.", duration=-1)
-                dlg_resource_creation.close()
+                dlg_resource_confirmation.close()
 
         def close_dialog():
-            dlg_resource_creation.close()
+            dlg_resource_confirmation.close()
 
         # Get info on current layer and selected graph
         selectedLayerIndex = dlg.createResFeatureSelect.currentIndex()
@@ -97,18 +97,20 @@ class ArchesResources:
         geomcoll, geometry_type_dict = geom_convert.geometry_conversion()
      
         # Format text box
-        dlg_resource_creation.infoText.viewport().setAutoFillBackground(False) # Sets the text box to be invisible
-        dlg_resource_creation.infoText.setText("")
-        dlg_resource_creation.infoText.append("An Arches resource will be created with the following geometries:\n")
+        dlg_resource_confirmation.infoText.viewport().setAutoFillBackground(False) # Sets the text box to be invisible
+        dlg_resource_confirmation.infoText.setText("")
+        dlg_resource_confirmation.infoText.append("An Arches resource will be created with the following geometries:\n")
         for k,v in geometry_type_dict.items():
-            dlg_resource_creation.infoText.append(f"{k}: {v}")
+            dlg_resource_confirmation.infoText.append(f"{k}: {v}")
 
         # open dialog
-        dlg_resource_creation.show()
+        dlg_resource_confirmation.confirmDialogConfirm.setText("Create")
+        dlg_resource_confirmation.messageLabel.setText("Are you sure you want to CREATE an Arches resource?")
+        dlg_resource_confirmation.show()
 
         # Push button responses    
-        dlg_resource_creation.confirmDialogConfirm.clicked.connect(send_new_resource_to_arches)
-        dlg_resource_creation.confirmDialogCancel.clicked.connect(close_dialog)
+        dlg_resource_confirmation.confirmDialogConfirm.clicked.connect(send_new_resource_to_arches)
+        dlg_resource_confirmation.confirmDialogCancel.clicked.connect(close_dialog)
 
 
 
@@ -116,8 +118,7 @@ class ArchesResources:
                       replace, 
                       arches_selected_resource,
                       dlg,
-                      dlg_edit_resource_replace,
-                      dlg_edit_resource_add,
+                      dlg_resource_confirmation,
                       iface):
         """
         Save geometries to existing resource - either replace or add
@@ -163,34 +164,38 @@ class ArchesResources:
             # Replace geometry
             if replace == True:
                 # Format text box
-                dlg_edit_resource_replace.infoText.viewport().setAutoFillBackground(False) # Sets the text box to be invisible
-                dlg_edit_resource_replace.infoText.setText("")
-                dlg_edit_resource_replace.infoText.append("The following geometries will be replace the existing Arches resource's geometries:\n")
+                dlg_resource_confirmation.infoText.viewport().setAutoFillBackground(False) # Sets the text box to be invisible
+                dlg_resource_confirmation.infoText.setText("")
+                dlg_resource_confirmation.infoText.append("The following geometries will be replace the existing Arches resource's geometries:\n")
                 for k,v in geometry_type_dict.items():
-                    dlg_edit_resource_replace.infoText.append(f"{k}: {v}")
+                    dlg_resource_confirmation.infoText.append(f"{k}: {v}")
 
-                dlg_edit_resource_replace.confirmDialogConfirm.disconnect()
-                dlg_edit_resource_replace.confirmDialogConfirm.clicked.connect(lambda: send_edited_data_to_arches(operation_type="create",
-                                                                                        dialog=dlg_edit_resource_replace))
-                dlg_edit_resource_replace.confirmDialogCancel.disconnect()
-                dlg_edit_resource_replace.confirmDialogCancel.clicked.connect(lambda: close_dialog(dialog=dlg_edit_resource_replace))
+                dlg_resource_confirmation.confirmDialogConfirm.disconnect()
+                dlg_resource_confirmation.confirmDialogConfirm.clicked.connect(lambda: send_edited_data_to_arches(operation_type="create",
+                                                                                        dialog=dlg_resource_confirmation))
+                dlg_resource_confirmation.confirmDialogCancel.disconnect()
+                dlg_resource_confirmation.confirmDialogCancel.clicked.connect(lambda: close_dialog(dialog=dlg_resource_confirmation))
                 # Show confirmation dialog
-                dlg_edit_resource_replace.show()
+                dlg_resource_confirmation.confirmDialogConfirm.setText("Replace")
+                dlg_resource_confirmation.messageLabel.setText("Are you sure you want to REPLACE geometries?")
+                dlg_resource_confirmation.show()
 
             # Add geometry to the resource
             else:
                 # Format text box
-                dlg_edit_resource_add.infoText.viewport().setAutoFillBackground(False) # Sets the text box to be invisible
-                dlg_edit_resource_add.infoText.setText("")
-                dlg_edit_resource_add.infoText.append("The following geometries will be added to the Arches resource:\n")
+                dlg_resource_confirmation.infoText.viewport().setAutoFillBackground(False) # Sets the text box to be invisible
+                dlg_resource_confirmation.infoText.setText("")
+                dlg_resource_confirmation.infoText.append("The following geometries will be added to the Arches resource:\n")
                 for k,v in geometry_type_dict.items():
-                    dlg_edit_resource_add.infoText.append(f"{k}: {v}")
+                    dlg_resource_confirmation.infoText.append(f"{k}: {v}")
 
-                dlg_edit_resource_add.confirmDialogConfirm.disconnect()
-                dlg_edit_resource_add.confirmDialogConfirm.clicked.connect(lambda: send_edited_data_to_arches(operation_type="append",
-                                                                                    dialog=dlg_edit_resource_add))
-                dlg_edit_resource_add.confirmDialogCancel.disconnect()
-                dlg_edit_resource_add.confirmDialogCancel.clicked.connect(lambda: close_dialog(dialog=dlg_edit_resource_add))
+                dlg_resource_confirmation.confirmDialogConfirm.disconnect()
+                dlg_resource_confirmation.confirmDialogConfirm.clicked.connect(lambda: send_edited_data_to_arches(operation_type="append",
+                                                                                    dialog=dlg_resource_confirmation))
+                dlg_resource_confirmation.confirmDialogCancel.disconnect()
+                dlg_resource_confirmation.confirmDialogCancel.clicked.connect(lambda: close_dialog(dialog=dlg_resource_confirmation))
                 # Show confirmation dialog
-                dlg_edit_resource_add.show()
+                dlg_resource_confirmation.confirmDialogConfirm.setText("Add")
+                dlg_resource_confirmation.messageLabel.setText("Are you sure you want to ADD geometries?")
+                dlg_resource_confirmation.show()
 
