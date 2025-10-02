@@ -24,7 +24,7 @@
    <item>
     <widget class="QLabel" name="messageLabel">
      <property name="text">
-      <string>Are you sure you want to CREATE an Arches resource?</string>
+      <string>Are you sure you want to...?</string>
      </property>
      <property name="alignment">
       <set>Qt::AlignCenter</set>
