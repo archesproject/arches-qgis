@@ -5,11 +5,10 @@ from qgis.core import (
     QgsWkbTypes,
     QgsMapSettings,
     QgsMapRendererParallelJob,
-    QgsMapLayerType,
 )
 
-from PyQt5.QtGui import QImage, QPainter
-from PyQt5.QtCore import QSize, Qt
+from PyQt5.QtGui import QPixmap
+from PyQt5.QtCore import QSize
 
 
 class Geometries:
@@ -19,9 +18,6 @@ class Geometries:
         self.arches_crs = QgsCoordinateReferenceSystem.fromEpsgId(4326)
 
     def geometry_snapshot(self, basemap):
-        # basemap = None
-        # basemap = QgsProject.instance().mapLayersByName("OpenStreetMap")[0]
-
         layers_to_render = [self.selectedLayer, basemap]
 
         old_extent = self.selectedLayer.extent()
@@ -29,20 +25,18 @@ class Geometries:
             self.selectedLayer.crs(), basemap.crs(), QgsProject.instance()
         )
         new_extent = transformer.transformBoundingBox(old_extent)
-
         settings = QgsMapSettings()
         settings.setLayers(layers_to_render)
         settings.setDestinationCrs(basemap.crs()) 
         settings.setExtent(new_extent)
-        settings.setOutputSize(QSize(600, 600))
+        settings.setOutputSize(QSize(250, 250))
 
         render = QgsMapRendererParallelJob(settings)
         render.start()
         render.waitForFinished()
 
-        return render.renderedImage()
-
-        # render.renderedImage().save("C:/temp/snapshot2.png", "PNG")
+        pixmap = QPixmap.fromImage(render.renderedImage())
+        return pixmap
 
     def coordinate_transform(self, geom):
         if self.selected_layer_crs != self.arches_crs:

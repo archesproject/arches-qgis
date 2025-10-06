@@ -1,5 +1,6 @@
 from datetime import datetime
 from qgis.core import QgsProject
+from PyQt5.QtCore import Qt
 
 import requests
 from functools import partial
@@ -259,6 +260,10 @@ class ArchesResources:
                 for k, v in geometry_type_dict.items():
                     dlg_resource_confirmation.infoText.append(f"{k}: {v}")
 
+                dlg_resource_confirmation.snapshotLabel.setPixmap(snapshot_image)
+                dlg_resource_confirmation.snapshotLabel.setScaledContents(False)
+                dlg_resource_confirmation.snapshotLabel.setAlignment(Qt.AlignRight)
+                
                 dlg_resource_confirmation.confirmDialogConfirm.disconnect()
                 dlg_resource_confirmation.confirmDialogConfirm.clicked.connect(
                     partial(
