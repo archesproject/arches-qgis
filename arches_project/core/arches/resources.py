@@ -1,4 +1,6 @@
 from datetime import datetime
+from qgis.core import QgsProject
+
 import requests
 from functools import partial
 
@@ -233,6 +235,9 @@ class ArchesResources:
 
             geom_convert = Geometries(selectedLayer)
             geomcoll, geometry_type_dict = geom_convert.geometry_conversion()
+
+            basemap = QgsProject.instance().mapLayersByName("OpenStreetMap")[0]
+            snapshot_image = geom_convert.geometry_snapshot(basemap)
 
             # Get nodegroup from graph
             for graph in arches_api.arches_graphs_list:
