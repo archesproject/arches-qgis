@@ -20,7 +20,7 @@ from qgis.core import (
     QgsCoordinateReferenceSystem,
     QgsRasterLayer)
 
-from utils.utilities import get_qgis_app
+from arches_project.tests.utils.utilities import get_qgis_app
 QGIS_APP = get_qgis_app()
 
 

@@ -7,7 +7,7 @@
      (at your option) any later version.
 
 """
-from utils.utilities import get_qgis_app
+from arches_project.tests.utils.utilities import get_qgis_app
 
 __author__ = 'ismailsunni@yahoo.co.id'
 __date__ = '12/10/2011'
