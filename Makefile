@@ -241,7 +241,7 @@ setup-qgis-docker:
 	docker exec qgis-testing-environment bash -c "rm -f  /root/.local/share/QGIS/QGIS3/profiles/default/python/plugins/arches_project"
 	docker exec qgis-testing-environment bash -c "ln -s /tests_directory/ /root/.local/share/QGIS/QGIS3/profiles/default/python/plugins/arches_project"
 # 	docker exec qgis-testing-environment bash -c "cd /tests_directory && qgis_testrunner.sh tests.plugin_tests"
-	docker exec qgis-testing-environment bash -c "apt-get update && apt-get install -y pre-commit python3-coverage"
+	docker exec qgis-testing-environment bash -c "apt-get update && apt-get install -y pre-commit python3-coverage python3-dotenv"
 	docker exec qgis-testing-environment bash -c "git config --global --add safe.directory /tests_directory"
 	@echo "------------------------------------------"
 	@echo "QGIS testing environment setup complete..."
@@ -254,13 +254,22 @@ shutdown-qgis-docker:
 	docker stop qgis-testing-environment
 	docker rm qgis-testing-environment
 
-run-all-tests:
-	@echo "-----------------------------------"
-	@echo "Running Arches QGIS plugin tests..."
-	@echo "-----------------------------------"
+run-tests:
+ifeq ($(file),)
+	@echo "---------------------------------------"
+	@echo "Running all Arches QGIS plugin tests..."
+	@echo "---------------------------------------"
 	docker exec qgis-testing-environment bash -c "cd /tests_directory \
 	&& python3 -m coverage run -m unittest discover arches_project/tests \
 	&& python3 -m coverage report -m || true"
+else
+	@echo "----------------------------------------------"
+	@echo "Running Arches QGIS plugin test for $(file)..."
+	@echo "----------------------------------------------"
+	docker exec qgis-testing-environment bash -c "cd /tests_directory \
+	&& python3 -m coverage run -m unittest $(file) \
+	&& python3 -m coverage report -m || true"
+endif
 
 run-formatting:
 	@echo "----------------------------------------"

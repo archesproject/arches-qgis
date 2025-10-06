@@ -1,4 +1,5 @@
 import unittest
+import os
 
 from arches_project.ui.arches_project_dialog import ArchesProjectDialog
 from arches_project.ui.create_resource_confirmation_dialog import CreateResourceConfirmation
@@ -10,7 +11,7 @@ from arches_project.core.views.stylesheets import PluginStylesheets
 
 from qgis.PyQt.QtCore import QSettings
 
-from utils.utilities import get_qgis_app
+from arches_project.tests.utils.utilities import get_qgis_app
 CANVAS, PARENT, IFACE, QGIS_APP = get_qgis_app()
 
 
@@ -18,10 +19,6 @@ class ArchesQGISTestCase(unittest.TestCase):
     """
     Extended unittest TestCase including plugin setup and configuration.
     """
-
-    # def __init__(self, *args, **kwargs):
-    #     super(ArchesQGISTestCase, self).__init__(*args, **kwargs)
-
 
     def setUp(self):
         """

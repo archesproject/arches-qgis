@@ -9,7 +9,7 @@ from qgis.gui import QgsMapCanvas
 from qgis.PyQt.QtCore import QSize
 from qgis.PyQt.QtWidgets import QWidget
 from qgis.utils import iface
-from utils.qgis_interface import QgisInterface
+from arches_project.tests.utils.qgis_interface import QgisInterface
 
 LOGGER = logging.getLogger("QGIS")
 QGIS_APP = None  # Static variable used to hold hand to running QGIS app

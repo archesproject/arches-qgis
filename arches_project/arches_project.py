@@ -32,27 +32,27 @@ from qgis.core import (QgsProject,
                        )
 
 # Initialize Qt resources from file resources.py
-from .resources import *
+from arches_project.resources import *
 
 # Import the code for the dialog
-from .ui.arches_project_dialog import ArchesProjectDialog
+from arches_project.ui.arches_project_dialog import ArchesProjectDialog
 
 # Import the confirmation dialogs
-from .ui.create_resource_confirmation_dialog import CreateResourceConfirmation
-from .ui.edit_resource_add_confirmation_dialog import EditResourceAddConfirmation
-from .ui.edit_resource_replace_confirmation_dialog import EditResourceReplaceConfirmation
+from arches_project.ui.create_resource_confirmation_dialog import CreateResourceConfirmation
+from arches_project.ui.edit_resource_add_confirmation_dialog import EditResourceAddConfirmation
+from arches_project.ui.edit_resource_replace_confirmation_dialog import EditResourceReplaceConfirmation
 
-from .core.arches.connection import ArchesConnection, ConnectionProcess
-from .core.arches.resources import ArchesResources
+from arches_project.core.arches.connection import ArchesConnection, ConnectionProcess
+from arches_project.core.arches.resources import ArchesResources
 
-from .core.views.stylesheets import PluginStylesheets
-from .core.views.logging import enable_logging
-from .core.views.components.missing_credentials import missing_credentials
-from .core.views.login import UpdateLogin
+from arches_project.core.views.stylesheets import PluginStylesheets
+from arches_project.core.views.logging import enable_logging
+from arches_project.core.views.components.missing_credentials import missing_credentials
+from arches_project.core.views.login import UpdateLogin
 
-from .core.utils.format_url import format_url
-from .core.utils.spinner import triggerSpinner
-from .core.utils.qgis_messaging import show_message
+from arches_project.core.utils.format_url import format_url
+from arches_project.core.utils.spinner import triggerSpinner
+from arches_project.core.utils.qgis_messaging import show_message
 
 import os.path
 import sys

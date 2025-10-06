@@ -5,7 +5,7 @@ from PyQt5.QtCore import Qt
 
 from arches_project.tests.base_test import ArchesQGISTestCase
 
-from utils.utilities import get_qgis_app
+from arches_project.tests.utils.utilities import get_qgis_app
 CANVAS, PARENT, IFACE, QGIS_APP = get_qgis_app()
 
 

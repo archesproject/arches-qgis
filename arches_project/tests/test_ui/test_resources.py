@@ -21,7 +21,7 @@ from qgis.PyQt.QtGui import QIcon
 
 
 class ArchesProjectDialogTest(ArchesQGISTestCase):
-    """Test rerources work."""
+    """Test resources work."""
 
     def test_icon_png(self):
         """Test we can click OK."""
