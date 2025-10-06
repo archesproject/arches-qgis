@@ -95,7 +95,11 @@ class ArchesProject:
         # Must be set in initGui() to survive plugin reloads
         self.first_start = None
 
-        # Confirmation additional dialogs
+        # Confirmation dialogs
+        self.dlg = ArchesProjectDialog()
+        self.dlg_resource_creation = CreateResourceConfirmation()
+        self.dlg_edit_resource_add = EditResourceAddConfirmation()
+        self.dlg_edit_resource_replace = EditResourceReplaceConfirmation()
 
         ## ARCHES PLUGIN SPECIFIC VARIABLES
         # Cache connection details to prevent firing duplicate connections
@@ -231,10 +235,6 @@ class ArchesProject:
         # Only create GUI ONCE in callback, so that it will only load when the plugin is started
         if self.first_start == True:
             self.first_start = False
-            self.dlg = ArchesProjectDialog()            
-            self.dlg_resource_creation = CreateResourceConfirmation()
-            self.dlg_edit_resource_add = EditResourceAddConfirmation()
-            self.dlg_edit_resource_replace = EditResourceReplaceConfirmation()
 
             # Setup Arches Stylesheet
             PluginStylesheets(dlg = self.dlg,
@@ -309,13 +309,6 @@ class ArchesProject:
 
         # show the dialog
         self.dlg.show()
-        # Run the dialog event loop
-        result = self.dlg.exec_()
-        # See if OK was pressed
-        if result:
-            # Do something useful here - delete the line containing pass and
-            # substitute with your code.
-            pass
 
     def map_selection(self):
         """
