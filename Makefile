@@ -157,7 +157,7 @@ run-testing:
 	@echo "------------------"
 	@echo "QGIS is available."
 	@echo "------------------"
-	$(MAKE) run-all-tests
+	$(MAKE) test
 	$(MAKE) run-formatting
 	$(MAKE) shutdown-qgis-docker
 	$(MAKE) shutdown-arches-docker
