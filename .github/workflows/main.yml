@@ -19,21 +19,22 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Set up testing Arches environment
-        run: |
-          make setup-arches-docker
-          until curl -s http://localhost:$DJANGO_PORT > /dev/null; do
-            echo "Waiting for Arches to start..."; \
-            sleep 30; \
-          done
+      # - name: Set up testing Arches environment
+      #   run: |
+      #     make setup-arches-docker
+      #     until curl -s http://localhost:$DJANGO_PORT > /dev/null; do
+      #       echo "Waiting for Arches to start..."; \
+      #       sleep 30; \
+      #     done
 
-      - name: Set up QGIS environment
-        run: make setup-qgis-docker
+      # - name: Set up QGIS environment
+      #   run: make setup-qgis-docker
 
-      - name: Run plugin tests
-        run: make test
+      # - name: Run plugin tests
+      #   run: make test
 
-      - name: Run black formatting
-        run: make python-formatting
+      # - name: Run black formatting
+      #   run: make python-formatting
 
-      
+      - name: Run testing environment and tests
+        run: make run-testing
