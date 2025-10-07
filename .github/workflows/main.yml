@@ -19,13 +19,16 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Setup QGIS environment
+      - name: Set up testing Arches environment
+        run: make setup-arches-docker
+
+      - name: Set up QGIS environment
         run: make setup-qgis-docker
 
       - name: Run plugin tests
-        run: make run-tests
+        run: make test
 
       - name: Run black formatting
-        run: make run-formatting
+        run: make python-formatting
 
       
