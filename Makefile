@@ -34,6 +34,7 @@ LOCALES =
 #LRELEASE = lrelease
 #LRELEASE = lrelease-qt4
 
+.PHONY: test
 
 # translation
 SOURCES = \
