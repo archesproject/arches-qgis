@@ -243,6 +243,7 @@ setup-qgis-docker:
 # 	docker exec qgis-testing-environment bash -c "cd /tests_directory && qgis_testrunner.sh tests.plugin_tests"
 	docker exec qgis-testing-environment bash -c "apt-get update && apt-get install -y pre-commit python3-coverage python3-dotenv"
 	docker exec qgis-testing-environment bash -c "git config --global --add safe.directory /tests_directory"
+	docker network connect arches-qgis-network qgis-testing-environment
 	@echo "------------------------------------------"
 	@echo "QGIS testing environment setup complete..."
 	@echo "------------------------------------------"
@@ -290,7 +291,6 @@ shutdown-arches-docker:
 	cd ./test/arches && docker compose down -v
 
 tests-run-all:
-	@echo ${DJANGO_PORT}
 	$(MAKE) setup-arches-docker -s
 	@until curl -s http://localhost:$(DJANGO_PORT) > /dev/null; do \
 		echo "Waiting for Arches to start..."; \
