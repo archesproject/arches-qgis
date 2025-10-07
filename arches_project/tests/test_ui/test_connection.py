@@ -11,7 +11,7 @@ CANVAS, PARENT, IFACE, QGIS_APP = get_qgis_app()
 
 class ConnectionTests(ArchesQGISTestCase):
     """
-    Test connection to Arches.
+    Test connection to Arches UI.
     """
 
     def test_missing_connection_credentials(self):
