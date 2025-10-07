@@ -20,7 +20,12 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Set up testing Arches environment
-        run: make setup-arches-docker
+        run: |
+          make setup-arches-docker
+          until curl -s http://localhost:$DJANGO_PORT > /dev/null; do
+            echo "Waiting for Arches to start..."; \
+            sleep 30; \
+          done
 
       - name: Set up QGIS environment
         run: make setup-qgis-docker
