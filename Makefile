@@ -125,10 +125,10 @@ else
 	&& python3 -m coverage report -m || true"
 endif
 
-python-formatting:
-	@echo "----------------------------------------"
-	@echo "Running Arches QGIS plugin formatting..."
-	@echo "----------------------------------------"
+black:
+	@echo "----------------------------------------------"
+	@echo "Running Arches QGIS plugin black formatting..."
+	@echo "----------------------------------------------"
 	docker exec qgis-testing-environment bash -c "cd /tests_directory/arches_project && pre-commit run --all-files --verbose"
 
 setup-arches-docker:
@@ -158,6 +158,6 @@ run-testing:
 	@echo "QGIS is available."
 	@echo "------------------"
 	$(MAKE) test
-	$(MAKE) run-formatting
+	$(MAKE) black
 	$(MAKE) shutdown-qgis-docker
 	$(MAKE) shutdown-arches-docker
