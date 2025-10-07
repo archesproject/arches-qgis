@@ -65,7 +65,7 @@ ENV APP_ROOT=${WEB_ROOT}/${ARCHES_PROJECT}
 # Root project folder
 # ENV ARCHES_ROOT=${WEB_ROOT}/arches
 ENV WHEELS=/wheels
-ENV NODE_VERSION 16.20.1
+ENV NODE_VERSION 20.19.5
 
 RUN mkdir ${WEB_ROOT}
 
@@ -123,33 +123,20 @@ RUN npm install -g yarn && apt install wait-for-it
 
 RUN rm -rf /root/.cache/pip/*
 
-
-# create a new Arches project
 WORKDIR ${WEB_ROOT}
-RUN arches-admin startproject ${ARCHES_PROJECT} 
-
-WORKDIR ${APP_ROOT}
-RUN rm -rf node_modules
-RUN rm -f package-lock.json
-# Now do the NPM install
-RUN npm install
-
-COPY ./settings_local.py ${APP_ROOT}/${ARCHES_PROJECT}/settings_local.py
-COPY ./project_setup.py ${APP_ROOT}/${ARCHES_PROJECT}/management/commands/project_setup.py
-
+COPY ./settings_local.py ${WEB_ROOT}/settings_local.py
+COPY ./project_setup.py ${WEB_ROOT}/project_setup.py
 
 # Make sure the entry point is available and lacks weird characters
 # that don't work in a Linux OS
 COPY ./entrypoint.sh entrypoint.sh
 RUN chmod -R 700 entrypoint.sh && \
-  dos2unix ${APP_ROOT}/entrypoint.sh
-
-# WORKDIR ${APP_ROOT}
+  dos2unix ${WEB_ROOT}/entrypoint.sh
 
 # Set entrypoint
 ENTRYPOINT ["./entrypoint.sh"]
 CMD ["run_arches"]
 
-# Expose port 8000 or other django port
+# Expose django port
 ARG DJANGO_PORT
 EXPOSE ${DJANGO_PORT}

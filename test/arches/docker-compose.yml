@@ -1,6 +1,6 @@
 services:
 
-  arches-testing:
+  arches-qgis-arches:
     container_name: arches-qgis-arches
     env_file:
       - ./.env

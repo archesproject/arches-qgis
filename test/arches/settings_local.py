@@ -35,4 +35,10 @@ DATABASES = {
     }
 }
 
+ARCHES_NAMESPACE_FOR_DATA_EXPORT = f"http://localhost:{get_env_variable("DJANGO_PORT")}"
+PUBLIC_SERVER_ADDRESS = f"http://localhost:{get_env_variable("DJANGO_PORT")}"
+
 OAUTH_CLIENT_ID = "ZmRsVUmUtwas8lmgX40PmgAQacESxxv9EPQdIm8S"
+
+# Include name of docker container in allowed hosts
+ALLOWED_HOSTS = ["localhost", "arches-qgis-arches"]

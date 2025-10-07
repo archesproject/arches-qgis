@@ -95,10 +95,39 @@ init_arches() {
 	fi
 }
 
+create_arches_project() {
+	echo "Checking if Arches project "${ARCHES_PROJECT}" exists..."
+	if [[ ! -d ${APP_FOLDER}/${ARCHES_PROJECT} ]] || [[ ! "$(ls ${APP_FOLDER}/${ARCHES_PROJECT})" ]]; then
+		echo ""
+		echo "----- Creating '${ARCHES_PROJECT}'... -----"
+		echo ""
+
+		cd ${WEB_ROOT}
+		arches-admin startproject ${ARCHES_PROJECT}
+		APP_FOLDER=${WEB_ROOT}/${ARCHES_PROJECT}
+
+		copy_project_files
+		run_setup_db
+
+		exit_code=$?
+		if [[ ${exit_code} != 0 ]]; then
+			echo "Something went wrong when creating your Arches project: ${ARCHES_PROJECT}."
+			echo "Exiting..."
+			exit ${exit_code}
+		fi
+	else
+		echo "Arches project '${ARCHES_PROJECT}' exists."
+	fi
+}
+
 #### Misc
+copy_project_files() {
+	echo "Copying files to project..."
+	yes | cp ${WEB_ROOT}/settings_local.py ${APP_FOLDER}/${ARCHES_PROJECT}/settings_local.py
+	yes | cp ${WEB_ROOT}/project_setup.py ${APP_FOLDER}/${ARCHES_PROJECT}/management/commands/project_setup.py
+}
 
 #### Run commands
-
 run_migrations() {
 	echo ""
 	echo "----- RUNNING DATABASE MIGRATIONS -----"
