@@ -38,7 +38,8 @@ class ArchesQGISTestCase(unittest.TestCase):
                           self.dlg_edit_resource_replace, 
                           self.arches_project.plugin_dir, 
                           True)
-        self.arches_url = f"http://localhost:{os.environ.get('DJANGO_PORT')}"
+        
+        self.arches_url = f"http://{os.environ.get('ARCHES_HOST')}:{os.environ.get('DJANGO_PORT')}"
 
         self.arches_project.first_start=True
         self.arches_project.run()
