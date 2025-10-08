@@ -15,37 +15,22 @@ class ConnectionTests(ArchesQGISTestCase):
     """
 
     def test_missing_connection_credentials(self):
-        # Missing password
-        self.dlg.archesServerInput.setText(self.arches_url)
-        self.dlg.usernameInput.setText("admin")
-        self.dlg.passwordInput.setText("") 
-        QTest.mouseClick(self.dlg.btnConnect, Qt.LeftButton)
-        self.assertEqual(self.dlg.loginErrorMessageLabel.text(), "Login missing password.")
 
-        # Missing username
-        self.dlg.usernameInput.setText("")
-        self.dlg.passwordInput.setText("admin") 
-        QTest.mouseClick(self.dlg.btnConnect, Qt.LeftButton)
-        self.assertEqual(self.dlg.loginErrorMessageLabel.text(), "Login missing username.")
+        cases = [
+            {"type": "missing password", "url": self.arches_url, "username": "admin", "password": "", "expected_msg": "Login missing password."},
+            {"type": "missing username", "url": self.arches_url, "username": "", "password": "admin", "expected_msg": "Login missing username."},
+            {"type": "missing url", "url": "", "username": "admin", "password": "admin", "expected_msg": "Login missing URL."},
+            {"type": "missing username and password", "url": self.arches_url, "username": "", "password": "", "expected_msg": "Login missing values for username and password."},
+            {"type": "missing all", "url": "", "username": "", "password": "", "expected_msg": "Login missing values for URL, username and password."},
+        ]
 
-        # Missing URL
-        self.dlg.archesServerInput.setText("")
-        self.dlg.usernameInput.setText("admin")
-        QTest.mouseClick(self.dlg.btnConnect, Qt.LeftButton)
-        self.assertEqual(self.dlg.loginErrorMessageLabel.text(), "Login missing URL.")
-
-        # Missing two (e.g. username and password)
-        self.dlg.archesServerInput.setText(self.arches_url)
-        self.dlg.usernameInput.setText("")
-        self.dlg.passwordInput.setText("") 
-        QTest.mouseClick(self.dlg.btnConnect, Qt.LeftButton)
-        self.assertEqual(self.dlg.loginErrorMessageLabel.text(), "Login missing values for username and password.")
-
-        # Missing all three
-        self.dlg.archesServerInput.setText("")
-        QTest.mouseClick(self.dlg.btnConnect, Qt.LeftButton)
-        self.assertEqual(self.dlg.loginErrorMessageLabel.text(), "Login missing values for URL, username and password.")
-
+        for case in cases:
+            with self.subTest(case=case):
+                self.dlg.archesServerInput.setText(case["url"])
+                self.dlg.usernameInput.setText(case["username"])
+                self.dlg.passwordInput.setText(case["password"])
+                QTest.mouseClick(self.dlg.btnConnect, Qt.LeftButton)
+                self.assertEqual(self.dlg.loginErrorMessageLabel.text(), case["expected_msg"])
 
     def test_successful_arches_login(self):
         self.dlg.archesServerInput.setText(self.arches_url)
