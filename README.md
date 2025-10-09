@@ -82,8 +82,7 @@ Various functions are set up in the [Makefile](/Makefile) which can be used to i
 - `make run-testing` - this runs the entire testing process and shuts down, removes containers and volumes at the end. This command runs the following functions in the order below.
 - `make setup-arches-docker` - this runs the docker-compose file found in `test/arches` and spins up Arches, postgres and elasticsearch containers. In the Arches container, the project is created and run. This does not include webpack as Arches is only being fetched via API, thus in a partially headless state.
 - `make setup-qgis-docker` - runs various docker run commands to spin up the QGIS testing container. This is placed on the same network as the Arches container, therefore should be run after.
-- `make test` - runs all the plugin tests in the QGIS environment. Displays coverage at the end.
-- `make test file=path/to/file` - runs the specified plugin test. Displays coverage at the end.
+- `make test <file=path/to/file>` - runs all (or a specified) plugin tests in the QGIS environment. Displays coverage at the end.
 - `make black` - runs black formatting on all python files in the plugin.
-- `make shutdown-arches-docker` - runs docker compose down and removes volumes.
 - `make shutdown-qgis-docker` - stops and removes the QGIS docker container.
+- `make shutdown-arches-docker <remove_volumes=true|false>` - runs docker compose down for the Arches testing environment and optionally removes volumes.
