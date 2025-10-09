@@ -20,6 +20,8 @@ services:
     depends_on:
       - arches-qgis-postgres
       - arches-qgis-elasticsearch
+    volumes:
+      - arches-qgis-arches:/web_root
     ports:
       - ${DJANGO_PORT}:${DJANGO_PORT}
       - 5678:5678
@@ -38,6 +40,7 @@ services:
     restart: always
     volumes:
         - ./init-unix.sql:/docker-entrypoint-initdb.d/init.sql # to set up the DB template
+        - arches-qgis-postgres:/var/lib/postgresql/data
     ports:
       - ${PGPORT_HOST}:${PGPORT_CONTAINER}
     env_file:
@@ -49,6 +52,8 @@ services:
     container_name: arches-qgis-elasticsearch
     image: elasticsearch:8.5.3
     restart: always
+    volumes:
+      - arches-qgis-elasticsearch:/usr/share/elasticsearch/data
     environment:
       - xpack.security.enabled=false
       - discovery.type=single-node
@@ -64,3 +69,8 @@ networks:
   arches-qgis-network:
     driver: bridge
     name: arches-qgis-network
+
+volumes:
+    arches-qgis-arches:
+    arches-qgis-postgres:
+    arches-qgis-elasticsearch:

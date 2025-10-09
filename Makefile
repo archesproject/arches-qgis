@@ -142,23 +142,24 @@ setup-arches-docker:
 	done
 	@echo "Arches setup has completed."
 
+delete_volumes = false
 shutdown-arches-docker:
 	@echo "-------------------------------------------"
 	@echo "Shutting down Arches testing environment..."
 	@echo "-------------------------------------------"
-	cd ./test/arches && docker compose down -v
+	cd ./test/arches && docker compose down $(if $(filter true, $(delete_volumes)), -v)
 
 # Runs entire testing process
 run-testing:
-	$(MAKE) setup-arches-docker -s
+	$(MAKE) setup-arches-docker
 	@echo "--------------------"
 	@echo "Arches is available."
 	@echo "--------------------"
-	$(MAKE) setup-qgis-docker -s
+	$(MAKE) setup-qgis-docker
 	@echo "------------------"
 	@echo "QGIS is available."
 	@echo "------------------"
-# 	$(MAKE) test
-# 	$(MAKE) black
+	$(MAKE) test
+	$(MAKE) black
 	$(MAKE) shutdown-qgis-docker
-	$(MAKE) shutdown-arches-docker
+	$(MAKE) shutdown-arches-docker delete_volumes=true

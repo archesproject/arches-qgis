@@ -151,7 +151,7 @@ run_django_server() {
 	echo ""
 	cd ${APP_FOLDER}
     echo "Running Django"
-	exec sh -c "pip install debugpy -t /tmp && python3 /tmp/debugpy --listen 0.0.0.0:5678 manage.py runserver 0.0.0.0:${DJANGO_PORT}"
+	python3 manage.py runserver 0.0.0.0:${DJANGO_PORT}
 }
 
 run_project_commands() {
