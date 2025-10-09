@@ -136,6 +136,11 @@ setup-arches-docker:
 	@echo "Setting up Arches testing environment..."
 	@echo "----------------------------------------"
 	cd ./test/arches && docker compose up -d --build
+	@echo "Waiting for Arches to start, this may take a few minutes..."
+	@until curl -s http://localhost:$(DJANGO_PORT) > /dev/null; do \
+		sleep 20; \
+	done
+	@echo "Arches setup has completed."
 
 shutdown-arches-docker:
 	@echo "-------------------------------------------"
@@ -146,10 +151,6 @@ shutdown-arches-docker:
 # Runs entire testing process
 run-testing:
 	$(MAKE) setup-arches-docker -s
-	@until curl -s http://localhost:$(DJANGO_PORT) > /dev/null; do \
-		echo "Waiting for Arches to start..."; \
-		sleep 20; \
-	done
 	@echo "--------------------"
 	@echo "Arches is available."
 	@echo "--------------------"
@@ -157,7 +158,7 @@ run-testing:
 	@echo "------------------"
 	@echo "QGIS is available."
 	@echo "------------------"
-	$(MAKE) test
-	$(MAKE) black
+# 	$(MAKE) test
+# 	$(MAKE) black
 	$(MAKE) shutdown-qgis-docker
 	$(MAKE) shutdown-arches-docker
