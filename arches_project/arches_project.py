@@ -227,7 +227,6 @@ class ArchesProject:
             self.iface.removeToolBarIcon(action)
 
     def run(self):
-        print("RUNNNNNNNN")
         """Run method that performs all the real work"""
 
         # Create the dialog with elements (after translation) and keep reference
