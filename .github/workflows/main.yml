@@ -1,4 +1,4 @@
-name: CI Plugin Tests
+name: Arches QGIS Plugin Tests
 
 on: 
   # push: -- just run on PRs for now
@@ -11,30 +11,38 @@ jobs:
 
     strategy:
       fail-fast: false
-      # matrix:
-        # qgis_version: [3.40.10, ]
-        # hardcoded in makefile - needs changing for multiple versions
+      matrix:
+        qgis_version: [3.40.11, 3.44.3]
 
     steps:
       - name: Checkout
         uses: actions/checkout@v4
 
-      # - name: Set up testing Arches environment
-      #   run: |
-      #     make setup-arches-docker
-      #     until curl -s http://localhost:$DJANGO_PORT > /dev/null; do
-      #       echo "Waiting for Arches to start..."; \
-      #       sleep 30; \
-      #     done
+      - name: Set up Arches
+        run: |
+          cd ./test/arches && docker compose up -d --build
+          until curl -s http://localhost:8002 > /dev/null; do
+            sleep 30; \
+          done
 
-      # - name: Set up QGIS environment
-      #   run: make setup-qgis-docker
+      - name: Set up QGIS ${{ matrix.qgis_version }}
+        run: |
+          	docker run -dt --name qgis-testing-environment -v .:/tests_directory -e QT_QPA_PLATFORM="offscreen" qgis/qgis:${{ matrix.qgis_version }}
+            sleep 10 
+            docker exec qgis-testing-environment bash -c "cp -a /tests_directory/test/scripts/. /usr/bin/"
+            docker exec qgis-testing-environment bash -c "/tests_directory/test/scripts/qgis_setup.sh arches_project"
+            docker exec qgis-testing-environment bash -c "rm -f  /root/.local/share/QGIS/QGIS3/profiles/default/python/plugins/arches_project"
+            docker exec qgis-testing-environment bash -c "ln -s /tests_directory/ /root/.local/share/QGIS/QGIS3/profiles/default/python/plugins/arches_project"
+            docker exec qgis-testing-environment bash -c "apt-get update && apt-get install -y pre-commit python3-coverage python3-dotenv"
+            docker exec qgis-testing-environment bash -c "git config --global --add safe.directory /tests_directory"
+            docker network connect arches-qgis-network qgis-testing-environment
 
-      # - name: Run plugin tests
-      #   run: make test
+      - name: Run black formatting
+        run: |
+          docker exec qgis-testing-environment bash -c "cd /tests_directory/arches_project && pre-commit run --all-files --verbose"
 
-      # - name: Run black formatting
-      #   run: make python-formatting
-
-      - name: Run testing environment and tests
-        run: make run-testing
+      - name: Run plugin tests
+        run: |
+          docker exec qgis-testing-environment bash -c "cd /tests_directory \
+          && python3 -m coverage run -m unittest discover arches_project/tests \
+          && python3 -m coverage report -m
