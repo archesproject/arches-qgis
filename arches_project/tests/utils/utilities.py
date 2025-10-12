@@ -69,7 +69,9 @@ def get_qgis_app(cleanup=True):
             """
             print(f"{tag}({level}): {message}")
 
-        QgsApplication.instance().messageLog().messageReceived.connect(debug_log_message)
+        QgsApplication.instance().messageLog().messageReceived.connect(
+            debug_log_message
+        )
 
         if cleanup:
 

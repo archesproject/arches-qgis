@@ -6,4 +6,4 @@ def enable_logging(self):
         self.dlg.tabWidget.setTabVisible(5, False)
 
 
-#TODO needs expanding into class and functionality 
+# TODO needs expanding into class and functionality

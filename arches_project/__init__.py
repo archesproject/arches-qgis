@@ -33,4 +33,5 @@ def classFactory(iface):  # pylint: disable=invalid-name
     """
     #
     from arches_project.arches_project import ArchesProject
+
     return ArchesProject(iface)

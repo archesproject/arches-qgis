@@ -5,26 +5,28 @@ from ..views.login import LoggedIn
 from ..utils.qgis_messaging import show_message
 from ..utils.spinner import triggerSpinner
 
-from qgis.core import (QgsProject,
-                       QgsVectorLayer,
-                       QgsTask,
-                       QgsMessageLog,
-                       )
+from qgis.core import (
+    QgsProject,
+    QgsVectorLayer,
+    QgsTask,
+    QgsMessageLog,
+)
 from PyQt5.QtCore import pyqtSignal
 
-class ArchesConnection():
-    """ Class for Arches APIs """
+
+class ArchesConnection:
+    """Class for Arches APIs"""
+
     def __init__(self, url, username, password):
         self.url = url
         self.password = password
         self.username = username
 
-
     def get_client_id(self):
         try:
             files = {
-                'username': (None, self.username),
-                'password': (None, self.password),
+                "username": (None, self.username),
+                "password": (None, self.password),
             }
             response = requests.post(f"{self.url}/auth/get_client_id", data=files)
             clientid = response.json()["clientid"]
@@ -32,16 +34,19 @@ class ArchesConnection():
         except:
             return None
 
-
     def get_user_permissions(self, arches_user_info):
         try:
             files = {
-                'username': (None, self.username),
-                'password': (None, self.password),
+                "username": (None, self.username),
+                "password": (None, self.password),
             }
             response = requests.post(f"{self.url}/auth/user_profile", data=files)
-            arches_user_info["deletable_nodegroups"] = response.json()["deletable_nodegroups"]
-            arches_user_info["editable_nodegroups"] = response.json()["editable_nodegroups"]
+            arches_user_info["deletable_nodegroups"] = response.json()[
+                "deletable_nodegroups"
+            ]
+            arches_user_info["editable_nodegroups"] = response.json()[
+                "editable_nodegroups"
+            ]
             arches_user_info["groups"] = response.json()["groups"]
             arches_user_info["is_active"] = response.json()["is_active"]
             arches_user_info["date_joined"] = response.json()["date_joined"]
@@ -57,38 +62,43 @@ class ArchesConnection():
             arches_user_info["last_name"] = None
         return arches_user_info
 
-
     def get_token(self, clientid, arches_token):
         try:
             files = {
-                'username': (None, self.username),
-                'password': (None, self.password),
-                'client_id': (None, clientid),
-                'grant_type': (None, "password")
+                "username": (None, self.username),
+                "password": (None, self.password),
+                "client_id": (None, clientid),
+                "grant_type": (None, "password"),
             }
-            response = requests.post(self.url+"/o/token/", data=files)
+            response = requests.post(self.url + "/o/token/", data=files)
             arches_token = response.json()
             arches_token["formatted_url"] = self.url
             arches_token["time"] = datetime.now()
-            arches_token["expires_at"] = arches_token["time"] + timedelta(seconds=arches_token["expires_in"])
+            arches_token["expires_at"] = arches_token["time"] + timedelta(
+                seconds=arches_token["expires_in"]
+            )
 
             # If the token has an error status in it then break
             if "error" in arches_token.keys():
                 error_msg = arches_token["error"]
-                arches_token = {} # reset token to empty
+                arches_token = {}  # reset token to empty
             return arches_token
-        
+
         except Exception as e:
             print(f"Failed to get OAuth token: {e}")
             return arches_token
-
 
     def get_graphs(self, arches_graphs_list, login_updates, percent_progress):
         try:
             login_updates.emit("Fetching graphs ...")
             response = requests.get(f"{self.url}/graphs/")
-            graphids = [x["graphid"] for x in response.json() if x["graphid"] != "ff623370-fa12-11e6-b98b-6c4008b05c4c" and x["isresource"]]
-            percent_progress.emit(True,0,0)
+            graphids = [
+                x["graphid"]
+                for x in response.json()
+                if x["graphid"] != "ff623370-fa12-11e6-b98b-6c4008b05c4c"
+                and x["isresource"]
+            ]
+            percent_progress.emit(True, 0, 0)
 
             for x, graph in enumerate(graphids):
                 geometry_node_data = {}
@@ -97,7 +107,7 @@ class ArchesConnection():
 
                 req = requests.get(f"{self.url}/graphs/{graph}")
 
-                if req.json()["graph"]["publication_id"]:   # if graph is published
+                if req.json()["graph"]["publication_id"]:  # if graph is published
                     login_updates.emit(f"Fetching graphs ... ({x+1}/{len(graphids)})")
                     for nodes in req.json()["graph"]["nodes"]:
                         if nodes["datatype"] == "geojson-feature-collection":
@@ -106,27 +116,30 @@ class ArchesConnection():
                             nodegroupid = nodes["nodegroup_id"]
                             nodeid = nodes["nodeid"]
                             node_name = nodes["name"]
-                            geometry_node_data[nodeid] = {"nodegroup_id": nodegroupid, "name": node_name}
+                            geometry_node_data[nodeid] = {
+                                "nodegroup_id": nodegroupid,
+                                "name": node_name,
+                            }
                     if contains_geom == True:
-                        if geom_node_count > 1: multiple = True
-                        else: multiple = False
+                        if geom_node_count > 1:
+                            multiple = True
+                        else:
+                            multiple = False
 
-                        arches_graphs_list.append({
-                            "graph_id":graph,
-                            "name":req.json()["graph"]["name"],
-                            "geometry_node_data": geometry_node_data,
-                            "multiple_geometry_nodes": multiple
-                        })
-                    percent_progress.emit(False, x+1, len(graphids))
+                        arches_graphs_list.append(
+                            {
+                                "graph_id": graph,
+                                "name": req.json()["graph"]["name"],
+                                "geometry_node_data": geometry_node_data,
+                                "multiple_geometry_nodes": multiple,
+                            }
+                        )
+                    percent_progress.emit(False, x + 1, len(graphids))
         except:
             pass
         return arches_graphs_list
-    
 
-    def connection_reset(self, 
-                         hard_reset, 
-                         self_obj,
-                         manual_logout=False):
+    def connection_reset(self, hard_reset, self_obj, manual_logout=False):
         """
         Reset Arches connection
         """
@@ -160,19 +173,26 @@ class ArchesConnection():
         self_obj.dlg.editResSelectFeatures.setEnabled(False)
         self_obj.dlg.selectedResAttributeTable.setRowCount(0)
         self_obj.dlg.selectedResAttributeTable.setEnabled(False)
-        self_obj.dlg.selectedResUUID.setText("Connect to your Arches instance to edit resources.")
+        self_obj.dlg.selectedResUUID.setText(
+            "Connect to your Arches instance to edit resources."
+        )
         # Hide multiple nodegroup dropdown
         self_obj.dlg.geometryNodeSelect.setEnabled(False)
 
         if manual_logout:
-            show_message(self_obj.iface, "information", "Logged out of Arches instance. Please reconnect to use the plugin.")
+            show_message(
+                self_obj.iface,
+                "information",
+                "Logged out of Arches instance. Please reconnect to use the plugin.",
+            )
+
 
 class ConnectionProcess(QgsTask):
-    """ Connecting to Arches via QGIS task and updating the UI """
+    """Connecting to Arches via QGIS task and updating the UI"""
+
     login_updates = pyqtSignal(str)
     percent_progress = pyqtSignal(bool, int, int)
     complete = pyqtSignal()
-
 
     def __init__(self, url, username, password, archesproject):
         super().__init__()
@@ -182,22 +202,24 @@ class ConnectionProcess(QgsTask):
         self.archesproject = archesproject
 
     def run(self):
-        arches_connection = ArchesConnection(url=self.url,
-                                            username=self.username,
-                                            password=self.password)
+        arches_connection = ArchesConnection(
+            url=self.url, username=self.username, password=self.password
+        )
 
         self.login_updates.emit("Fetching client id ...")
         clientid = arches_connection.get_client_id()
         self.archesproject.clientid = clientid
-        self.percent_progress.emit(True, 0,0)
+        self.percent_progress.emit(True, 0, 0)
         if not clientid:
             return False
 
         # get/update user info on the logged in user
         self.archesproject.arches_user_info = {}
         self.login_updates.emit("Fetching user permissions ...")
-        self.archesproject.arches_user_info = arches_connection.get_user_permissions(self.archesproject.arches_user_info)
-        self.percent_progress.emit(True,0,0)
+        self.archesproject.arches_user_info = arches_connection.get_user_permissions(
+            self.archesproject.arches_user_info
+        )
+        self.percent_progress.emit(True, 0, 0)
 
         # re-fetch graphs before checking cache as updates may have occurred
         self.archesproject.arches_graphs_list = []
@@ -206,23 +228,28 @@ class ConnectionProcess(QgsTask):
             # if user does not have permissions return early and deal with in finished()
             return True
 
-        self.archesproject.arches_graphs_list = arches_connection.get_graphs(self.archesproject.arches_graphs_list,
-                                                                                self.login_updates,
-                                                                                self.percent_progress)
+        self.archesproject.arches_graphs_list = arches_connection.get_graphs(
+            self.archesproject.arches_graphs_list,
+            self.login_updates,
+            self.percent_progress,
+        )
 
-        self.archesproject.arches_token = arches_connection.get_token(clientid, self.archesproject.arches_token)
+        self.archesproject.arches_token = arches_connection.get_token(
+            clientid, self.archesproject.arches_token
+        )
 
         self.login_updates.emit("Fetching Oauth token ...")
         if not self.archesproject.arches_token:
             return False
-        self.percent_progress.emit(True,0,0)
+        self.percent_progress.emit(True, 0, 0)
 
         # Store for preventing duplicate connection requests
-        self.archesproject.arches_connection_cache = {"url": self.archesproject.dlg.archesServerInput.text(),
-                                        "username": self.archesproject.dlg.usernameInput.text()}
-                            
+        self.archesproject.arches_connection_cache = {
+            "url": self.archesproject.dlg.archesServerInput.text(),
+            "username": self.archesproject.dlg.usernameInput.text(),
+        }
+
         return True
-            
 
     def finished(self, result):
         def update_login_tab():
@@ -231,10 +258,12 @@ class ConnectionProcess(QgsTask):
             self.archesproject.dlg.tabWidget.setTabVisible(1, True)
             self.archesproject.dlg.tabWidget.setCurrentIndex(1)
 
-            logged_in_tab = LoggedIn(dlg = self.archesproject.dlg,
-                                     username = self.username,
-                                     url = self.url,
-                                     arches_user_info = self.archesproject.arches_user_info)
+            logged_in_tab = LoggedIn(
+                dlg=self.archesproject.dlg,
+                username=self.username,
+                url=self.url,
+                arches_user_info=self.archesproject.arches_user_info,
+            )
             logged_in_tab.update_logged_in_view()
             # self.archesproject.dlg.displayTextLabel.setText(f"Connected to {self.url} as {self.archesproject.dlg.usernameInput.text()}.")
             # self.archesproject.dlg.displayUrlLabel.setOpenExternalLinks(True) #TODO
@@ -243,11 +272,15 @@ class ConnectionProcess(QgsTask):
             self.archesproject.dlg.createResModelSelect.clear()
             self.archesproject.dlg.createResFeatureSelect.setEnabled(True)
             self.archesproject.dlg.createResFeatureSelect.clear()
-            self.archesproject.dlg.createResFeatureSelect.addItems([layer.name() for layer in self.archesproject.layers])
-            
+            self.archesproject.dlg.createResFeatureSelect.addItems(
+                [layer.name() for layer in self.archesproject.layers]
+            )
+
             if self.archesproject.arches_graphs_list:
                 self.archesproject.dlg.createResModelSelect.setEnabled(True)
-                self.archesproject.dlg.createResModelSelect.addItems([graph["name"] for graph in self.archesproject.arches_graphs_list])
+                self.archesproject.dlg.createResModelSelect.addItems(
+                    [graph["name"] for graph in self.archesproject.arches_graphs_list]
+                )
                 self.archesproject.dlg.addNewRes.setEnabled(True)
 
         def update_edit_resources_tab():
@@ -258,9 +291,13 @@ class ConnectionProcess(QgsTask):
                 self.archesproject.dlg.replaceEditRes.setEnabled(True)
             self.archesproject.dlg.editResSelectFeatures.setEnabled(True)
             self.archesproject.dlg.editResSelectFeatures.clear()
-            self.archesproject.dlg.editResSelectFeatures.addItems([layer.name() for layer in self.archesproject.layers])
+            self.archesproject.dlg.editResSelectFeatures.addItems(
+                [layer.name() for layer in self.archesproject.layers]
+            )
             self.archesproject.dlg.selectedResAttributeTable.setEnabled(True)
-            self.archesproject.dlg.selectedResUUID.setText("Connected to Arches. Select an Arches resource to proceed.")
+            self.archesproject.dlg.selectedResUUID.setText(
+                "Connected to Arches. Select an Arches resource to proceed."
+            )
 
         triggerSpinner(arches_obj=self.archesproject).hide_spinner()
 
@@ -270,28 +307,48 @@ class ConnectionProcess(QgsTask):
                 # This must be in result, in order to display that login failed due to permissions rather than other
 
                 # get all vector layers
-                self.archesproject.layers = [l for l in QgsProject.instance().mapLayers().values() if l.type() == QgsVectorLayer.VectorLayer if str(l.dataProvider().name()) != "postgres"] 
+                self.archesproject.layers = [
+                    l
+                    for l in QgsProject.instance().mapLayers().values()
+                    if l.type() == QgsVectorLayer.VectorLayer
+                    if str(l.dataProvider().name()) != "postgres"
+                ]
 
                 update_login_tab()
                 update_edit_resources_tab()
                 update_create_resources_tab()
             else:
-                ArchesConnection(None,None,None).connection_reset(hard_reset=True,
-                                                                self_obj=self.archesproject)
-                show_message(self.archesproject.iface, "Warning", "Login prevented: This user does not have the permissions to create Arches resources.", duration=-1)
+                ArchesConnection(None, None, None).connection_reset(
+                    hard_reset=True, self_obj=self.archesproject
+                )
+                show_message(
+                    self.archesproject.iface,
+                    "Warning",
+                    "Login prevented: This user does not have the permissions to create Arches resources.",
+                    duration=-1,
+                )
                 self.archesproject.dlg.loginErrorMessageFrame.show()
                 self.archesproject.dlg.loginErrorMessageLabel.show()
-                self.archesproject.dlg.loginErrorMessageLabel.setText("Login prevented: This user does not have the permissions to create Arches resources.")
+                self.archesproject.dlg.loginErrorMessageLabel.setText(
+                    "Login prevented: This user does not have the permissions to create Arches resources."
+                )
         else:
-            show_message(self.archesproject.iface, "Error", "Failed to connect to Arches instance." , duration=-1 )
+            show_message(
+                self.archesproject.iface,
+                "Error",
+                "Failed to connect to Arches instance.",
+                duration=-1,
+            )
             self.archesproject.dlg.loginErrorMessageFrame.show()
             self.archesproject.dlg.loginErrorMessageLabel.show()
-            self.archesproject.dlg.loginErrorMessageLabel.setText("Failed to connect to Arches instance.")
-            ArchesConnection(None,None,None).connection_reset(hard_reset=True,
-                                                            self_obj=self.archesproject)
-
+            self.archesproject.dlg.loginErrorMessageLabel.setText(
+                "Failed to connect to Arches instance."
+            )
+            ArchesConnection(None, None, None).connection_reset(
+                hard_reset=True, self_obj=self.archesproject
+            )
 
     def cancel(self):
         triggerSpinner(arches_obj=self.archesproject).hide_spinner()
-        QgsMessageLog.logMessage('task was canceled')
+        QgsMessageLog.logMessage("task was canceled")
         super().cancel()

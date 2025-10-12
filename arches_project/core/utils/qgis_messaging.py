@@ -7,10 +7,10 @@ def show_message(iface, status, message, duration=5, level=Qgis.Info):
     """
 
     level_lookup = {
-        "information": Qgis.Info, # Level 0
-        "warning": Qgis.Warning, # Level 1
-        "error": Qgis.Critical, # Level 2
-        "success": Qgis.Success, # Level 3
+        "information": Qgis.Info,  # Level 0
+        "warning": Qgis.Warning,  # Level 1
+        "error": Qgis.Critical,  # Level 2
+        "success": Qgis.Success,  # Level 3
     }
     # Use duration -1 for a message that must be dismissed by the user.
 

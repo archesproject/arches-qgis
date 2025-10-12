@@ -12,14 +12,16 @@ class Spinner(QtWidgets.QLabel):
             startValue=0.0,
             endValue=360.0,
             duration=2000,
-            valueChanged=self.on_valueChanged
+            valueChanged=self.on_valueChanged,
         )
         self.arches_obj = arches_obj
-    
+
     def start(self):
-        self._animation.setLoopCount(-1)        
+        self._animation.setLoopCount(-1)
         if self._animation.state() != QtCore.QAbstractAnimation.Running:
-            self._animation.start(QtCore.QAbstractAnimation.DeletionPolicy.KeepWhenStopped)
+            self._animation.start(
+                QtCore.QAbstractAnimation.DeletionPolicy.KeepWhenStopped
+            )
 
     def set_pixmap(self, pixmap):
         self._pixmap = pixmap.scaled(140, 140, QtCore.Qt.KeepAspectRatio)
@@ -32,19 +34,23 @@ class Spinner(QtWidgets.QLabel):
         self.arches_obj.dlg.loadingWheel.setPixmap((self._pixmap.transformed(t)))
 
 
-
 class triggerSpinner(QtWidgets.QWidget):
     def __init__(self, parent=None, arches_obj=None):
         super(triggerSpinner, self).__init__(parent)
         self.arches_obj = arches_obj
-        self.spinner = Spinner(arches_obj, arches_obj.dlg.loadingWheel, )
+        self.spinner = Spinner(
+            arches_obj,
+            arches_obj.dlg.loadingWheel,
+        )
         self.arches_obj.dlg.loadingWheel.setFixedSize(150, 150)
-        self.spinner.set_pixmap(QPixmap(os.path.join(arches_obj.plugin_dir, "icons", "spinner.svg")))
+        self.spinner.set_pixmap(
+            QPixmap(os.path.join(arches_obj.plugin_dir, "icons", "spinner.svg"))
+        )
 
     def start_spinner(self):
         self.reveal_spinner()
         self.spinner.start()
-    
+
     def reveal_spinner(self):
         self.arches_obj.dlg.tabWidget.hide()
         self.arches_obj.dlg.loadingWheel.show()
@@ -58,4 +64,3 @@ class triggerSpinner(QtWidgets.QWidget):
         self.arches_obj.dlg.updateTextFrame.hide()
         self.arches_obj.dlg.loginErrorMessageFrame.hide()
         self.arches_obj.dlg.loadingWheelVerticalSpacerFrame.hide()
-

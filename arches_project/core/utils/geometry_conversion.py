@@ -1,10 +1,12 @@
-from qgis.core import (QgsProject,
-                       QgsCoordinateReferenceSystem,
-                       QgsCoordinateTransform,
-                       QgsWkbTypes
-                       )
+from qgis.core import (
+    QgsProject,
+    QgsCoordinateReferenceSystem,
+    QgsCoordinateTransform,
+    QgsWkbTypes,
+)
 
-class Geometries():
+
+class Geometries:
     def __init__(self, selectedLayer):
         self.selectedLayer = selectedLayer
         self.selected_layer_crs = selectedLayer.crs()
@@ -12,10 +14,10 @@ class Geometries():
 
     def coordinate_transform(self, geom):
         if self.selected_layer_crs != self.arches_crs:
-            tr = QgsCoordinateTransform(self.selected_layer_crs,
-                                                     self.arches_crs,
-                                                     QgsProject.instance())
-            
+            tr = QgsCoordinateTransform(
+                self.selected_layer_crs, self.arches_crs, QgsProject.instance()
+            )
+
             geom.transform(tr)
             return geom
         else:
@@ -34,7 +36,7 @@ class Geometries():
             geom = self.coordinate_transform(geom)
             all_features.append(geom.asWkt())
 
-            # Store types 
+            # Store types
             geom_type = geom.type()
             geom_type_label = QgsWkbTypes.geometryDisplayString(geom_type)
             if geom_type_label not in geometry_type_dict:
@@ -43,9 +45,9 @@ class Geometries():
                 geometry_type_dict[geom_type_label] += 1
 
         # Would use shapely to create GEOMETRYCOLLECTION but that'd require users to install the dependency themselves
-        # this is the alternative        
-        # all_features = [feature.geometry().asWkt() for feature in self.selectedLayer.getFeatures()] 
+        # this is the alternative
+        # all_features = [feature.geometry().asWkt() for feature in self.selectedLayer.getFeatures()]
         # removed for conversion
-        geomcoll = "GEOMETRYCOLLECTION (%s)" % (','.join(all_features))
-        
+        geomcoll = "GEOMETRYCOLLECTION (%s)" % (",".join(all_features))
+
         return geomcoll, geometry_type_dict
