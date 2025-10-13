@@ -6,12 +6,50 @@ on:
   workflow_dispatch:
 
 jobs:
-  tests:
+  build_target_branch:
     runs-on: ubuntu-latest
 
     strategy:
       fail-fast: false
       matrix:
+        # run on QGIS LTR
+        qgis_version: [3.40.11]
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Checkout into target branch
+        uses: actions/checkout@v4
+        with:
+          repository: ${{ github.repository }}
+          ref: ${{ github.event.pull_request.base.ref }}
+          path: .
+
+      - name: Set up Arches
+        uses: ./.github/actions/build-arches-environment
+
+      - name: Set up QGIS ${{ matrix.qgis_version }}
+        uses: ./.github/actions/build-qgis-environment
+        with:
+          qgis_version: ${{ matrix.qgis_version }}
+
+      - name: Run black formatting
+        run: |
+          docker exec qgis-testing-environment bash -c "cd /tests_directory/arches_project && pre-commit run --all-files --verbose"
+
+      - name: Run plugin tests
+        run: |
+          docker exec qgis-testing-environment bash -c "cd /tests_directory \
+          && python3 -m coverage run -m unittest discover arches_project/tests \
+          && python3 -m coverage report -m"
+
+  build_feature_branch:
+    runs-on: ubuntu-latest
+
+    strategy:
+      fail-fast: false
+      matrix:
+        # Use LTR and latest release
         qgis_version: [3.40.11, 3.44.3]
 
     steps:
@@ -19,23 +57,12 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Set up Arches
-        run: |
-          cd ./test/arches && docker compose up -d --build
-          until curl -s http://localhost:8002 > /dev/null; do
-            sleep 30; \
-          done
+        uses: ./.github/actions/build-arches-environment
 
       - name: Set up QGIS ${{ matrix.qgis_version }}
-        run: |
-          docker run -dt --name qgis-testing-environment -v .:/tests_directory -e QT_QPA_PLATFORM="offscreen" qgis/qgis:${{ matrix.qgis_version }}
-          sleep 10 
-          docker exec qgis-testing-environment bash -c "cp -a /tests_directory/test/scripts/. /usr/bin/"
-          docker exec qgis-testing-environment bash -c "/tests_directory/test/scripts/qgis_setup.sh arches_project"
-          docker exec qgis-testing-environment bash -c "rm -f  /root/.local/share/QGIS/QGIS3/profiles/default/python/plugins/arches_project"
-          docker exec qgis-testing-environment bash -c "ln -s /tests_directory/ /root/.local/share/QGIS/QGIS3/profiles/default/python/plugins/arches_project"
-          docker exec qgis-testing-environment bash -c "apt-get update && apt-get install -y pre-commit python3-coverage python3-dotenv"
-          docker exec qgis-testing-environment bash -c "git config --global --add safe.directory /tests_directory"
-          docker network connect arches-qgis-network qgis-testing-environment
+        uses: ./.github/actions/build-qgis-environment
+        with:
+          qgis_version: ${{ matrix.qgis_version }}
 
       - name: Run black formatting
         run: |

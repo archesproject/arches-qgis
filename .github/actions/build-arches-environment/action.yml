@@ -1,0 +1,11 @@
+name: 'Build Arches test environment'
+description: 'Builds the Arches testing environment'
+runs:
+  using: 'composite'
+  steps:
+    - name: Set up Arches
+      run: |
+        cd ./test/arches && docker compose up -d --build
+        until curl -s http://localhost:8002 > /dev/null; do
+          sleep 30; \
+        done
