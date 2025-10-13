@@ -114,16 +114,21 @@ ifeq ($(file),)
 	@echo "Running all Arches QGIS plugin tests..."
 	@echo "---------------------------------------"
 	docker exec qgis-testing-environment bash -c "cd /tests_directory \
-	&& python3 -m coverage run -m unittest discover arches_project/tests \
-	&& python3 -m coverage report -m || true"
+	&& python3 -m coverage run -m unittest discover arches_project/tests
 else
 	@echo "----------------------------------------------"
 	@echo "Running Arches QGIS plugin test for $(file)..."
 	@echo "----------------------------------------------"
 	docker exec qgis-testing-environment bash -c "cd /tests_directory \
-	&& python3 -m coverage run -m unittest $(file) \
-	&& python3 -m coverage report -m || true"
+	&& python3 -m coverage run -m unittest $(file)
 endif
+
+coverage:
+	@echo "--------------------------------------"
+	@echo "Running Arches QGIS plugin coverage..."
+	@echo "--------------------------------------"
+	docker exec qgis-testing-environment bash -c "cd /tests_directory \
+	&& python3 -m coverage report -m || true"
 
 black:
 	@echo "----------------------------------------------"
@@ -160,6 +165,7 @@ run-testing:
 	@echo "QGIS is available."
 	@echo "------------------"
 	$(MAKE) test
+	$(MAKE) coverage
 	$(MAKE) black
 	$(MAKE) shutdown-qgis-docker
 	$(MAKE) shutdown-arches-docker delete_volumes=true
