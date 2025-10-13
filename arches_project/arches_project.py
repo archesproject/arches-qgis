@@ -25,11 +25,7 @@ from PyQt5.QtCore import Qt
 from qgis.PyQt.QtCore import QSettings, QTranslator, QCoreApplication
 from qgis.PyQt.QtGui import QIcon
 from qgis.PyQt.QtWidgets import QAction, QTableWidgetItem
-from qgis.core import (QgsProject, 
-                       QgsVectorLayer, 
-                       QgsMessageLog,
-                       QgsApplication
-                       )
+from qgis.core import QgsProject, QgsVectorLayer, QgsMessageLog, QgsApplication
 
 # Initialize Qt resources from file resources.py
 from arches_project.resources import *
@@ -38,9 +34,15 @@ from arches_project.resources import *
 from arches_project.ui.arches_project_dialog import ArchesProjectDialog
 
 # Import the confirmation dialogs
-from arches_project.ui.create_resource_confirmation_dialog import CreateResourceConfirmation
-from arches_project.ui.edit_resource_add_confirmation_dialog import EditResourceAddConfirmation
-from arches_project.ui.edit_resource_replace_confirmation_dialog import EditResourceReplaceConfirmation
+from arches_project.ui.create_resource_confirmation_dialog import (
+    CreateResourceConfirmation,
+)
+from arches_project.ui.edit_resource_add_confirmation_dialog import (
+    EditResourceAddConfirmation,
+)
+from arches_project.ui.edit_resource_replace_confirmation_dialog import (
+    EditResourceReplaceConfirmation,
+)
 
 from arches_project.core.arches.connection import ArchesConnection, ConnectionProcess
 from arches_project.core.arches.resources import ArchesResources
@@ -60,6 +62,7 @@ import requests
 from datetime import datetime
 import time
 
+
 class ArchesProject:
     """QGIS Plugin Implementation."""
 
@@ -76,11 +79,10 @@ class ArchesProject:
         # initialize plugin directory
         self.plugin_dir = os.path.dirname(__file__)
         # initialize locale
-        locale = QSettings().value('locale/userLocale')[0:2]
+        locale = QSettings().value("locale/userLocale")[0:2]
         locale_path = os.path.join(
-            self.plugin_dir,
-            'i18n',
-            'ArchesProject_{}.qm'.format(locale))
+            self.plugin_dir, "i18n", "ArchesProject_{}.qm".format(locale)
+        )
 
         if os.path.exists(locale_path):
             self.translator = QTranslator()
@@ -89,7 +91,7 @@ class ArchesProject:
 
         # Declare instance attributes
         self.actions = []
-        self.menu = self.tr(u'&Arches Project')
+        self.menu = self.tr("&Arches Project")
 
         # Check if plugin was started the first time in current QGIS session
         # Must be set in initGui() to survive plugin reloads
@@ -110,10 +112,11 @@ class ArchesProject:
         self.arches_user_info = {}
         # Store selected arches resource
         self.layers = []
-        self.arches_selected_resource = {"resourceinstanceid": "",
-                                         "nodeid": "",
-                                         "tileid": ""
-                                        }
+        self.arches_selected_resource = {
+            "resourceinstanceid": "",
+            "nodeid": "",
+            "tileid": "",
+        }
 
     # noinspection PyMethodMayBeStatic
     def tr(self, message):
@@ -128,7 +131,7 @@ class ArchesProject:
         :rtype: QString
         """
         # noinspection PyTypeChecker,PyArgumentList,PyCallByClass
-        return QCoreApplication.translate('ArchesProject', message)
+        return QCoreApplication.translate("ArchesProject", message)
 
     def add_action(
         self,
@@ -140,7 +143,8 @@ class ArchesProject:
         add_to_toolbar=True,
         status_tip=None,
         whats_this=None,
-        parent=None):
+        parent=None,
+    ):
         """Add a toolbar icon to the toolbar.
 
         :param icon_path: Path to the icon for this action. Can be a resource
@@ -196,9 +200,7 @@ class ArchesProject:
             self.iface.addToolBarIcon(action)
 
         if add_to_menu:
-            self.iface.addPluginToMenu(
-                self.menu,
-                action)
+            self.iface.addPluginToMenu(self.menu, action)
 
         self.actions.append(action)
 
@@ -207,15 +209,13 @@ class ArchesProject:
     def initGui(self):
         """Create the menu entries and toolbar icons inside the QGIS GUI."""
 
-        icon_path = os.path.join(
-            self.plugin_dir,
-            'icons',
-            'arches.png')
+        icon_path = os.path.join(self.plugin_dir, "icons", "arches.png")
         self.add_action(
             icon_path,
-            text=self.tr(u'Arches Project'),
+            text=self.tr("Arches Project"),
             callback=self.run,
-            parent=self.iface.mainWindow())
+            parent=self.iface.mainWindow(),
+        )
 
         # will be set False in run()
         self.first_start = True
@@ -223,9 +223,7 @@ class ArchesProject:
     def unload(self):
         """Removes the plugin menu item and icon from QGIS GUI."""
         for action in self.actions:
-            self.iface.removePluginMenu(
-                self.tr(u'&Arches Project'),
-                action)
+            self.iface.removePluginMenu(self.tr("&Arches Project"), action)
             self.iface.removeToolBarIcon(action)
 
     def run(self):
@@ -237,20 +235,25 @@ class ArchesProject:
             self.first_start = False
 
             # Setup Arches Stylesheet
-            PluginStylesheets(dlg = self.dlg,
-                              dlg_resource_creation = self.dlg_resource_creation,
-                              dlg_edit_resource_add = self.dlg_edit_resource_add,
-                              dlg_edit_resource_replace = self.dlg_edit_resource_replace,
-                              on_start = True,
-                              plugin_dir = self.plugin_dir)
+            PluginStylesheets(
+                dlg=self.dlg,
+                dlg_resource_creation=self.dlg_resource_creation,
+                dlg_edit_resource_add=self.dlg_edit_resource_add,
+                dlg_edit_resource_replace=self.dlg_edit_resource_replace,
+                on_start=True,
+                plugin_dir=self.plugin_dir,
+            )
             # if stylesheet is disabled
             self.dlg.useStylesheetCheckbox.stateChanged.connect(
-                lambda: PluginStylesheets(dlg = self.dlg,
-                                          dlg_resource_creation = self.dlg_resource_creation,
-                                          dlg_edit_resource_add = self.dlg_edit_resource_add,
-                                          dlg_edit_resource_replace = self.dlg_edit_resource_replace,
-                                          on_start = False,
-                                          plugin_dir = self.plugin_dir))
+                lambda: PluginStylesheets(
+                    dlg=self.dlg,
+                    dlg_resource_creation=self.dlg_resource_creation,
+                    dlg_edit_resource_add=self.dlg_edit_resource_add,
+                    dlg_edit_resource_replace=self.dlg_edit_resource_replace,
+                    on_start=False,
+                    plugin_dir=self.plugin_dir,
+                )
+            )
 
             ## Have everything called in here so multiple connections aren't made when plugin button pressed
             # This way only one connection is made at a time
@@ -267,10 +270,11 @@ class ArchesProject:
 
             # Connection to Arches instance
             self.dlg.btnConnect.clicked.connect(self.arches_connection_save)
-            self.dlg.btnLogout.clicked.connect(lambda: ArchesConnection(None, None, None).
-                                              connection_reset(hard_reset=True,
-                                                                self_obj=self,
-                                                                manual_logout=True))
+            self.dlg.btnLogout.clicked.connect(
+                lambda: ArchesConnection(None, None, None).connection_reset(
+                    hard_reset=True, self_obj=self, manual_logout=True
+                )
+            )
 
             # Get the map selection and update when changed
             self.iface.mapCanvas().selectionChanged.connect(self.map_selection)
@@ -282,30 +286,46 @@ class ArchesProject:
 
             # to run when layer is changed in create resource and edit resource tabs
             self.dlg.hidePostgresLayers.setChecked(True)
-            self.dlg.createResFeatureSelect.highlighted.connect(lambda: self.update_map_layers(checkbox=self.dlg.hidePostgresLayers))
-            self.dlg.editResSelectFeatures.highlighted.connect(lambda: self.update_map_layers(checkbox=self.dlg.hidePostgresLayers))
+            self.dlg.createResFeatureSelect.highlighted.connect(
+                lambda: self.update_map_layers(checkbox=self.dlg.hidePostgresLayers)
+            )
+            self.dlg.editResSelectFeatures.highlighted.connect(
+                lambda: self.update_map_layers(checkbox=self.dlg.hidePostgresLayers)
+            )
 
-            self.dlg.hidePostgresLayers.stateChanged.connect(lambda: self.show_hide_psql_layers(combobox1=self.dlg.createResFeatureSelect,
-                                                                                                combobox2=self.dlg.editResSelectFeatures))
+            self.dlg.hidePostgresLayers.stateChanged.connect(
+                lambda: self.show_hide_psql_layers(
+                    combobox1=self.dlg.createResFeatureSelect,
+                    combobox2=self.dlg.editResSelectFeatures,
+                )
+            )
 
             # click add button - should bring up new dialog for confirmation
             self.dlg.addNewRes.clicked.connect(self.create_resource)
 
             ## Set "Edit Resource" to false to begin with
-            self.dlg.selectedResUUID.setText("Connect to your Arches instance to edit resources.")
+            self.dlg.selectedResUUID.setText(
+                "Connect to your Arches instance to edit resources."
+            )
             self.dlg.addEditRes.setEnabled(False)
             self.dlg.replaceEditRes.setEnabled(False)
             self.dlg.editResSelectFeatures.setEnabled(False)
             self.dlg.selectedResAttributeTable.setEnabled(False)
 
-            self.dlg.addEditRes.clicked.connect(lambda: self.edit_resource(replace=False))
-            self.dlg.replaceEditRes.clicked.connect(lambda: self.edit_resource(replace=True))
+            self.dlg.addEditRes.clicked.connect(
+                lambda: self.edit_resource(replace=False)
+            )
+            self.dlg.replaceEditRes.clicked.connect(
+                lambda: self.edit_resource(replace=True)
+            )
 
             # Hide multiple geometry node selection by default
             self.dlg.geometryNodeSelectFrame.hide()
 
             # Check if selected graph has multiple geometry nodes
-            self.dlg.createResModelSelect.currentIndexChanged.connect(self.multiple_geometry_node_check)
+            self.dlg.createResModelSelect.currentIndexChanged.connect(
+                self.multiple_geometry_node_check
+            )
 
         # show the dialog
         self.dlg.show()
@@ -325,7 +345,7 @@ class ArchesProject:
             features = None
 
         print("\nmap selection has been fired because selection changed")
-        print("layer:",active_layer, "features:",features)
+        print("layer:", active_layer, "features:", features)
 
         if features:
 
@@ -333,9 +353,13 @@ class ArchesProject:
                 print("Select one feature")
                 self.dlg.selectedResAttributeTable.setRowCount(0)
                 if self.arches_token:
-                    self.dlg.selectedResUUID.setText("Multiple features selected, select one feature to proceed.")
+                    self.dlg.selectedResUUID.setText(
+                        "Multiple features selected, select one feature to proceed."
+                    )
                 else:
-                    self.dlg.selectedResUUID.setText("Connect to your Arches instance to edit resources.")
+                    self.dlg.selectedResUUID.setText(
+                        "Connect to your Arches instance to edit resources."
+                    )
                 return
 
             elif len(features) == 0:
@@ -346,7 +370,9 @@ class ArchesProject:
                     self.dlg.addEditRes.setEnabled(False)
                     self.dlg.replaceEditRes.setEnabled(False)
                 else:
-                    self.dlg.selectedResUUID.setText("Connect to your Arches instance to edit resources.")
+                    self.dlg.selectedResUUID.setText(
+                        "Connect to your Arches instance to edit resources."
+                    )
                 return
 
             else:
@@ -376,27 +402,35 @@ class ArchesProject:
                             elif k == "tileid":
                                 self.arches_selected_resource["tileid"] = v
 
-                        self.dlg.selectedResAttributeTable.setHorizontalHeaderLabels([u'Feature',u'Values'])
+                        self.dlg.selectedResAttributeTable.setHorizontalHeaderLabels(
+                            ["Feature", "Values"]
+                        )
                         self.dlg.selectedResAttributeTable.resizeColumnsToContents()
 
                         # if the token exists then enable the UI elements
                         if self.arches_token:
-                            resource_string = "Resource: %s" % (f['resourceinstanceid'])
+                            resource_string = "Resource: %s" % (f["resourceinstanceid"])
                             self.dlg.selectedResUUID.setText(resource_string)
                             self.dlg.addEditRes.setEnabled(True)
                             self.dlg.replaceEditRes.setEnabled(True)
 
                             # Save resource instance details once selected
                         else:
-                            self.dlg.selectedResUUID.setText("Connect to your Arches instance to edit resources.")
+                            self.dlg.selectedResUUID.setText(
+                                "Connect to your Arches instance to edit resources."
+                            )
                             self.dlg.addEditRes.setEnabled(False)
                             self.dlg.replaceEditRes.setEnabled(False)
 
-                    else: 
+                    else:
                         if self.arches_token:
-                            self.dlg.selectedResUUID.setText("The feature selected is not an Arches resource.")
+                            self.dlg.selectedResUUID.setText(
+                                "The feature selected is not an Arches resource."
+                            )
                         else:
-                            self.dlg.selectedResUUID.setText("Connect to your Arches instance to edit resources.")
+                            self.dlg.selectedResUUID.setText(
+                                "Connect to your Arches instance to edit resources."
+                            )
 
     def update_map_layers(self, checkbox):
         """
@@ -404,10 +438,19 @@ class ArchesProject:
         """
 
         if checkbox.isChecked():
-            all_current_layers = [l for l in QgsProject.instance().mapLayers().values() if l.type() == QgsVectorLayer.VectorLayer if str(l.dataProvider().name()) != "postgres"] 
+            all_current_layers = [
+                l
+                for l in QgsProject.instance().mapLayers().values()
+                if l.type() == QgsVectorLayer.VectorLayer
+                if str(l.dataProvider().name()) != "postgres"
+            ]
 
         elif not checkbox.isChecked():
-            all_current_layers = [l for l in QgsProject.instance().mapLayers().values() if l.type() == QgsVectorLayer.VectorLayer]
+            all_current_layers = [
+                l
+                for l in QgsProject.instance().mapLayers().values()
+                if l.type() == QgsVectorLayer.VectorLayer
+            ]
 
         if self.layers != all_current_layers:
             self.layers = all_current_layers
@@ -425,12 +468,21 @@ class ArchesProject:
             c.blockSignals(False)
 
         if self.dlg.hidePostgresLayers.isChecked():
-            self.layers = [l for l in QgsProject.instance().mapLayers().values() if l.type() == QgsVectorLayer.VectorLayer if str(l.dataProvider().name()) != "postgres"]
+            self.layers = [
+                l
+                for l in QgsProject.instance().mapLayers().values()
+                if l.type() == QgsVectorLayer.VectorLayer
+                if str(l.dataProvider().name()) != "postgres"
+            ]
             change_both_comboboxes(combobox1)
             change_both_comboboxes(combobox2)
 
         elif not self.dlg.hidePostgresLayers.isChecked():
-            self.layers = [l for l in QgsProject.instance().mapLayers().values() if l.type() == QgsVectorLayer.VectorLayer]
+            self.layers = [
+                l
+                for l in QgsProject.instance().mapLayers().values()
+                if l.type() == QgsVectorLayer.VectorLayer
+            ]
             change_both_comboboxes(combobox1)
             change_both_comboboxes(combobox2)
 
@@ -443,35 +495,49 @@ class ArchesProject:
         self.dlg.geometryNodeSelectFrame.hide()
 
         if selectedGraph:
-            if selectedGraph["multiple_geometry_nodes"] == True:               
-                for k,v in selectedGraph["geometry_node_data"].items():
-                    self.geometry_nodes.append({"node_id": k, "nodegroup_id": v["nodegroup_id"], "name": v["name"]})
+            if selectedGraph["multiple_geometry_nodes"] == True:
+                for k, v in selectedGraph["geometry_node_data"].items():
+                    self.geometry_nodes.append(
+                        {
+                            "node_id": k,
+                            "nodegroup_id": v["nodegroup_id"],
+                            "name": v["name"],
+                        }
+                    )
                 self.dlg.geometryNodeSelect.setEnabled(True)
                 self.dlg.geometryNodeSelect.clear()
-                self.dlg.geometryNodeSelect.addItems([n["name"] for n in self.geometry_nodes])
+                self.dlg.geometryNodeSelect.addItems(
+                    [n["name"] for n in self.geometry_nodes]
+                )
                 self.dlg.geometryNodeSelectFrame.show()
 
     def create_resource(self):
         """Create Resource dialog and functionality"""
-        arches_create_resource = ArchesResources(nodeid=None, # filled by selectedNode
-                                                 tileid=None,
-                                                 archesproject=self)
-        arches_create_resource.create_resource(dlg=self.dlg,
-                                               dlg_resource_creation=self.dlg_resource_creation,
-                                               iface=self.iface)
+        arches_create_resource = ArchesResources(
+            nodeid=None, tileid=None, archesproject=self  # filled by selectedNode
+        )
+        arches_create_resource.create_resource(
+            dlg=self.dlg,
+            dlg_resource_creation=self.dlg_resource_creation,
+            iface=self.iface,
+        )
 
     def edit_resource(self, replace):
         """Save geometries to existing resource - either replace or add"""
 
-        arches_edit_resource = ArchesResources(nodeid=self.arches_selected_resource["nodeid"],
-                                               tileid=self.arches_selected_resource["tileid"],
-                                               archesproject=self)
-        arches_edit_resource.edit_resource(replace=replace,
-                                           arches_selected_resource=self.arches_selected_resource,                                            
-                                           dlg=self.dlg,
-                                           dlg_edit_resource_replace=self.dlg_edit_resource_replace, 
-                                           dlg_edit_resource_add=self.dlg_edit_resource_add,
-                                           iface=self.iface)
+        arches_edit_resource = ArchesResources(
+            nodeid=self.arches_selected_resource["nodeid"],
+            tileid=self.arches_selected_resource["tileid"],
+            archesproject=self,
+        )
+        arches_edit_resource.edit_resource(
+            replace=replace,
+            arches_selected_resource=self.arches_selected_resource,
+            dlg=self.dlg,
+            dlg_edit_resource_replace=self.dlg_edit_resource_replace,
+            dlg_edit_resource_add=self.dlg_edit_resource_add,
+            iface=self.iface,
+        )
 
     def arches_connection_save(self):
         """
@@ -483,24 +549,24 @@ class ArchesProject:
                 "value": self.dlg.archesServerInput.text().strip(),
                 "input": self.dlg.archesServerInput,
                 "label": self.dlg.archesServerLabel,
-                }, 
+            },
             "username": {
                 "value": self.dlg.usernameInput.text().strip(),
                 "input": self.dlg.usernameInput,
-                "label": self.dlg.usernameLabel
-                }, 
+                "label": self.dlg.usernameLabel,
+            },
             "password": {
                 "value": self.dlg.passwordInput.text().strip(),
                 "input": self.dlg.passwordInput,
-                "label": self.dlg.passwordLabel
-                }
+                "label": self.dlg.passwordLabel,
+            },
         }
 
-        is_valid_input=True
+        is_valid_input = True
         missing_inputs = []
-        for k,v in connection_information.items():
+        for k, v in connection_information.items():
             if not v["value"]:
-                is_valid_input=False
+                is_valid_input = False
                 missing_credentials(v["input"], "True")
                 missing_credentials(v["label"], "True")
                 missing_inputs.append(k)
@@ -525,19 +591,25 @@ class ArchesProject:
             formatted_url = format_url(self.dlg.archesServerInput.text())
 
             # Adding arches connection to task queue
-            self.arches_connection = ConnectionProcess(url=formatted_url,
-                                                    username=connection_information["username"]["value"], 
-                                                    password=connection_information["password"]["value"],
-                                                    archesproject=self)
+            self.arches_connection = ConnectionProcess(
+                url=formatted_url,
+                username=connection_information["username"]["value"],
+                password=connection_information["password"]["value"],
+                archesproject=self,
+            )
             self.login_text_updater = UpdateLogin(self.dlg.updateText)
             self.login_percent_updater = UpdateLogin(self.dlg.percentProgressText)
             self.dlg.updateText.setText("")
             self.dlg.percentProgressText.setText("0%")
-            self.arches_connection.login_updates.connect(self.login_text_updater.update_login_progress)
-            self.arches_connection.percent_progress.connect(self.login_percent_updater.update_percent)
+            self.arches_connection.login_updates.connect(
+                self.login_text_updater.update_login_progress
+            )
+            self.arches_connection.percent_progress.connect(
+                self.login_percent_updater.update_percent
+            )
             QgsApplication.taskManager().addTask(self.arches_connection)
 
-            #24 Tasks must be assigned to self, otherwise finished() won't run
+            # 24 Tasks must be assigned to self, otherwise finished() won't run
             # https://github.com/qgis/QGIS/issues/59464#issuecomment-2640165772
 
             spinner = triggerSpinner(arches_obj=self)
