@@ -9,3 +9,4 @@ runs:
         until curl -s http://localhost:8002 > /dev/null; do
           sleep 30; \
         done
+      shell: bash
