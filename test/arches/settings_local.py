@@ -6,6 +6,7 @@ try:
 except ImportError:
     pass
 
+
 def get_env_variable(var_name):
     msg = "Set the %s environment variable"
     try:

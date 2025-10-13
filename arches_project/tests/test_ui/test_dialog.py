@@ -8,9 +8,9 @@
 
 """
 
-__author__ = 'samuel.scandrett@k-int.co.uk'
-__date__ = '2023-09-15'
-__copyright__ = 'Copyright 2023, Knowledge Integration'
+__author__ = "samuel.scandrett@k-int.co.uk"
+__date__ = "2023-09-15"
+__copyright__ = "Copyright 2023, Knowledge Integration"
 
 import unittest
 
@@ -19,13 +19,11 @@ from arches_project.tests.base_test import ArchesQGISTestCase
 from qgis.PyQt.QtGui import QIcon
 
 
-
 class ArchesProjectDialogTest(ArchesQGISTestCase):
     """Test resources work."""
 
     def test_icon_png(self):
         """Test we can click OK."""
-        path = ':/plugins/ArchesProject/arches.png'
+        path = ":/plugins/ArchesProject/arches.png"
         icon = QIcon(path)
         self.assertFalse(icon.isNull())
-

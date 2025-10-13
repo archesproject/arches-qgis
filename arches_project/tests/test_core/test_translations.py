@@ -9,10 +9,9 @@
 """
 from arches_project.tests.utils.utilities import get_qgis_app
 
-__author__ = 'ismailsunni@yahoo.co.id'
-__date__ = '12/10/2011'
-__copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
-                 'Disaster Reduction')
+__author__ = "ismailsunni@yahoo.co.id"
+__date__ = "12/10/2011"
+__copyright__ = "Copyright 2012, Australia Indonesia Facility for " "Disaster Reduction"
 import unittest
 import os
 
@@ -26,13 +25,13 @@ class SafeTranslationsTest(unittest.TestCase):
 
     def setUp(self):
         """Runs before each test."""
-        if 'LANG' in iter(os.environ.keys()):
-            os.environ.__delitem__('LANG')
+        if "LANG" in iter(os.environ.keys()):
+            os.environ.__delitem__("LANG")
 
     def tearDown(self):
         """Runs after each test."""
-        if 'LANG' in iter(os.environ.keys()):
-            os.environ.__delitem__('LANG')
+        if "LANG" in iter(os.environ.keys()):
+            os.environ.__delitem__("LANG")
 
     # Commented out until i18n is properly implemented
     # def test_qgis_translations(self):
