@@ -18,3 +18,4 @@ runs:
         docker exec qgis-testing-environment bash -c "apt-get update && apt-get install -y pre-commit python3-coverage python3-dotenv"
         docker exec qgis-testing-environment bash -c "git config --global --add safe.directory /tests_directory"
         docker network connect arches-qgis-network qgis-testing-environment
+      shell: bash        
