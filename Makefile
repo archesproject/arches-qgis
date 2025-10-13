@@ -34,7 +34,7 @@ LOCALES =
 #LRELEASE = lrelease
 #LRELEASE = lrelease-qt4
 
-.PHONY: test
+.PHONY: test coverage
 
 # translation
 SOURCES = \
@@ -114,13 +114,13 @@ ifeq ($(file),)
 	@echo "Running all Arches QGIS plugin tests..."
 	@echo "---------------------------------------"
 	docker exec qgis-testing-environment bash -c "cd /tests_directory \
-	&& python3 -m coverage run -m unittest discover arches_project/tests
+	&& python3 -m coverage run -m unittest discover arches_project/tests"
 else
 	@echo "----------------------------------------------"
 	@echo "Running Arches QGIS plugin test for $(file)..."
 	@echo "----------------------------------------------"
 	docker exec qgis-testing-environment bash -c "cd /tests_directory \
-	&& python3 -m coverage run -m unittest $(file)
+	&& python3 -m coverage run -m unittest $(file)"
 endif
 
 coverage:
