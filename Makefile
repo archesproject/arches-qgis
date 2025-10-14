@@ -156,16 +156,44 @@ shutdown-arches-docker:
 
 # Runs entire testing process
 run-testing:
-	$(MAKE) setup-arches-docker
-	@echo "--------------------"
-	@echo "Arches is available."
-	@echo "--------------------"
-	$(MAKE) setup-qgis-docker
-	@echo "------------------"
-	@echo "QGIS is available."
-	@echo "------------------"
+	@if [ "$$(docker inspect -f '{{.State.Running}}' arches-qgis-arches 2>/dev/null)" = "true" ]; then \
+		echo "Arches test environment is already running."; \
+	else  \
+		$(MAKE) setup-arches-docker; \
+ 		echo "--------------------"; \
+ 		echo "Arches is available."; \
+ 		echo "--------------------"; \
+	fi
+	@if [ "$$(docker inspect -f '{{.State.Running}}' qgis-testing-environment 2>/dev/null)" = "true" ]; then \
+		echo "QGIS test environment is already running."; \
+	else \
+ 		$(MAKE) setup-qgis-docker; \
+ 		echo "------------------"; \
+ 		echo "QGIS is available."; \
+ 		echo "------------------"; \
+	fi
+	$(MAKE) black
 	$(MAKE) test
 	$(MAKE) coverage
-	$(MAKE) black
 	$(MAKE) shutdown-qgis-docker
 	$(MAKE) shutdown-arches-docker delete_volumes=true
+# ifeq ($(shell if [ docker inspect arches-qgis-arches > /dev/null 2>&1; then ];then echo "Arches docker environment is already running."; else echo 0; fi),1)
+#     $(error Insufficient disk space. At least $(MIN_SPACE_MB)MB required)
+# endif
+
+# 	if [ "docker exec -it arches-qgis-arches bash" ]; then \
+# 		echo "Arches docker environment is already running..." \
+# 	else \
+#  		$(MAKE) setup-arches-docker \
+# 		@echo "--------------------"; \
+# 		@echo "Arches is available."; \
+# 		@echo "--------------------"; \
+# 	fi
+# 	if [docker exec -it qgis-testing-environment bash]; then \
+# 		echo "QGIS docker environment is already running..."; \
+# 	else \
+# 		$(MAKE) setup-qgis-docker \
+# 		@echo "------------------" \
+# 		@echo "QGIS is available." \
+# 		@echo "------------------" \
+# 	fi
