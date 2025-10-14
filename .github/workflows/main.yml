@@ -40,7 +40,11 @@ jobs:
       - name: Run plugin tests
         run: |
           docker exec qgis-testing-environment bash -c "cd /tests_directory \
-          && python3 -m coverage run -m unittest discover arches_project/tests \
+          && python3 -m coverage run -m unittest discover arches_project/tests
+
+      - name: Run coverage
+        run: |
+          docker exec qgis-testing-environment bash -c "cd /tests_directory \
           && python3 -m coverage report -m"
 
   build_feature_branch:
@@ -71,5 +75,9 @@ jobs:
       - name: Run plugin tests
         run: |
           docker exec qgis-testing-environment bash -c "cd /tests_directory \
-          && python3 -m coverage run -m unittest discover arches_project/tests \
+          && python3 -m coverage run -m unittest discover arches_project/tests
+
+      - name: Run coverage
+        run: |
+          docker exec qgis-testing-environment bash -c "cd /tests_directory \
           && python3 -m coverage report -m"
