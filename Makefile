@@ -177,23 +177,3 @@ run-testing:
 	$(MAKE) coverage
 	$(MAKE) shutdown-qgis-docker
 	$(MAKE) shutdown-arches-docker delete_volumes=true
-# ifeq ($(shell if [ docker inspect arches-qgis-arches > /dev/null 2>&1; then ];then echo "Arches docker environment is already running."; else echo 0; fi),1)
-#     $(error Insufficient disk space. At least $(MIN_SPACE_MB)MB required)
-# endif
-
-# 	if [ "docker exec -it arches-qgis-arches bash" ]; then \
-# 		echo "Arches docker environment is already running..." \
-# 	else \
-#  		$(MAKE) setup-arches-docker \
-# 		@echo "--------------------"; \
-# 		@echo "Arches is available."; \
-# 		@echo "--------------------"; \
-# 	fi
-# 	if [docker exec -it qgis-testing-environment bash]; then \
-# 		echo "QGIS docker environment is already running..."; \
-# 	else \
-# 		$(MAKE) setup-qgis-docker \
-# 		@echo "------------------" \
-# 		@echo "QGIS is available." \
-# 		@echo "------------------" \
-# 	fi
