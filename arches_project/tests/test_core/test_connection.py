@@ -15,6 +15,7 @@ class ConnectionTests(ArchesQGISTestCase):
     """
     Test connection to Arches server.
     """
+
     client_id = "ZmRsVUmUtwas8lmgX40PmgAQacESxxv9EPQdIm8S"
 
     def test_get_clientid(self):
