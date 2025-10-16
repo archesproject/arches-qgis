@@ -12,16 +12,16 @@ runs:
           docker exec qgis-testing-environment bash -c "cd /tests_directory/arches_project && pre-commit run --all-files --verbose"
         shell: bash
 
-      - name: Run plugin tests
-        run: |
-          docker exec qgis-testing-environment bash -c "cd /tests_directory \
-          && python3 -m coverage run -m unittest discover arches_project/tests"
-        shell: bash
-
       - name: Ensure previous Python coverage data is erased
         run: |
           docker exec qgis-testing-environment bash -c "cd /tests_directory \
           && python3 -m coverage erase"
+        shell: bash
+
+      - name: Run plugin tests
+        run: |
+          docker exec qgis-testing-environment bash -c "cd /tests_directory \
+          && python3 -m coverage run -m unittest discover arches_project/tests"
         shell: bash
 
       - name: Run coverage
