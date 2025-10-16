@@ -4,6 +4,7 @@ inputs:
   branch-type:
     description: 'String denoting either `target` or `feature` branch'
     required: true
+runs:
   using: 'composite'
   steps:
       - name: Run black formatting
