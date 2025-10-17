@@ -128,7 +128,8 @@ coverage:
 	@echo "Running Arches QGIS plugin coverage..."
 	@echo "--------------------------------------"
 	docker exec qgis-testing-environment bash -c "cd /tests_directory \
-	&& python3 -m coverage report -m || true"
+	&& python3 -m coverage report \
+	&& python3 -m coverage json"
 
 black:
 	@echo "----------------------------------------------"

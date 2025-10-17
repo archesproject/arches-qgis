@@ -1,0 +1,40 @@
+name: 'Run tests on branch'
+description: 'Runs testing, formatting and coverage report on the desired branch.'
+inputs: 
+  branch-type:
+    description: 'String denoting either `target` or `feature` branch'
+    required: true
+runs:
+  using: 'composite'
+  steps:
+      - name: Run black formatting
+        run: |
+          docker exec qgis-testing-environment bash -c "cd /tests_directory/arches_project && pre-commit run --all-files --verbose"
+        shell: bash
+
+      - name: Ensure previous Python coverage data is erased
+        run: |
+          docker exec qgis-testing-environment bash -c "cd /tests_directory \
+          && python3 -m coverage erase"
+        shell: bash
+
+      - name: Run plugin tests
+        run: |
+          docker exec qgis-testing-environment bash -c "cd /tests_directory \
+          && python3 -m coverage run -m unittest discover arches_project/tests"
+        shell: bash
+
+      - name: Run coverage
+        run: |
+          docker exec qgis-testing-environment bash -c "cd /tests_directory \
+          && python3 -m coverage report \
+          && python3 -m coverage json"
+          sudo mv coverage/python/coverage.json ${{ inputs.branch-type }}_branch_python_coverage.json
+        shell: bash
+
+      - name: Upload Python coverage report as artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ inputs.branch-type }}-branch-python-coverage-report
+          path: ${{ inputs.branch-type }}_branch_python_coverage.json
+          overwrite: true
