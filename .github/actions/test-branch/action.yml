@@ -38,6 +38,7 @@ runs:
           ls -l
           ls -l coverage/python/coverage.json
           chmod +w coverage/python/coverage.json
+          sudo chown "$(id -u):$(id -g)" coverage/python/coverage.json
           mv coverage/python/coverage.json ${{ inputs.branch-type }}_branch_python_coverage.json
         shell: bash
 
