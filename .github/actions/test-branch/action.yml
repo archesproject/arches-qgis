@@ -12,6 +12,11 @@ runs:
           docker exec qgis-testing-environment bash -c "cd /tests_directory/arches_project && pre-commit run --all-files --verbose"
         shell: bash
 
+      - name: Check line endings on all files
+        run: |
+          ! git ls-files --eol | grep 'w/crlf\|w/mixed'
+        shell: bash
+
       - name: Ensure previous Python coverage data is erased
         run: |
           docker exec qgis-testing-environment bash -c "cd /tests_directory \
