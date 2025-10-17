@@ -13,12 +13,11 @@ CANVAS, PARENT, IFACE, QGIS_APP = get_qgis_app()
 
 class ConnectionTests(ArchesQGISTestCase):
     """
-    Test connection to Arches server.
+    Test connection to Arches.
     """
 
-    client_id = "ZmRsVUmUtwas8lmgX40PmgAQacESxxv9EPQdIm8S"
-
     def test_get_clientid(self):
+
         files = {
             "username": (None, "admin"),
             "password": (None, "admin"),
