@@ -38,9 +38,9 @@ runs:
           ls -l
           ls -l coverage/python/coverage.json
           sudo chown "$(id -u):$(id -g)" coverage/python/coverage.json
-          chmod 775 coverage/python/coverage.json
+          sudo chmod 775 coverage/python/coverage.json
           ls -l coverage/python/coverage.json
-          mv coverage/python/coverage.json ${{ inputs.branch-type }}_branch_python_coverage.json
+          sudo mv coverage/python/coverage.json ${{ inputs.branch-type }}_branch_python_coverage.json
         shell: bash
 
       - name: Upload Python coverage report as artifact
