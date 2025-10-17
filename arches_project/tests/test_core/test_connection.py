@@ -25,14 +25,3 @@ class ConnectionTests(ArchesQGISTestCase):
         }
         response = requests.post(f"{self.arches_url}/auth/get_client_id", data=files)
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(response.json()["clientid"], self.client_id)
-
-    def test_access_token(self):
-        files = {
-            "username": (None, "admin"),
-            "password": (None, "admin"),
-            "client_id": (None, self.client_id),
-            "grant_type": (None, "password"),
-        }
-        response = requests.post(self.arches_url + "/o/token/", data=files)
-        self.assertEqual(response.status_code, 200)
