@@ -137,6 +137,12 @@ black:
 	@echo "----------------------------------------------"
 	docker exec qgis-testing-environment bash -c "cd /tests_directory/arches_project && pre-commit run --all-files --verbose"
 
+eof:
+	@echo "---------------------"
+	@echo "Running EOF checks..."
+	@echo "---------------------"
+	! git ls-files --eol | grep 'w/crlf\|w/mixed'
+
 setup-arches-docker:
 	@echo "----------------------------------------"
 	@echo "Setting up Arches testing environment..."
