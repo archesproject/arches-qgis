@@ -9,7 +9,7 @@ runs:
   steps:
     - name: Set up QGIS ${{ matrix.qgis_version }}
       run: |
-        docker run -dt --user "$(id -u):$(id -g)" --name qgis-testing-environment -v .:/tests_directory -e QT_QPA_PLATFORM="offscreen" qgis/qgis:${{ matrix.qgis_version }}
+        docker run -dt --name qgis-testing-environment -v .:/tests_directory -e QT_QPA_PLATFORM="offscreen" qgis/qgis:${{ matrix.qgis_version }}
         sleep 10 
         docker exec qgis-testing-environment bash -c "cp -a /tests_directory/test/scripts/. /usr/bin/"
         docker exec qgis-testing-environment bash -c "/tests_directory/test/scripts/qgis_setup.sh arches_project"
