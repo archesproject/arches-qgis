@@ -25,7 +25,8 @@
 import os
 
 from arches_project.core.views.logging import enable_logging
-
+from arches_project.core.views.map import map_selection
+from arches_project.core.views.components.psql_layers import update_map_layers, show_hide_psql_layers
 
 from qgis.PyQt import uic
 from qgis.PyQt import QtWidgets
@@ -37,7 +38,7 @@ FORM_CLASS, _ = uic.loadUiType(
 
 
 class ArchesProjectDialog(QtWidgets.QDialog, FORM_CLASS):
-    def __init__(self, iface, arches_token, parent=None):
+    def __init__(self, iface, archesproject, parent=None):
         """Constructor."""
         super(ArchesProjectDialog, self).__init__(parent)
         # Set up the user interface from Designer through FORM_CLASS.
@@ -48,7 +49,9 @@ class ArchesProjectDialog(QtWidgets.QDialog, FORM_CLASS):
         self.setupUi(self)
 
         self.iface = iface
-        self.arches_token = arches_token
+        self.arches_token = archesproject.arches_token
+        self.arches_selected_resource = archesproject.arches_selected_resource
+        self.layers = []
 
         # Set tab index to 0 always
         self.tabWidget.setCurrentIndex(0)
@@ -56,6 +59,46 @@ class ArchesProjectDialog(QtWidgets.QDialog, FORM_CLASS):
         self.tabWidget.setTabVisible(5, False)
 
         self.enableLoggingCheckbox.stateChanged.connect(enable_logging)
+
+        # initiate the current selected layer
+        map_selection(
+            iface=self.iface,
+            arches_token=self.arches_token,
+            arches_selected_resource=self.arches_selected_resource,
+            dlg=self,
+        )
+
+        # Get the map selection and update when changed
+        self.iface.mapCanvas().selectionChanged.connect(
+            lambda: map_selection(
+                iface=self.iface,
+                arches_token=self.arches_token,
+                arches_selected_resource=self.arches_selected_resource,
+                dlg=self,
+            )
+        )
+
+        # to run when layer is changed in create resource and edit resource tabs
+        self.hidePostgresLayers.setChecked(True)
+        self.createResFeatureSelect.highlighted.connect(
+            lambda: update_map_layers(
+                layers=self.layers, checkbox=self.hidePostgresLayers
+            )
+        )
+        self.editResSelectFeatures.highlighted.connect(
+            lambda: update_map_layers(
+                layers=self.layers, checkbox=self.hidePostgresLayers
+            )
+        )
+
+        self.hidePostgresLayers.stateChanged.connect(
+            lambda: show_hide_psql_layers(
+                layers=self.layers,
+                combobox1=self.createResFeatureSelect,
+                combobox2=self.editResSelectFeatures,
+                dlg=self
+            )
+        )
 
         ## Set "Create resource" to false to begin with and only update once Arches connection made
         self.createResModelSelect.setEnabled(False)
@@ -73,6 +116,3 @@ class ArchesProjectDialog(QtWidgets.QDialog, FORM_CLASS):
 
         # Hide multiple geometry node selection by default
         self.geometryNodeSelectFrame.hide()
-
-
-        print(self.arches_token)
