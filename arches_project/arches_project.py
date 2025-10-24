@@ -48,7 +48,6 @@ from arches_project.core.arches.connection import ArchesConnection, ConnectionPr
 from arches_project.core.arches.resources import ArchesResources
 
 from arches_project.core.views.stylesheets import PluginStylesheets
-from arches_project.core.views.logging import enable_logging
 from arches_project.core.views.components.missing_credentials import missing_credentials
 from arches_project.core.views.login import UpdateLogin
 
@@ -97,12 +96,6 @@ class ArchesProject:
         # Must be set in initGui() to survive plugin reloads
         self.first_start = None
 
-        # Confirmation dialogs
-        self.dlg = ArchesProjectDialog()
-        self.dlg_resource_creation = CreateResourceConfirmation()
-        self.dlg_edit_resource_add = EditResourceAddConfirmation()
-        self.dlg_edit_resource_replace = EditResourceReplaceConfirmation()
-
         ## ARCHES PLUGIN SPECIFIC VARIABLES
         # Cache connection details to prevent firing duplicate connections
         self.arches_connection_cache = {}
@@ -117,6 +110,12 @@ class ArchesProject:
             "nodeid": "",
             "tileid": "",
         }
+
+        # Confirmation dialogs
+        self.dlg = ArchesProjectDialog(self.iface, self.arches_token)
+        self.dlg_resource_creation = CreateResourceConfirmation()
+        self.dlg_edit_resource_add = EditResourceAddConfirmation()
+        self.dlg_edit_resource_replace = EditResourceReplaceConfirmation()
 
     # noinspection PyMethodMayBeStatic
     def tr(self, message):
@@ -258,12 +257,6 @@ class ArchesProject:
             ## Have everything called in here so multiple connections aren't made when plugin button pressed
             # This way only one connection is made at a time
 
-            # Set tab index to 0 always
-            self.dlg.tabWidget.setCurrentIndex(0)
-            self.dlg.tabWidget.setTabVisible(1, False)
-            self.dlg.tabWidget.setTabVisible(5, False)
-
-            self.dlg.enableLoggingCheckbox.stateChanged.connect(enable_logging)
 
             # initiate the current selected layer
             self.map_selection()
@@ -279,10 +272,6 @@ class ArchesProject:
             # Get the map selection and update when changed
             self.iface.mapCanvas().selectionChanged.connect(self.map_selection)
 
-            ## Set "Create resource" to false to begin with and only update once Arches connection made
-            self.dlg.createResModelSelect.setEnabled(False)
-            self.dlg.createResFeatureSelect.setEnabled(False)
-            self.dlg.addNewRes.setEnabled(False)
 
             # to run when layer is changed in create resource and edit resource tabs
             self.dlg.hidePostgresLayers.setChecked(True)
@@ -303,14 +292,6 @@ class ArchesProject:
             # click add button - should bring up new dialog for confirmation
             self.dlg.addNewRes.clicked.connect(self.create_resource)
 
-            ## Set "Edit Resource" to false to begin with
-            self.dlg.selectedResUUID.setText(
-                "Connect to your Arches instance to edit resources."
-            )
-            self.dlg.addEditRes.setEnabled(False)
-            self.dlg.replaceEditRes.setEnabled(False)
-            self.dlg.editResSelectFeatures.setEnabled(False)
-            self.dlg.selectedResAttributeTable.setEnabled(False)
 
             self.dlg.addEditRes.clicked.connect(
                 lambda: self.edit_resource(replace=False)
@@ -319,8 +300,6 @@ class ArchesProject:
                 lambda: self.edit_resource(replace=True)
             )
 
-            # Hide multiple geometry node selection by default
-            self.dlg.geometryNodeSelectFrame.hide()
 
             # Check if selected graph has multiple geometry nodes
             self.dlg.createResModelSelect.currentIndexChanged.connect(
