@@ -24,6 +24,9 @@
 
 import os
 
+from arches_project.core.views.logging import enable_logging
+
+
 from qgis.PyQt import uic
 from qgis.PyQt import QtWidgets
 
@@ -34,7 +37,7 @@ FORM_CLASS, _ = uic.loadUiType(
 
 
 class ArchesProjectDialog(QtWidgets.QDialog, FORM_CLASS):
-    def __init__(self, parent=None):
+    def __init__(self, iface, arches_token, parent=None):
         """Constructor."""
         super(ArchesProjectDialog, self).__init__(parent)
         # Set up the user interface from Designer through FORM_CLASS.
@@ -43,3 +46,33 @@ class ArchesProjectDialog(QtWidgets.QDialog, FORM_CLASS):
         # http://qt-project.org/doc/qt-4.8/designer-using-a-ui-file.html
         # #widgets-and-dialogs-with-auto-connect
         self.setupUi(self)
+
+        self.iface = iface
+        self.arches_token = arches_token
+
+        # Set tab index to 0 always
+        self.tabWidget.setCurrentIndex(0)
+        self.tabWidget.setTabVisible(1, False)
+        self.tabWidget.setTabVisible(5, False)
+
+        self.enableLoggingCheckbox.stateChanged.connect(enable_logging)
+
+        ## Set "Create resource" to false to begin with and only update once Arches connection made
+        self.createResModelSelect.setEnabled(False)
+        self.createResFeatureSelect.setEnabled(False)
+        self.addNewRes.setEnabled(False)
+
+        ## Set "Edit Resource" to false to begin with
+        self.selectedResUUID.setText(
+            "Connect to your Arches instance to edit resources."
+        )
+        self.addEditRes.setEnabled(False)
+        self.replaceEditRes.setEnabled(False)
+        self.editResSelectFeatures.setEnabled(False)
+        self.selectedResAttributeTable.setEnabled(False)
+
+        # Hide multiple geometry node selection by default
+        self.geometryNodeSelectFrame.hide()
+
+
+        print(self.arches_token)
