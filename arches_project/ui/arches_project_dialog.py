@@ -25,7 +25,7 @@
 import os
 
 from arches_project.core.views.logging import enable_logging
-from arches_project.core.views.map import map_selection
+from arches_project.core.views.components.map import map_selection
 from arches_project.core.views.components.psql_layers import update_map_layers, show_hide_psql_layers
 
 from qgis.PyQt import uic
