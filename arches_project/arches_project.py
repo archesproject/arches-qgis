@@ -112,7 +112,8 @@ class ArchesProject:
         }
 
         # Confirmation dialogs
-        self.dlg = ArchesProjectDialog(self.iface, self.arches_token)
+        self.dlg = ArchesProjectDialog(iface = self.iface, 
+                                       archesproject = self)
         self.dlg_resource_creation = CreateResourceConfirmation()
         self.dlg_edit_resource_add = EditResourceAddConfirmation()
         self.dlg_edit_resource_replace = EditResourceReplaceConfirmation()
@@ -258,9 +259,6 @@ class ArchesProject:
             # This way only one connection is made at a time
 
 
-            # initiate the current selected layer
-            self.map_selection()
-
             # Connection to Arches instance
             self.dlg.btnConnect.clicked.connect(self.arches_connection_save)
             self.dlg.btnLogout.clicked.connect(
@@ -269,29 +267,9 @@ class ArchesProject:
                 )
             )
 
-            # Get the map selection and update when changed
-            self.iface.mapCanvas().selectionChanged.connect(self.map_selection)
-
-
-            # to run when layer is changed in create resource and edit resource tabs
-            self.dlg.hidePostgresLayers.setChecked(True)
-            self.dlg.createResFeatureSelect.highlighted.connect(
-                lambda: self.update_map_layers(checkbox=self.dlg.hidePostgresLayers)
-            )
-            self.dlg.editResSelectFeatures.highlighted.connect(
-                lambda: self.update_map_layers(checkbox=self.dlg.hidePostgresLayers)
-            )
-
-            self.dlg.hidePostgresLayers.stateChanged.connect(
-                lambda: self.show_hide_psql_layers(
-                    combobox1=self.dlg.createResFeatureSelect,
-                    combobox2=self.dlg.editResSelectFeatures,
-                )
-            )
 
             # click add button - should bring up new dialog for confirmation
             self.dlg.addNewRes.clicked.connect(self.create_resource)
-
 
             self.dlg.addEditRes.clicked.connect(
                 lambda: self.edit_resource(replace=False)
@@ -300,7 +278,6 @@ class ArchesProject:
                 lambda: self.edit_resource(replace=True)
             )
 
-
             # Check if selected graph has multiple geometry nodes
             self.dlg.createResModelSelect.currentIndexChanged.connect(
                 self.multiple_geometry_node_check
@@ -308,162 +285,6 @@ class ArchesProject:
 
         # show the dialog
         self.dlg.show()
-
-    def map_selection(self):
-        """
-        Get the Arches Resource from the map
-        """
-
-        active_layer = self.iface.activeLayer()
-        canvas = self.iface.mapCanvas()
-
-        # If plugin is opened before QGIS project opened/setup selectedFeatures is None
-        try:
-            features = active_layer.selectedFeatures()
-        except AttributeError:
-            features = None
-
-        print("\nmap selection has been fired because selection changed")
-        print("layer:", active_layer, "features:", features)
-
-        if features:
-
-            if len(features) > 1:
-                print("Select one feature")
-                self.dlg.selectedResAttributeTable.setRowCount(0)
-                if self.arches_token:
-                    self.dlg.selectedResUUID.setText(
-                        "Multiple features selected, select one feature to proceed."
-                    )
-                else:
-                    self.dlg.selectedResUUID.setText(
-                        "Connect to your Arches instance to edit resources."
-                    )
-                return
-
-            elif len(features) == 0:
-                print("No feature selected")
-                self.dlg.selectedResAttributeTable.setRowCount(0)
-                if self.arches_token:
-                    self.dlg.selectedResUUID.setText("Select a feature to proceed.")
-                    self.dlg.addEditRes.setEnabled(False)
-                    self.dlg.replaceEditRes.setEnabled(False)
-                else:
-                    self.dlg.selectedResUUID.setText(
-                        "Connect to your Arches instance to edit resources."
-                    )
-                return
-
-            else:
-                print("FEATURE SELECTED")
-                for f in features:
-                    if "resourceinstanceid" in f.attributeMap():
-
-                        # Initialise attribute table in the plugin window if the geom is recognised as an Arches res
-                        # if initialised when arches_token exists then would have to click off and back on to recognise
-                        no_rows = len(f.attributes())
-                        no_cols = 2
-                        self.dlg.selectedResAttributeTable.setRowCount(no_rows)
-                        self.dlg.selectedResAttributeTable.setColumnCount(no_cols)
-
-                        # Fill table with attributes
-                        for i, (k, v) in enumerate(f.attributeMap().items()):
-                            feat = QTableWidgetItem(str(k))
-                            val = QTableWidgetItem(str(v))
-                            self.dlg.selectedResAttributeTable.setItem(i, 0, feat)
-                            self.dlg.selectedResAttributeTable.setItem(i, 1, val)
-                            self.dlg.selectedResAttributeTable.setRowHeight(i, 5)
-                            # Store current resource info
-                            if k == "resourceinstanceid":
-                                self.arches_selected_resource["resourceinstanceid"] = v
-                            elif k == "nodeid":
-                                self.arches_selected_resource["nodeid"] = v
-                            elif k == "tileid":
-                                self.arches_selected_resource["tileid"] = v
-
-                        self.dlg.selectedResAttributeTable.setHorizontalHeaderLabels(
-                            ["Feature", "Values"]
-                        )
-                        self.dlg.selectedResAttributeTable.resizeColumnsToContents()
-
-                        # if the token exists then enable the UI elements
-                        if self.arches_token:
-                            resource_string = "Resource: %s" % (f["resourceinstanceid"])
-                            self.dlg.selectedResUUID.setText(resource_string)
-                            self.dlg.addEditRes.setEnabled(True)
-                            self.dlg.replaceEditRes.setEnabled(True)
-
-                            # Save resource instance details once selected
-                        else:
-                            self.dlg.selectedResUUID.setText(
-                                "Connect to your Arches instance to edit resources."
-                            )
-                            self.dlg.addEditRes.setEnabled(False)
-                            self.dlg.replaceEditRes.setEnabled(False)
-
-                    else:
-                        if self.arches_token:
-                            self.dlg.selectedResUUID.setText(
-                                "The feature selected is not an Arches resource."
-                            )
-                        else:
-                            self.dlg.selectedResUUID.setText(
-                                "Connect to your Arches instance to edit resources."
-                            )
-
-    def update_map_layers(self, checkbox):
-        """
-        Function to update new vector layers dynamically
-        """
-
-        if checkbox.isChecked():
-            all_current_layers = [
-                l
-                for l in QgsProject.instance().mapLayers().values()
-                if l.type() == QgsVectorLayer.VectorLayer
-                if str(l.dataProvider().name()) != "postgres"
-            ]
-
-        elif not checkbox.isChecked():
-            all_current_layers = [
-                l
-                for l in QgsProject.instance().mapLayers().values()
-                if l.type() == QgsVectorLayer.VectorLayer
-            ]
-
-        if self.layers != all_current_layers:
-            self.layers = all_current_layers
-
-    def show_hide_psql_layers(self, combobox1, combobox2):
-        """
-        Reflect change made by checkbox to show or hide PSQL layers from self.layers
-        """
-        # TODO: Not sure I like the way this works but it works
-
-        def change_both_comboboxes(c):
-            c.blockSignals(True)
-            c.clear()
-            c.addItems([layer.name() for layer in self.layers])
-            c.blockSignals(False)
-
-        if self.dlg.hidePostgresLayers.isChecked():
-            self.layers = [
-                l
-                for l in QgsProject.instance().mapLayers().values()
-                if l.type() == QgsVectorLayer.VectorLayer
-                if str(l.dataProvider().name()) != "postgres"
-            ]
-            change_both_comboboxes(combobox1)
-            change_both_comboboxes(combobox2)
-
-        elif not self.dlg.hidePostgresLayers.isChecked():
-            self.layers = [
-                l
-                for l in QgsProject.instance().mapLayers().values()
-                if l.type() == QgsVectorLayer.VectorLayer
-            ]
-            change_both_comboboxes(combobox1)
-            change_both_comboboxes(combobox2)
 
     def multiple_geometry_node_check(self):
         selectedGraphIndex = self.dlg.createResModelSelect.currentIndex()
