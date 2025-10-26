@@ -20,5 +20,6 @@ class ArchesAPI:
             "tileid": "",
         }
 
+
 # Create an instance of the Arches API class that can be used throughout the plugin.
 arches_api = ArchesAPI()

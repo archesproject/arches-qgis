@@ -6,6 +6,7 @@ from arches_project.core.utils.qgis_messaging import show_message
 from arches_project.core.utils.refresh_token import refresh_token
 from arches_project.core.arches.api import arches_api
 
+
 class ArchesResources:
     def __init__(self, nodeid, tileid, archesproject):
         self.nodeid = nodeid
@@ -174,10 +175,7 @@ class ArchesResources:
         """
 
         def send_edited_data_to_arches(operation_type, dialog):
-            if (
-                nodegroup_value
-                in arches_api.arches_user_info["editable_nodegroups"]
-            ):
+            if nodegroup_value in arches_api.arches_user_info["editable_nodegroups"]:
                 try:
                     results = self.save_to_arches(
                         tileid=self.tileid,

@@ -1,6 +1,7 @@
 from qgis.core import QgsProject, QgsVectorLayer
 
-# Note this will be removed with #8 
+# Note this will be removed with #8
+
 
 def update_map_layers(layers, checkbox):
     """
@@ -24,6 +25,7 @@ def update_map_layers(layers, checkbox):
 
     if layers != all_current_layers:
         layers = all_current_layers
+
 
 def show_hide_psql_layers(layers, combobox1, combobox2, dlg):
     """

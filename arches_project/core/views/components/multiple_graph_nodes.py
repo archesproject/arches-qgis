@@ -1,5 +1,6 @@
 from arches_project.core.arches.api import arches_api
 
+
 def multiple_geometry_node_check(dlg):
     selectedGraphIndex = dlg.createResModelSelect.currentIndex()
     selectedGraph = arches_api.arches_graphs_list[selectedGraphIndex]
@@ -20,7 +21,5 @@ def multiple_geometry_node_check(dlg):
                 )
             dlg.geometryNodeSelect.setEnabled(True)
             dlg.geometryNodeSelect.clear()
-            dlg.geometryNodeSelect.addItems(
-                [n["name"] for n in geometry_nodes]
-            )
+            dlg.geometryNodeSelect.addItems([n["name"] for n in geometry_nodes])
             dlg.geometryNodeSelectFrame.show()
