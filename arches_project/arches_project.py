@@ -101,7 +101,6 @@ class ArchesProject:
         # Store token data to avoid regenerating every connection
         # Store selected arches resource
         self.layers = []
-        self.arches_selected_resource = arches_api.arches_selected_resource
 
         # Confirmation dialogs
         self.dlg = ArchesProjectDialog(iface = self.iface, 
@@ -269,38 +268,8 @@ class ArchesProject:
                 lambda: self.edit_resource(replace=True)
             )
 
-            # Check if selected graph has multiple geometry nodes
-            self.dlg.createResModelSelect.currentIndexChanged.connect(
-                self.multiple_geometry_node_check
-            )
-
         # show the dialog
         self.dlg.show()
-
-    def multiple_geometry_node_check(self):
-        selectedGraphIndex = self.dlg.createResModelSelect.currentIndex()
-        selectedGraph = arches_api.arches_graphs_list[selectedGraphIndex]
-
-        self.geometry_nodes = []
-        self.dlg.geometryNodeSelect.setEnabled(False)
-        self.dlg.geometryNodeSelectFrame.hide()
-
-        if selectedGraph:
-            if selectedGraph["multiple_geometry_nodes"] == True:
-                for k, v in selectedGraph["geometry_node_data"].items():
-                    self.geometry_nodes.append(
-                        {
-                            "node_id": k,
-                            "nodegroup_id": v["nodegroup_id"],
-                            "name": v["name"],
-                        }
-                    )
-                self.dlg.geometryNodeSelect.setEnabled(True)
-                self.dlg.geometryNodeSelect.clear()
-                self.dlg.geometryNodeSelect.addItems(
-                    [n["name"] for n in self.geometry_nodes]
-                )
-                self.dlg.geometryNodeSelectFrame.show()
 
     def create_resource(self):
         """Create Resource dialog and functionality"""

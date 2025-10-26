@@ -28,6 +28,7 @@ from arches_project.core.views.logging import enable_logging
 
 from arches_project.core.views.components.map import map_selection
 from arches_project.core.views.components.psql_layers import update_map_layers, show_hide_psql_layers
+from arches_project.core.views.components.multiple_graph_nodes import multiple_geometry_node_check
 
 from qgis.PyQt import uic
 from qgis.PyQt import QtWidgets
@@ -109,5 +110,8 @@ class ArchesProjectDialog(QtWidgets.QDialog, FORM_CLASS):
         self.editResSelectFeatures.setEnabled(False)
         self.selectedResAttributeTable.setEnabled(False)
 
+        # Check if selected graph has multiple geometry nodes
+        self.createResModelSelect.currentIndexChanged.connect(
+            lambda: multiple_geometry_node_check(dlg=self))
         # Hide multiple geometry node selection by default
         self.geometryNodeSelectFrame.hide()
