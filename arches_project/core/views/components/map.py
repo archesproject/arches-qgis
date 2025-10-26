@@ -1,6 +1,8 @@
 from qgis.PyQt.QtWidgets import QTableWidgetItem
 
-def map_selection(iface, arches_token, arches_selected_resource, dlg):
+from arches_project.core.arches.api import arches_api
+
+def map_selection(iface, dlg):
     """
     Get the Arches Resource from the map
     """
@@ -22,7 +24,7 @@ def map_selection(iface, arches_token, arches_selected_resource, dlg):
         if len(features) > 1:
             print("Select one feature")
             dlg.selectedResAttributeTable.setRowCount(0)
-            if arches_token:
+            if arches_api.arches_token:
                 dlg.selectedResUUID.setText(
                     "Multiple features selected, select one feature to proceed."
                 )
@@ -35,7 +37,7 @@ def map_selection(iface, arches_token, arches_selected_resource, dlg):
         elif len(features) == 0:
             print("No feature selected")
             dlg.selectedResAttributeTable.setRowCount(0)
-            if arches_token:
+            if arches_api.arches_token:
                 dlg.selectedResUUID.setText("Select a feature to proceed.")
                 dlg.addEditRes.setEnabled(False)
                 dlg.replaceEditRes.setEnabled(False)
@@ -66,11 +68,11 @@ def map_selection(iface, arches_token, arches_selected_resource, dlg):
                         dlg.selectedResAttributeTable.setRowHeight(i, 5)
                         # Store current resource info
                         if k == "resourceinstanceid":
-                            arches_selected_resource["resourceinstanceid"] = v
+                            arches_api.arches_selected_resource["resourceinstanceid"] = v
                         elif k == "nodeid":
-                            arches_selected_resource["nodeid"] = v
+                            arches_api.arches_selected_resource["nodeid"] = v
                         elif k == "tileid":
-                            arches_selected_resource["tileid"] = v
+                            arches_api.arches_selected_resource["tileid"] = v
 
                     dlg.selectedResAttributeTable.setHorizontalHeaderLabels(
                         ["Feature", "Values"]
@@ -78,7 +80,7 @@ def map_selection(iface, arches_token, arches_selected_resource, dlg):
                     dlg.selectedResAttributeTable.resizeColumnsToContents()
 
                     # if the token exists then enable the UI elements
-                    if arches_token:
+                    if arches_api.arches_token:
                         resource_string = "Resource: %s" % (f["resourceinstanceid"])
                         dlg.selectedResUUID.setText(resource_string)
                         dlg.addEditRes.setEnabled(True)
@@ -93,7 +95,7 @@ def map_selection(iface, arches_token, arches_selected_resource, dlg):
                         dlg.replaceEditRes.setEnabled(False)
 
                 else:
-                    if arches_token:
+                    if arches_api.arches_token:
                         dlg.selectedResUUID.setText(
                             "The feature selected is not an Arches resource."
                         )

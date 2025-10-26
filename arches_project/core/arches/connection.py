@@ -1,9 +1,12 @@
 import requests
 from datetime import datetime, timedelta
 import os
-from ..views.login import LoggedIn
-from ..utils.qgis_messaging import show_message
-from ..utils.spinner import triggerSpinner
+
+from arches_project.core.views.login import LoggedIn
+from arches_project.core.utils.qgis_messaging import show_message
+from arches_project.core.utils.spinner import triggerSpinner
+
+from arches_project.core.arches.api import arches_api
 
 from qgis.core import (
     QgsProject,
@@ -158,10 +161,10 @@ class ArchesConnection:
             self_obj.dlg.tabWidget.setCurrentIndex(0)
 
         # Reset stored data
-        self_obj.arches_user_info = {}
-        self_obj.arches_connection_cache = {}
-        self_obj.arches_token = {}
-        self_obj.arches_graphs_list = []
+        arches_api.arches_user_info = {}
+        arches_api.arches_connection_cache = {}
+        arches_api.arches_token = {}
+        arches_api.arches_graphs_list = []
         # Reset Create Resource tab as no longer useable
         self_obj.dlg.createResModelSelect.setEnabled(False)
         self_obj.dlg.createResFeatureSelect.setEnabled(False)
@@ -214,37 +217,37 @@ class ConnectionProcess(QgsTask):
             return False
 
         # get/update user info on the logged in user
-        self.archesproject.arches_user_info = {}
+        arches_api.arches_user_info = {}
         self.login_updates.emit("Fetching user permissions ...")
-        self.archesproject.arches_user_info = arches_connection.get_user_permissions(
-            self.archesproject.arches_user_info
+        arches_api.arches_user_info = arches_connection.get_user_permissions(
+            arches_api.arches_user_info
         )
         self.percent_progress.emit(True, 0, 0)
 
         # re-fetch graphs before checking cache as updates may have occurred
-        self.archesproject.arches_graphs_list = []
+        arches_api.arches_graphs_list = []
 
-        if 2 not in self.archesproject.arches_user_info["groups"]:
+        if 2 not in arches_api.arches_user_info["groups"]:
             # if user does not have permissions return early and deal with in finished()
             return True
 
-        self.archesproject.arches_graphs_list = arches_connection.get_graphs(
-            self.archesproject.arches_graphs_list,
+        arches_api.arches_graphs_list = arches_connection.get_graphs(
+            arches_api.arches_graphs_list,
             self.login_updates,
             self.percent_progress,
         )
 
-        self.archesproject.arches_token = arches_connection.get_token(
-            clientid, self.archesproject.arches_token
+        arches_api.arches_token = arches_connection.get_token(
+            clientid, arches_api.arches_token
         )
 
         self.login_updates.emit("Fetching Oauth token ...")
-        if not self.archesproject.arches_token:
+        if not arches_api.arches_token:
             return False
         self.percent_progress.emit(True, 0, 0)
 
         # Store for preventing duplicate connection requests
-        self.archesproject.arches_connection_cache = {
+        arches_api.arches_connection_cache = {
             "url": self.archesproject.dlg.archesServerInput.text(),
             "username": self.archesproject.dlg.usernameInput.text(),
         }
@@ -262,7 +265,7 @@ class ConnectionProcess(QgsTask):
                 dlg=self.archesproject.dlg,
                 username=self.username,
                 url=self.url,
-                arches_user_info=self.archesproject.arches_user_info,
+                arches_user_info=arches_api.arches_user_info,
             )
             logged_in_tab.update_logged_in_view()
             # self.archesproject.dlg.displayTextLabel.setText(f"Connected to {self.url} as {self.archesproject.dlg.usernameInput.text()}.")
@@ -276,10 +279,10 @@ class ConnectionProcess(QgsTask):
                 [layer.name() for layer in self.archesproject.layers]
             )
 
-            if self.archesproject.arches_graphs_list:
+            if arches_api.arches_graphs_list:
                 self.archesproject.dlg.createResModelSelect.setEnabled(True)
                 self.archesproject.dlg.createResModelSelect.addItems(
-                    [graph["name"] for graph in self.archesproject.arches_graphs_list]
+                    [graph["name"] for graph in arches_api.arches_graphs_list]
                 )
                 self.archesproject.dlg.addNewRes.setEnabled(True)
 
@@ -302,7 +305,7 @@ class ConnectionProcess(QgsTask):
         triggerSpinner(arches_obj=self.archesproject).hide_spinner()
 
         if result:
-            if 2 in self.archesproject.arches_user_info["groups"]:
+            if 2 in arches_api.arches_user_info["groups"]:
                 # THIS IS THE RESOURCE EDITOR PERMISSION
                 # This must be in result, in order to display that login failed due to permissions rather than other
 

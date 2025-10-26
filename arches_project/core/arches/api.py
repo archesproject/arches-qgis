@@ -1,0 +1,24 @@
+class ArchesAPI:
+    """
+    Holds data fetched from the Arches API.
+    """
+
+    def __init__(self):
+        """
+        ARCHES PLUGIN SPECIFIC VARIABLES
+        """
+        # Cache connection details to prevent firing duplicate connections
+        self.arches_connection_cache = {}
+        # Store token data to avoid regenerating every connection
+        self.arches_token = {}
+        self.arches_graphs_list = []
+        self.arches_user_info = {}
+        # Store selected arches resource
+        self.arches_selected_resource = {
+            "resourceinstanceid": "",
+            "nodeid": "",
+            "tileid": "",
+        }
+
+# Create an instance of the Arches API class that can be used throughout the plugin.
+arches_api = ArchesAPI()

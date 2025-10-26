@@ -55,6 +55,8 @@ from arches_project.core.utils.format_url import format_url
 from arches_project.core.utils.spinner import triggerSpinner
 from arches_project.core.utils.qgis_messaging import show_message
 
+from arches_project.core.arches.api import arches_api
+
 import os.path
 import sys
 import requests
@@ -96,20 +98,10 @@ class ArchesProject:
         # Must be set in initGui() to survive plugin reloads
         self.first_start = None
 
-        ## ARCHES PLUGIN SPECIFIC VARIABLES
-        # Cache connection details to prevent firing duplicate connections
-        self.arches_connection_cache = {}
         # Store token data to avoid regenerating every connection
-        self.arches_token = {}
-        self.arches_graphs_list = []
-        self.arches_user_info = {}
         # Store selected arches resource
         self.layers = []
-        self.arches_selected_resource = {
-            "resourceinstanceid": "",
-            "nodeid": "",
-            "tileid": "",
-        }
+        self.arches_selected_resource = arches_api.arches_selected_resource
 
         # Confirmation dialogs
         self.dlg = ArchesProjectDialog(iface = self.iface, 
@@ -267,7 +259,6 @@ class ArchesProject:
                 )
             )
 
-
             # click add button - should bring up new dialog for confirmation
             self.dlg.addNewRes.clicked.connect(self.create_resource)
 
@@ -288,7 +279,7 @@ class ArchesProject:
 
     def multiple_geometry_node_check(self):
         selectedGraphIndex = self.dlg.createResModelSelect.currentIndex()
-        selectedGraph = self.arches_graphs_list[selectedGraphIndex]
+        selectedGraph = arches_api.arches_graphs_list[selectedGraphIndex]
 
         self.geometry_nodes = []
         self.dlg.geometryNodeSelect.setEnabled(False)

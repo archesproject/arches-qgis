@@ -25,6 +25,7 @@
 import os
 
 from arches_project.core.views.logging import enable_logging
+
 from arches_project.core.views.components.map import map_selection
 from arches_project.core.views.components.psql_layers import update_map_layers, show_hide_psql_layers
 
@@ -49,8 +50,6 @@ class ArchesProjectDialog(QtWidgets.QDialog, FORM_CLASS):
         self.setupUi(self)
 
         self.iface = iface
-        self.arches_token = archesproject.arches_token
-        self.arches_selected_resource = archesproject.arches_selected_resource
         self.layers = []
 
         # Set tab index to 0 always
@@ -63,8 +62,6 @@ class ArchesProjectDialog(QtWidgets.QDialog, FORM_CLASS):
         # initiate the current selected layer
         map_selection(
             iface=self.iface,
-            arches_token=self.arches_token,
-            arches_selected_resource=self.arches_selected_resource,
             dlg=self,
         )
 
@@ -72,8 +69,6 @@ class ArchesProjectDialog(QtWidgets.QDialog, FORM_CLASS):
         self.iface.mapCanvas().selectionChanged.connect(
             lambda: map_selection(
                 iface=self.iface,
-                arches_token=self.arches_token,
-                arches_selected_resource=self.arches_selected_resource,
                 dlg=self,
             )
         )
