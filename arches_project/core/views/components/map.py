@@ -2,6 +2,7 @@ from qgis.PyQt.QtWidgets import QTableWidgetItem
 
 from arches_project.core.arches.api import arches_api
 
+
 def map_selection(iface, dlg):
     """
     Get the Arches Resource from the map
@@ -68,7 +69,9 @@ def map_selection(iface, dlg):
                         dlg.selectedResAttributeTable.setRowHeight(i, 5)
                         # Store current resource info
                         if k == "resourceinstanceid":
-                            arches_api.arches_selected_resource["resourceinstanceid"] = v
+                            arches_api.arches_selected_resource[
+                                "resourceinstanceid"
+                            ] = v
                         elif k == "nodeid":
                             arches_api.arches_selected_resource["nodeid"] = v
                         elif k == "tileid":
