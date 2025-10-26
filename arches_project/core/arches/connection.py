@@ -289,7 +289,7 @@ class ConnectionProcess(QgsTask):
         def update_edit_resources_tab():
             self.archesproject.dlg.addEditRes.setEnabled(False)
             self.archesproject.dlg.replaceEditRes.setEnabled(False)
-            if self.archesproject.arches_selected_resource["resourceinstanceid"]:
+            if arches_api.arches_selected_resource["resourceinstanceid"]:
                 self.archesproject.dlg.addEditRes.setEnabled(True)
                 self.archesproject.dlg.replaceEditRes.setEnabled(True)
             self.archesproject.dlg.editResSelectFeatures.setEnabled(True)
