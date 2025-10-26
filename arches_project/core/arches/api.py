@@ -12,6 +12,7 @@ class ArchesAPI:
         # Store token data to avoid regenerating every connection
         self.arches_token = {}
         self.arches_graphs_list = []
+        self.geometry_nodes = [] # for multiple in graph
         self.arches_user_info = {}
         # Store selected arches resource
         self.arches_selected_resource = {

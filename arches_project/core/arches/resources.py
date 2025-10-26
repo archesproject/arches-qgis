@@ -128,7 +128,7 @@ class ArchesResources:
 
         if selectedGraph["multiple_geometry_nodes"] == True:
             selectedNodeIndex = dlg.geometryNodeSelect.currentIndex()
-            selectedNode = self.archesproject.geometry_nodes[selectedNodeIndex]
+            selectedNode = arches_api.geometry_nodes[selectedNodeIndex]
 
         elif selectedGraph["multiple_geometry_nodes"] == False:
             node_id = list(selectedGraph["geometry_node_data"].keys())[0]
