@@ -20,5 +20,7 @@ def multiple_geometry_node_check(dlg):
                 )
             dlg.geometryNodeSelect.setEnabled(True)
             dlg.geometryNodeSelect.clear()
-            dlg.geometryNodeSelect.addItems([n["name"] for n in arches_api.geometry_nodes])
+            dlg.geometryNodeSelect.addItems(
+                [n["name"] for n in arches_api.geometry_nodes]
+            )
             dlg.geometryNodeSelectFrame.show()

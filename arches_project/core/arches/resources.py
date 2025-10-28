@@ -8,10 +8,10 @@ from arches_project.core.arches.api import arches_api
 
 
 class ArchesResources:
-    def __init__(self, nodeid, tileid, archesproject):
+    def __init__(self, nodeid, tileid, layers):
         self.nodeid = nodeid
         self.tileid = tileid
-        self.archesproject = archesproject
+        self.layers = layers
 
     def save_to_arches(
         self, tileid, nodeid, geometry_collection, geometry_format, arches_operation
@@ -40,7 +40,7 @@ class ArchesResources:
                 )
 
                 if arches_api.arches_token["expires_at"] < datetime.now():
-                    refresh_token(self.archesproject)
+                    refresh_token()
                     headers = {
                         "Authorization": "Bearer %s"
                         % (arches_api.arches_token["access_token"])
@@ -122,7 +122,7 @@ class ArchesResources:
 
         # Get info on current layer and selected graph
         selectedLayerIndex = dlg.createResFeatureSelect.currentIndex()
-        selectedLayer = self.archesproject.layers[selectedLayerIndex]
+        selectedLayer = self.layers[selectedLayerIndex]
         selectedGraphIndex = dlg.createResModelSelect.currentIndex()
         selectedGraph = arches_api.arches_graphs_list[selectedGraphIndex]
 
@@ -216,7 +216,7 @@ class ArchesResources:
 
         if arches_api.arches_selected_resource:
             selectedLayerIndex = dlg.editResSelectFeatures.currentIndex()
-            selectedLayer = self.archesproject.layers[selectedLayerIndex]
+            selectedLayer = self.layers[selectedLayerIndex]
 
             geom_convert = Geometries(selectedLayer)
             geomcoll, geometry_type_dict = geom_convert.geometry_conversion()

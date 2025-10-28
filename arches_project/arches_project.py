@@ -103,7 +103,7 @@ class ArchesProject:
         self.layers = []
 
         # Confirmation dialogs
-        self.dlg = ArchesProjectDialog(iface=self.iface, archesproject=self)
+        self.dlg = ArchesProjectDialog(archesproject=self)
         self.dlg_resource_creation = CreateResourceConfirmation()
         self.dlg_edit_resource_add = EditResourceAddConfirmation()
         self.dlg_edit_resource_replace = EditResourceReplaceConfirmation()
@@ -247,14 +247,6 @@ class ArchesProject:
 
             ## Have everything called in here so multiple connections aren't made when plugin button pressed
             # This way only one connection is made at a time
-
-            # Connection to Arches instance
-            self.dlg.btnConnect.clicked.connect(self.arches_connection_save)
-            self.dlg.btnLogout.clicked.connect(
-                lambda: ArchesConnection(None, None, None).connection_reset(
-                    hard_reset=True, self_obj=self, manual_logout=True
-                )
-            )
 
             # click add button - should bring up new dialog for confirmation
             self.dlg.addNewRes.clicked.connect(self.create_resource)
