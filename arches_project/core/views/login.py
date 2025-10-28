@@ -1,3 +1,6 @@
+from arches_project.core.arches.api import arches_api
+
+
 class LoggedIn:
     """
     Class for logged in/user profile view
@@ -7,12 +10,11 @@ class LoggedIn:
         self.dlg = dlg
         self.username = username
         self.url = url
-        self.arches_user_info = arches_user_info
 
     def update_logged_in_view(self):
         full_name = ""
-        if self.arches_user_info["first_name"]:
-            full_name = f'{self.arches_user_info["first_name"]} {self.arches_user_info["last_name"]}'
+        if arches_api.arches_user_info["first_name"]:
+            full_name = f'{arches_api.arches_user_info["first_name"]} {arches_api.arches_user_info["last_name"]}'
 
         # if there isn't a first/last name, replace main text with the username & hide sub
         if not full_name:

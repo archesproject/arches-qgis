@@ -24,8 +24,8 @@
 
 import os
 
+from arches_project.core.arches.connection import ArchesConnection
 from arches_project.core.views.logging import enable_logging
-
 from arches_project.core.views.components.map import map_selection
 from arches_project.core.views.components.psql_layers import (
     update_map_layers,
@@ -34,6 +34,9 @@ from arches_project.core.views.components.psql_layers import (
 from arches_project.core.views.components.multiple_graph_nodes import (
     multiple_geometry_node_check,
 )
+from arches_project.core.views.resources import ResourcesView
+from arches_project.core.views.connection import ArchesConnectionView
+
 
 from qgis.PyQt import uic
 from qgis.PyQt import QtWidgets
@@ -45,7 +48,7 @@ FORM_CLASS, _ = uic.loadUiType(
 
 
 class ArchesProjectDialog(QtWidgets.QDialog, FORM_CLASS):
-    def __init__(self, iface, archesproject, parent=None):
+    def __init__(self, archesproject, parent=None):
         """Constructor."""
         super(ArchesProjectDialog, self).__init__(parent)
         # Set up the user interface from Designer through FORM_CLASS.
@@ -55,8 +58,9 @@ class ArchesProjectDialog(QtWidgets.QDialog, FORM_CLASS):
         # #widgets-and-dialogs-with-auto-connect
         self.setupUi(self)
 
-        self.iface = iface
         self.layers = []
+        self.iface = archesproject.iface
+        self.plugin_dir = archesproject.plugin_dir
 
         # Set tab index to 0 always
         self.tabWidget.setCurrentIndex(0)
@@ -106,6 +110,10 @@ class ArchesProjectDialog(QtWidgets.QDialog, FORM_CLASS):
         self.createResFeatureSelect.setEnabled(False)
         self.addNewRes.setEnabled(False)
 
+        # click add button - should bring up new dialog for confirmation
+        # resource_view = ResourcesView(dlg = self)
+        # self.dlg.addNewRes.clicked.connect(self.create_resource)
+
         ## Set "Edit Resource" to false to begin with
         self.selectedResUUID.setText(
             "Connect to your Arches instance to edit resources."
@@ -121,3 +129,14 @@ class ArchesProjectDialog(QtWidgets.QDialog, FORM_CLASS):
         )
         # Hide multiple geometry node selection by default
         self.geometryNodeSelectFrame.hide()
+
+        # Connection to Arches instance
+        self.arches_connection = ArchesConnectionView(
+            dlg=self, plugin_dir=self.plugin_dir, layers=self.layers, iface=self.iface
+        )
+        self.btnConnect.clicked.connect(self.arches_connection.arches_connection_save)
+        self.btnLogout.clicked.connect(
+            lambda: ArchesConnection(None, None, None).connection_reset(
+                hard_reset=True, dlg=self, iface=self.iface, manual_logout=True
+            )
+        )
