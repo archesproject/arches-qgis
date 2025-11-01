@@ -8,10 +8,9 @@ from arches_project.core.arches.api import arches_api
 
 
 class ArchesResources:
-    def __init__(self, nodeid, tileid, layers):
+    def __init__(self, nodeid, tileid):
         self.nodeid = nodeid
         self.tileid = tileid
-        self.layers = layers
 
     def save_to_arches(
         self, tileid, nodeid, geometry_collection, geometry_format, arches_operation
@@ -28,6 +27,13 @@ class ArchesResources:
                     "format": (None, geometry_format),
                     "operation": (None, arches_operation),
                 }
+                print(
+                    geometry_collection,
+                    geometry_format,
+                    arches_operation,
+                    tileid,
+                    nodeid,
+                )
 
                 headers = {
                     "Authorization": "Bearer %s"
@@ -122,7 +128,7 @@ class ArchesResources:
 
         # Get info on current layer and selected graph
         selectedLayerIndex = dlg.createResFeatureSelect.currentIndex()
-        selectedLayer = self.layers[selectedLayerIndex]
+        selectedLayer = arches_api.layers[selectedLayerIndex]
         selectedGraphIndex = dlg.createResModelSelect.currentIndex()
         selectedGraph = arches_api.arches_graphs_list[selectedGraphIndex]
 
@@ -216,7 +222,7 @@ class ArchesResources:
 
         if arches_api.arches_selected_resource:
             selectedLayerIndex = dlg.editResSelectFeatures.currentIndex()
-            selectedLayer = self.layers[selectedLayerIndex]
+            selectedLayer = arches_api.layers[selectedLayerIndex]
 
             geom_convert = Geometries(selectedLayer)
             geomcoll, geometry_type_dict = geom_convert.geometry_conversion()

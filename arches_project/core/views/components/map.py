@@ -1,4 +1,5 @@
 from qgis.PyQt.QtWidgets import QTableWidgetItem
+from qgis.core import QgsProject, QgsVectorLayer
 
 from arches_project.core.arches.api import arches_api
 
@@ -106,3 +107,27 @@ def map_selection(iface, dlg):
                         dlg.selectedResUUID.setText(
                             "Connect to your Arches instance to edit resources."
                         )
+
+
+def update_map_layers(checkbox):
+    """
+    Function to update new vector layers dynamically
+    """
+
+    if checkbox.isChecked():
+        all_current_layers = [
+            l
+            for l in QgsProject.instance().mapLayers().values()
+            if l.type() == QgsVectorLayer.VectorLayer
+            if str(l.dataProvider().name()) != "postgres"
+        ]
+
+    elif not checkbox.isChecked():
+        all_current_layers = [
+            l
+            for l in QgsProject.instance().mapLayers().values()
+            if l.type() == QgsVectorLayer.VectorLayer
+        ]
+
+    if arches_api.layers != all_current_layers:
+        arches_api.layers = all_current_layers

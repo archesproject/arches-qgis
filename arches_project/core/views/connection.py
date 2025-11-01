@@ -9,12 +9,11 @@ from qgis.core import QgsMessageLog, QgsApplication
 
 
 class ArchesConnectionView:
-    def __init__(self, dlg, plugin_dir, layers, iface):
+    def __init__(self, dlg, plugin_dir, iface):
         self.error_msg = ""
         self.dlg = dlg
         self.plugin_dir = plugin_dir
         self.iface = iface
-        self.layers = layers
 
     def arches_connection_save(self):
         """
@@ -73,7 +72,6 @@ class ArchesConnectionView:
                 username=connection_information["username"]["value"],
                 password=connection_information["password"]["value"],
                 dlg=self.dlg,
-                layers=self.layers,
                 iface=self.iface,
                 plugin_dir=self.plugin_dir,
             )
