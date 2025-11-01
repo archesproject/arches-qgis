@@ -11,13 +11,11 @@ class ResourcesView:
         self.dlg = dlg
         self.dlg_resource_creation = dlg_resource_creation
         self.iface = iface
-        print("here", arches_api.layers)
 
     def create_resource(self):
         """
         Create Resource dialog and functionality
         """
-        print("again here", arches_api.layers)
 
         arches_create_resource = ArchesResources(
             nodeid=None, tileid=None  # filled by selectedNode
