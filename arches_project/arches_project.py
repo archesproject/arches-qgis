@@ -55,6 +55,8 @@ from arches_project.core.utils.format_url import format_url
 from arches_project.core.utils.spinner import triggerSpinner
 from arches_project.core.utils.qgis_messaging import show_message
 
+from arches_project.core.views.components.map import map_selection, update_map_layers
+
 from arches_project.core.arches.api import arches_api
 
 import os.path
@@ -98,15 +100,14 @@ class ArchesProject:
         # Must be set in initGui() to survive plugin reloads
         self.first_start = None
 
-        # Store token data to avoid regenerating every connection
-        # Store selected arches resource
-        self.layers = []
-
         # Confirmation dialogs
-        self.dlg = ArchesProjectDialog(archesproject=self)
         self.dlg_resource_creation = CreateResourceConfirmation()
         self.dlg_edit_resource_add = EditResourceAddConfirmation()
         self.dlg_edit_resource_replace = EditResourceReplaceConfirmation()
+        self.dlg = ArchesProjectDialog(archesproject=self)
+
+        # initialise self.layers
+        update_map_layers(self.dlg.hidePostgresLayers)
 
     # noinspection PyMethodMayBeStatic
     def tr(self, message):
@@ -243,19 +244,6 @@ class ArchesProject:
                     on_start=False,
                     plugin_dir=self.plugin_dir,
                 )
-            )
-
-            ## Have everything called in here so multiple connections aren't made when plugin button pressed
-            # This way only one connection is made at a time
-
-            # click add button - should bring up new dialog for confirmation
-            self.dlg.addNewRes.clicked.connect(self.create_resource)
-
-            self.dlg.addEditRes.clicked.connect(
-                lambda: self.edit_resource(replace=False)
-            )
-            self.dlg.replaceEditRes.clicked.connect(
-                lambda: self.edit_resource(replace=True)
             )
 
         # show the dialog

@@ -198,13 +198,12 @@ class ConnectionProcess(QgsTask):
     percent_progress = pyqtSignal(bool, int, int)
     complete = pyqtSignal()
 
-    def __init__(self, url, username, password, dlg, layers, iface, plugin_dir):
+    def __init__(self, url, username, password, dlg, iface, plugin_dir):
         super().__init__()
         self.url = url
         self.password = password
         self.username = username
         self.dlg = dlg
-        self.layers = layers
         self.iface = iface
         self.plugin_dir = plugin_dir
 
@@ -279,7 +278,7 @@ class ConnectionProcess(QgsTask):
             self.dlg.createResFeatureSelect.setEnabled(True)
             self.dlg.createResFeatureSelect.clear()
             self.dlg.createResFeatureSelect.addItems(
-                [layer.name() for layer in self.layers]
+                [layer.name() for layer in arches_api.layers]
             )
 
             if arches_api.arches_graphs_list:
@@ -298,7 +297,7 @@ class ConnectionProcess(QgsTask):
             self.dlg.editResSelectFeatures.setEnabled(True)
             self.dlg.editResSelectFeatures.clear()
             self.dlg.editResSelectFeatures.addItems(
-                [layer.name() for layer in self.layers]
+                [layer.name() for layer in arches_api.layers]
             )
             self.dlg.selectedResAttributeTable.setEnabled(True)
             self.dlg.selectedResUUID.setText(
@@ -313,7 +312,7 @@ class ConnectionProcess(QgsTask):
                 # This must be in result, in order to display that login failed due to permissions rather than other
 
                 # get all vector layers
-                self.layers = [
+                arches_api.layers = [
                     l
                     for l in QgsProject.instance().mapLayers().values()
                     if l.type() == QgsVectorLayer.VectorLayer

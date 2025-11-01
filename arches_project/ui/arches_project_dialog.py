@@ -24,13 +24,15 @@
 
 import os
 
+from arches_project.ui.create_resource_confirmation_dialog import (
+    CreateResourceConfirmation,
+)
+
 from arches_project.core.arches.connection import ArchesConnection
 from arches_project.core.views.logging import enable_logging
-from arches_project.core.views.components.map import map_selection
-from arches_project.core.views.components.psql_layers import (
-    update_map_layers,
-    show_hide_psql_layers,
-)
+from arches_project.core.views.components.map import map_selection, update_map_layers
+from arches_project.core.views.components.psql_layers import show_hide_psql_layers
+
 from arches_project.core.views.components.multiple_graph_nodes import (
     multiple_geometry_node_check,
 )
@@ -58,9 +60,12 @@ class ArchesProjectDialog(QtWidgets.QDialog, FORM_CLASS):
         # #widgets-and-dialogs-with-auto-connect
         self.setupUi(self)
 
-        self.layers = []
         self.iface = archesproject.iface
         self.plugin_dir = archesproject.plugin_dir
+
+        self.dlg_resource_creation = archesproject.dlg_resource_creation
+        self.dlg_edit_resource_add = archesproject.dlg_edit_resource_add
+        self.dlg_edit_resource_replace = archesproject.dlg_edit_resource_replace
 
         # Set tab index to 0 always
         self.tabWidget.setCurrentIndex(0)
@@ -86,19 +91,14 @@ class ArchesProjectDialog(QtWidgets.QDialog, FORM_CLASS):
         # to run when layer is changed in create resource and edit resource tabs
         self.hidePostgresLayers.setChecked(True)
         self.createResFeatureSelect.highlighted.connect(
-            lambda: update_map_layers(
-                layers=self.layers, checkbox=self.hidePostgresLayers
-            )
+            lambda: update_map_layers(checkbox=self.hidePostgresLayers)
         )
         self.editResSelectFeatures.highlighted.connect(
-            lambda: update_map_layers(
-                layers=self.layers, checkbox=self.hidePostgresLayers
-            )
+            lambda: update_map_layers(checkbox=self.hidePostgresLayers)
         )
 
         self.hidePostgresLayers.stateChanged.connect(
             lambda: show_hide_psql_layers(
-                layers=self.layers,
                 combobox1=self.createResFeatureSelect,
                 combobox2=self.editResSelectFeatures,
                 dlg=self,
@@ -109,10 +109,6 @@ class ArchesProjectDialog(QtWidgets.QDialog, FORM_CLASS):
         self.createResModelSelect.setEnabled(False)
         self.createResFeatureSelect.setEnabled(False)
         self.addNewRes.setEnabled(False)
-
-        # click add button - should bring up new dialog for confirmation
-        # resource_view = ResourcesView(dlg = self)
-        # self.dlg.addNewRes.clicked.connect(self.create_resource)
 
         ## Set "Edit Resource" to false to begin with
         self.selectedResUUID.setText(
@@ -132,7 +128,7 @@ class ArchesProjectDialog(QtWidgets.QDialog, FORM_CLASS):
 
         # Connection to Arches instance
         self.arches_connection = ArchesConnectionView(
-            dlg=self, plugin_dir=self.plugin_dir, layers=self.layers, iface=self.iface
+            dlg=self, plugin_dir=self.plugin_dir, iface=self.iface
         )
         self.btnConnect.clicked.connect(self.arches_connection.arches_connection_save)
         self.btnLogout.clicked.connect(
@@ -140,3 +136,14 @@ class ArchesProjectDialog(QtWidgets.QDialog, FORM_CLASS):
                 hard_reset=True, dlg=self, iface=self.iface, manual_logout=True
             )
         )
+
+        # click add button - should bring up new dialog for confirmation
+        self.create_arches_resource = ResourcesView(
+            dlg=self,
+            dlg_resource_creation=self.dlg_resource_creation,
+            iface=self.iface,
+        )
+        self.addNewRes.clicked.connect(self.create_arches_resource.create_resource)
+
+        self.addEditRes.clicked.connect(lambda: self.edit_resource(replace=False))
+        self.replaceEditRes.clicked.connect(lambda: self.edit_resource(replace=True))
