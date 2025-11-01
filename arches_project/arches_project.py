@@ -248,20 +248,3 @@ class ArchesProject:
 
         # show the dialog
         self.dlg.show()
-
-    def edit_resource(self, replace):
-        """Save geometries to existing resource - either replace or add"""
-
-        arches_edit_resource = ArchesResources(
-            nodeid=self.arches_selected_resource["nodeid"],
-            tileid=self.arches_selected_resource["tileid"],
-            archesproject=self,
-        )
-        arches_edit_resource.edit_resource(
-            replace=replace,
-            arches_selected_resource=self.arches_selected_resource,
-            dlg=self.dlg,
-            dlg_edit_resource_replace=self.dlg_edit_resource_replace,
-            dlg_edit_resource_add=self.dlg_edit_resource_add,
-            iface=self.iface,
-        )

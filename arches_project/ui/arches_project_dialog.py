@@ -138,12 +138,27 @@ class ArchesProjectDialog(QtWidgets.QDialog, FORM_CLASS):
         )
 
         # click add button - should bring up new dialog for confirmation
-        self.create_arches_resource = ResourcesView(
+        self.resources_object = ResourcesView(
             dlg=self,
-            dlg_resource_creation=self.dlg_resource_creation,
             iface=self.iface,
         )
-        self.addNewRes.clicked.connect(self.create_arches_resource.create_resource)
+        self.addNewRes.clicked.connect(
+            lambda: self.resources_object.create_resource(
+                dlg_resource_creation=self.dlg_resource_creation
+            )
+        )
 
-        self.addEditRes.clicked.connect(lambda: self.edit_resource(replace=False))
-        self.replaceEditRes.clicked.connect(lambda: self.edit_resource(replace=True))
+        self.addEditRes.clicked.connect(
+            lambda: self.resources_object.edit_resource(
+                replace=False,
+                dlg_edit_resource_replace=self.dlg_edit_resource_replace,
+                dlg_edit_resource_add=self.dlg_edit_resource_add,
+            )
+        )
+        self.replaceEditRes.clicked.connect(
+            lambda: self.resources_object.edit_resource(
+                replace=True,
+                dlg_edit_resource_replace=self.dlg_edit_resource_replace,
+                dlg_edit_resource_add=self.dlg_edit_resource_add,
+            )
+        )
