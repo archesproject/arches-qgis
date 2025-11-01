@@ -249,17 +249,6 @@ class ArchesProject:
         # show the dialog
         self.dlg.show()
 
-    def create_resource(self):
-        """Create Resource dialog and functionality"""
-        arches_create_resource = ArchesResources(
-            nodeid=None, tileid=None, archesproject=self  # filled by selectedNode
-        )
-        arches_create_resource.create_resource(
-            dlg=self.dlg,
-            dlg_resource_creation=self.dlg_resource_creation,
-            iface=self.iface,
-        )
-
     def edit_resource(self, replace):
         """Save geometries to existing resource - either replace or add"""
 
