@@ -3,7 +3,7 @@ import requests
 from functools import partial
 
 from arches_project.core.utils.geometry_conversion import Geometries
-from arches_project.core.utils.qgis_messaging import show_message
+from arches_project.core.views.components.qgis_messaging import show_message
 from arches_project.core.utils.refresh_token import refresh_token
 from arches_project.core.arches.api import arches_api
 
