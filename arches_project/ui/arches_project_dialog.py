@@ -23,16 +23,12 @@
 """
 
 import os
-
-from arches_project.ui.create_resource_confirmation_dialog import (
-    CreateResourceConfirmation,
-)
+from functools import partial
 
 from arches_project.core.arches.connection import ArchesConnection
 from arches_project.core.views.logging import enable_logging
 from arches_project.core.views.components.map import update_map_layers
 from arches_project.core.views.components.psql_layers import show_hide_psql_layers
-
 from arches_project.core.views.components.multiple_graph_nodes import (
     multiple_geometry_node_check,
 )
@@ -77,14 +73,15 @@ class ArchesProjectDialog(QtWidgets.QDialog, FORM_CLASS):
         # to run when layer is changed in create resource and edit resource tabs
         self.hidePostgresLayers.setChecked(True)
         self.createResFeatureSelect.highlighted.connect(
-            lambda: update_map_layers(checkbox=self.hidePostgresLayers)
+            partial(update_map_layers, checkbox=self.hidePostgresLayers)
         )
         self.editResSelectFeatures.highlighted.connect(
-            lambda: update_map_layers(checkbox=self.hidePostgresLayers)
+            partial(update_map_layers, checkbox=self.hidePostgresLayers)
         )
 
         self.hidePostgresLayers.stateChanged.connect(
-            lambda: show_hide_psql_layers(
+            partial(
+                show_hide_psql_layers,
                 combobox1=self.createResFeatureSelect,
                 combobox2=self.editResSelectFeatures,
                 dlg=self,
@@ -107,7 +104,7 @@ class ArchesProjectDialog(QtWidgets.QDialog, FORM_CLASS):
 
         # Check if selected graph has multiple geometry nodes
         self.createResModelSelect.currentIndexChanged.connect(
-            lambda: multiple_geometry_node_check(dlg=self)
+            partial(multiple_geometry_node_check, dlg=self)
         )
         # Hide multiple geometry node selection by default
         self.geometryNodeSelectFrame.hide()
@@ -118,8 +115,12 @@ class ArchesProjectDialog(QtWidgets.QDialog, FORM_CLASS):
         )
         self.btnConnect.clicked.connect(self.arches_connection.arches_connection_save)
         self.btnLogout.clicked.connect(
-            lambda: ArchesConnection(None, None, None).connection_reset(
-                hard_reset=True, dlg=self, iface=self.iface, manual_logout=True
+            partial(
+                ArchesConnection(None, None, None).connection_reset,
+                hard_reset=True,
+                dlg=self,
+                iface=self.iface,
+                manual_logout=True,
             )
         )
 
@@ -129,20 +130,23 @@ class ArchesProjectDialog(QtWidgets.QDialog, FORM_CLASS):
             iface=self.iface,
         )
         self.addNewRes.clicked.connect(
-            lambda: self.resources_object.create_resource(
-                dlg_resource_creation=self.dlg_resource_creation
+            partial(
+                self.resources_object.create_resource,
+                dlg_resource_creation=self.dlg_resource_creation,
             )
         )
 
         self.addEditRes.clicked.connect(
-            lambda: self.resources_object.edit_resource(
+            partial(
+                self.resources_object.edit_resource,
                 replace=False,
                 dlg_edit_resource_replace=self.dlg_edit_resource_replace,
                 dlg_edit_resource_add=self.dlg_edit_resource_add,
             )
         )
         self.replaceEditRes.clicked.connect(
-            lambda: self.resources_object.edit_resource(
+            partial(
+                self.resources_object.edit_resource,
                 replace=True,
                 dlg_edit_resource_replace=self.dlg_edit_resource_replace,
                 dlg_edit_resource_add=self.dlg_edit_resource_add,

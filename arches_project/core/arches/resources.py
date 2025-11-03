@@ -1,5 +1,6 @@
 from datetime import datetime
 import requests
+from functools import partial
 
 from arches_project.core.utils.geometry_conversion import Geometries
 from arches_project.core.utils.qgis_messaging import show_message
@@ -249,13 +250,15 @@ class ArchesResources:
 
                 dlg_edit_resource_replace.editDialogCreate.disconnect()
                 dlg_edit_resource_replace.editDialogCreate.clicked.connect(
-                    lambda: send_edited_data_to_arches(
-                        operation_type="create", dialog=dlg_edit_resource_replace
+                    partial(
+                        send_edited_data_to_arches,
+                        operation_type="create",
+                        dialog=dlg_edit_resource_replace,
                     )
                 )
                 dlg_edit_resource_replace.editDialogCancel.disconnect()
                 dlg_edit_resource_replace.editDialogCancel.clicked.connect(
-                    lambda: close_dialog(dialog=dlg_edit_resource_replace)
+                    partial(close_dialog, dialog=dlg_edit_resource_replace)
                 )
                 # Show confirmation dialog
                 dlg_edit_resource_replace.show()
@@ -275,13 +278,15 @@ class ArchesResources:
 
                 dlg_edit_resource_add.editDialogCreate.disconnect()
                 dlg_edit_resource_add.editDialogCreate.clicked.connect(
-                    lambda: send_edited_data_to_arches(
-                        operation_type="append", dialog=dlg_edit_resource_add
+                    partial(
+                        send_edited_data_to_arches,
+                        operation_type="append",
+                        dialog=dlg_edit_resource_add,
                     )
                 )
                 dlg_edit_resource_add.editDialogCancel.disconnect()
                 dlg_edit_resource_add.editDialogCancel.clicked.connect(
-                    lambda: close_dialog(dialog=dlg_edit_resource_add)
+                    partial(close_dialog, dialog=dlg_edit_resource_add)
                 )
                 # Show confirmation dialog
                 dlg_edit_resource_add.show()
