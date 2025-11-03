@@ -194,7 +194,9 @@ class ArchesProject:
         )
 
         # Get the map selection and update when changed
-        self.map_selection_callback = partial(map_selection, iface=self.iface, dlg=self.dlg)
+        self.map_selection_callback = partial(
+            map_selection, iface=self.iface, dlg=self.dlg
+        )
         self.iface.mapCanvas().selectionChanged.connect(self.map_selection_callback)
 
         # will be set False in run()
@@ -208,7 +210,9 @@ class ArchesProject:
 
         # disconnect QGIS signals
         try:
-            self.iface.mapCanvas().selectionChanged.disconnect(self.map_selection_callback)
+            self.iface.mapCanvas().selectionChanged.disconnect(
+                self.map_selection_callback
+            )
         except TypeError:
             pass
 
