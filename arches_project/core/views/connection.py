@@ -3,7 +3,7 @@ from arches_project.core.views.components.missing_credentials import missing_cre
 from arches_project.core.views.login import UpdateLogin
 from arches_project.core.views.login import UpdateLogin
 from arches_project.core.utils.format_url import format_url
-from arches_project.core.utils.spinner import triggerSpinner
+from arches_project.core.views.components.spinner import triggerSpinner
 
 from qgis.core import QgsMessageLog, QgsApplication
 

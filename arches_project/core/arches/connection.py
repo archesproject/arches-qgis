@@ -3,7 +3,7 @@ from datetime import datetime, timedelta
 
 from arches_project.core.views.login import LoggedIn
 from arches_project.core.utils.qgis_messaging import show_message
-from arches_project.core.utils.spinner import triggerSpinner
+from arches_project.core.views.components.spinner import triggerSpinner
 
 from arches_project.core.arches.api import arches_api
 
