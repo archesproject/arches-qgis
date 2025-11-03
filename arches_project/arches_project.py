@@ -45,9 +45,10 @@ from arches_project.ui.edit_resource_replace_confirmation_dialog import (
 )
 
 from arches_project.core.views.stylesheets import PluginStylesheets
-from arches_project.core.views.components.map import update_map_layers
+from arches_project.core.views.components.map import update_map_layers, map_selection
 
 import os.path
+from functools import partial
 
 
 class ArchesProject:
@@ -192,6 +193,10 @@ class ArchesProject:
             parent=self.iface.mainWindow(),
         )
 
+        # Get the map selection and update when changed
+        self.map_selection_callback = partial(map_selection, iface=self.iface, dlg=self.dlg)
+        self.iface.mapCanvas().selectionChanged.connect(self.map_selection_callback)
+
         # will be set False in run()
         self.first_start = True
 
@@ -200,6 +205,12 @@ class ArchesProject:
         for action in self.actions:
             self.iface.removePluginMenu(self.tr("&Arches Project"), action)
             self.iface.removeToolBarIcon(action)
+
+        # disconnect QGIS signals
+        try:
+            self.iface.mapCanvas().selectionChanged.disconnect(self.map_selection_callback)
+        except TypeError:
+            pass
 
     def run(self):
         """Run method that performs all the real work"""

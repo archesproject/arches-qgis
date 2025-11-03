@@ -30,7 +30,7 @@ from arches_project.ui.create_resource_confirmation_dialog import (
 
 from arches_project.core.arches.connection import ArchesConnection
 from arches_project.core.views.logging import enable_logging
-from arches_project.core.views.components.map import map_selection, update_map_layers
+from arches_project.core.views.components.map import update_map_layers
 from arches_project.core.views.components.psql_layers import show_hide_psql_layers
 
 from arches_project.core.views.components.multiple_graph_nodes import (
@@ -73,20 +73,6 @@ class ArchesProjectDialog(QtWidgets.QDialog, FORM_CLASS):
         self.tabWidget.setTabVisible(5, False)
 
         self.enableLoggingCheckbox.stateChanged.connect(enable_logging)
-
-        # initiate the current selected layer
-        map_selection(
-            iface=self.iface,
-            dlg=self,
-        )
-
-        # Get the map selection and update when changed
-        self.iface.mapCanvas().selectionChanged.connect(
-            lambda: map_selection(
-                iface=self.iface,
-                dlg=self,
-            )
-        )
 
         # to run when layer is changed in create resource and edit resource tabs
         self.hidePostgresLayers.setChecked(True)
