@@ -235,3 +235,17 @@ class QgisInterface(QObject):
         Return the message bar of the main app
         """
         return self.message_bar
+
+    def addPluginToMenu(self, name, action):
+        """
+        Add the action to the submenu with the given name
+        under the plugin menu.
+        """
+        pass
+
+    def removePluginMenu(self, name, action):
+        """
+        Find the QMenu with the given name within the Database
+        menu (ie the user visible text on the menu item).
+        """
+        pass
