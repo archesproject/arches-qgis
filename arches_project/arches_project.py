@@ -44,26 +44,10 @@ from arches_project.ui.edit_resource_replace_confirmation_dialog import (
     EditResourceReplaceConfirmation,
 )
 
-from arches_project.core.arches.connection import ArchesConnection, ConnectionProcess
-from arches_project.core.arches.resources import ArchesResources
-
 from arches_project.core.views.stylesheets import PluginStylesheets
-from arches_project.core.views.components.missing_credentials import missing_credentials
-from arches_project.core.views.login import UpdateLogin
-
-from arches_project.core.utils.format_url import format_url
-from arches_project.core.utils.spinner import triggerSpinner
-from arches_project.core.utils.qgis_messaging import show_message
-
-from arches_project.core.views.components.map import map_selection, update_map_layers
-
-from arches_project.core.arches.api import arches_api
+from arches_project.core.views.components.map import update_map_layers
 
 import os.path
-import sys
-import requests
-from datetime import datetime
-import time
 
 
 class ArchesProject:

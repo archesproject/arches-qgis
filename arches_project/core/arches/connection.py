@@ -1,6 +1,5 @@
 import requests
 from datetime import datetime, timedelta
-import os
 
 from arches_project.core.views.login import LoggedIn
 from arches_project.core.utils.qgis_messaging import show_message
