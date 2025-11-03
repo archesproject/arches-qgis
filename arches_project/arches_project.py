@@ -235,7 +235,8 @@ class ArchesProject:
             )
             # if stylesheet is disabled
             self.dlg.useStylesheetCheckbox.stateChanged.connect(
-                lambda: PluginStylesheets(
+                partial(
+                    PluginStylesheets,
                     dlg=self.dlg,
                     dlg_resource_creation=self.dlg_resource_creation,
                     dlg_edit_resource_add=self.dlg_edit_resource_add,
