@@ -1,0 +1,37 @@
+[project]
+name = "arches-qgis"
+version = "1.0.0a1"
+readme = "README.md"
+license = "AGPL-3.0-or-later"
+license-files = ["LICENSE"]
+dependencies = [
+    "PyQt5==5.15.9",
+    "pb-tool==3.1.0",
+]
+
+[dependency-groups]
+dev = [
+    "black==24.4.2",
+    "coverage",
+    "pre-commit==4.1.0",
+]
+
+[tool.setuptools.packages.find]
+namespaces = false
+
+[tool.black]
+include = '\.pyi?$'
+exclude = '''
+/(
+    \.eggs
+  | \.git
+  | \.hg
+  | \.mypy_cache
+  | \.tox
+  | \.venv
+  | _build
+  | buck-out
+  | build
+  | dist
+)/
+'''

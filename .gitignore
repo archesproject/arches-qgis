@@ -4,6 +4,8 @@ __pycache__/
 .coverage
 coverage
 .vscode
+arches_qgis.egg*
+.eggs
 
 env/
 env3.11/
