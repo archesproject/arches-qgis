@@ -2,7 +2,6 @@ import unittest
 import os
 
 from arches_project.arches_project import ArchesProject
-from arches_project.core.views.stylesheets import PluginStylesheets
 
 from qgis.PyQt.QtCore import QSettings
 
@@ -34,13 +33,6 @@ class ArchesQGISTestCase(unittest.TestCase):
         # Call the dialogs from within the plugin rather than establishing new ones.
         self.dlg = self.arches_project.dlg
         self.dlg_resource_confirmation = self.arches_project.dlg_resource_confirmation
-
-        PluginStylesheets(
-            self.dlg,
-            self.dlg_resource_confirmation,
-            self.arches_project.plugin_dir,
-            True,
-        )
 
         self.arches_url = (
             f"http://{os.environ.get('ARCHES_HOST')}:{os.environ.get('DJANGO_PORT')}"
