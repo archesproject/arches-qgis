@@ -4,6 +4,7 @@ __pycache__/
 .coverage
 coverage
 .vscode
+*.DS_Store
 
 env/
 env3.11/
