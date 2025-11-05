@@ -50,7 +50,6 @@ class ArchesQGISTestCase(unittest.TestCase):
 
         self.arches_project.first_start = True
         self.arches_project.initGui()
-        self.arches_project.run()
 
     def tearDown(self):
         """
