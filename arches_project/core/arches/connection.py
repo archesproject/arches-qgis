@@ -1,9 +1,11 @@
 import requests
 from datetime import datetime, timedelta
-import os
-from ..views.login import LoggedIn
-from ..utils.qgis_messaging import show_message
-from ..utils.spinner import triggerSpinner
+
+from arches_project.core.views.login import LoggedIn
+from arches_project.core.views.components.qgis_messaging import show_message
+from arches_project.core.views.components.spinner import triggerSpinner
+
+from arches_project.core.arches.api import arches_api
 
 from qgis.core import (
     QgsProject,
@@ -139,49 +141,50 @@ class ArchesConnection:
             pass
         return arches_graphs_list
 
-    def connection_reset(self, hard_reset, self_obj, manual_logout=False):
+    def connection_reset(self, hard_reset, dlg, iface, manual_logout=False):
         """
         Reset Arches connection
         """
+        # TODO: This is all UI related, so should be moved into views/
         if hard_reset == True:
             # Reset connection inputs
-            self_obj.dlg.archesServerInput.setText("")
-            self_obj.dlg.usernameInput.setText("")
-            self_obj.dlg.passwordInput.setText("")
+            dlg.archesServerInput.setText("")
+            dlg.usernameInput.setText("")
+            dlg.passwordInput.setText("")
             # Reset logged in values
-            self_obj.dlg.displayFullNameLabel.setText("")
-            self_obj.dlg.displayConnectionInfoLabel.setText("")
-            self_obj.dlg.displayUsernameLabel.setText("")
+            dlg.displayFullNameLabel.setText("")
+            dlg.displayConnectionInfoLabel.setText("")
+            dlg.displayUsernameLabel.setText("")
             # Replace login tab with logged in tab
-            self_obj.dlg.tabWidget.setTabVisible(0, True)
-            self_obj.dlg.tabWidget.setTabVisible(1, False)
-            self_obj.dlg.tabWidget.setCurrentIndex(0)
+            dlg.tabWidget.setTabVisible(0, True)
+            dlg.tabWidget.setTabVisible(1, False)
+            dlg.tabWidget.setCurrentIndex(0)
 
         # Reset stored data
-        self_obj.arches_user_info = {}
-        self_obj.arches_connection_cache = {}
-        self_obj.arches_token = {}
-        self_obj.arches_graphs_list = []
+        arches_api.arches_user_info = {}
+        arches_api.arches_connection_cache = {}
+        arches_api.arches_token = {}
+        arches_api.arches_graphs_list = []
         # Reset Create Resource tab as no longer useable
-        self_obj.dlg.createResModelSelect.setEnabled(False)
-        self_obj.dlg.createResFeatureSelect.setEnabled(False)
-        self_obj.dlg.addNewRes.setEnabled(False)
-        self_obj.dlg.createResOutputBox.setText("")
+        dlg.createResModelSelect.setEnabled(False)
+        dlg.createResFeatureSelect.setEnabled(False)
+        dlg.addNewRes.setEnabled(False)
+        dlg.createResOutputBox.setText("")
         ## Set "Edit Resource" to false to begin with
-        self_obj.dlg.addEditRes.setEnabled(False)
-        self_obj.dlg.replaceEditRes.setEnabled(False)
-        self_obj.dlg.editResSelectFeatures.setEnabled(False)
-        self_obj.dlg.selectedResAttributeTable.setRowCount(0)
-        self_obj.dlg.selectedResAttributeTable.setEnabled(False)
-        self_obj.dlg.selectedResUUID.setText(
+        dlg.addEditRes.setEnabled(False)
+        dlg.replaceEditRes.setEnabled(False)
+        dlg.editResSelectFeatures.setEnabled(False)
+        dlg.selectedResAttributeTable.setRowCount(0)
+        dlg.selectedResAttributeTable.setEnabled(False)
+        dlg.selectedResUUID.setText(
             "Connect to your Arches instance to edit resources."
         )
         # Hide multiple nodegroup dropdown
-        self_obj.dlg.geometryNodeSelect.setEnabled(False)
+        dlg.geometryNodeSelect.setEnabled(False)
 
         if manual_logout:
             show_message(
-                self_obj.iface,
+                iface,
                 "information",
                 "Logged out of Arches instance. Please reconnect to use the plugin.",
             )
@@ -194,12 +197,14 @@ class ConnectionProcess(QgsTask):
     percent_progress = pyqtSignal(bool, int, int)
     complete = pyqtSignal()
 
-    def __init__(self, url, username, password, archesproject):
+    def __init__(self, url, username, password, dlg, iface, plugin_dir):
         super().__init__()
         self.url = url
         self.password = password
         self.username = username
-        self.archesproject = archesproject
+        self.dlg = dlg
+        self.iface = iface
+        self.plugin_dir = plugin_dir
 
     def run(self):
         arches_connection = ArchesConnection(
@@ -207,46 +212,45 @@ class ConnectionProcess(QgsTask):
         )
 
         self.login_updates.emit("Fetching client id ...")
-        clientid = arches_connection.get_client_id()
-        self.archesproject.clientid = clientid
+        arches_api.client_id = arches_connection.get_client_id()
         self.percent_progress.emit(True, 0, 0)
-        if not clientid:
+        if not arches_api.client_id:
             return False
 
         # get/update user info on the logged in user
-        self.archesproject.arches_user_info = {}
+        arches_api.arches_user_info = {}
         self.login_updates.emit("Fetching user permissions ...")
-        self.archesproject.arches_user_info = arches_connection.get_user_permissions(
-            self.archesproject.arches_user_info
+        arches_api.arches_user_info = arches_connection.get_user_permissions(
+            arches_api.arches_user_info
         )
         self.percent_progress.emit(True, 0, 0)
 
         # re-fetch graphs before checking cache as updates may have occurred
-        self.archesproject.arches_graphs_list = []
+        arches_api.arches_graphs_list = []
 
-        if 2 not in self.archesproject.arches_user_info["groups"]:
+        if 2 not in arches_api.arches_user_info["groups"]:
             # if user does not have permissions return early and deal with in finished()
             return True
 
-        self.archesproject.arches_graphs_list = arches_connection.get_graphs(
-            self.archesproject.arches_graphs_list,
+        arches_api.arches_graphs_list = arches_connection.get_graphs(
+            arches_api.arches_graphs_list,
             self.login_updates,
             self.percent_progress,
         )
 
-        self.archesproject.arches_token = arches_connection.get_token(
-            clientid, self.archesproject.arches_token
+        arches_api.arches_token = arches_connection.get_token(
+            arches_api.client_id, arches_api.arches_token
         )
 
         self.login_updates.emit("Fetching Oauth token ...")
-        if not self.archesproject.arches_token:
+        if not arches_api.arches_token:
             return False
         self.percent_progress.emit(True, 0, 0)
 
         # Store for preventing duplicate connection requests
-        self.archesproject.arches_connection_cache = {
-            "url": self.archesproject.dlg.archesServerInput.text(),
-            "username": self.archesproject.dlg.usernameInput.text(),
+        arches_api.arches_connection_cache = {
+            "url": self.dlg.archesServerInput.text(),
+            "username": self.dlg.usernameInput.text(),
         }
 
         return True
@@ -254,60 +258,60 @@ class ConnectionProcess(QgsTask):
     def finished(self, result):
         def update_login_tab():
             # Replace login tab with logged in tab
-            self.archesproject.dlg.tabWidget.setTabVisible(0, False)
-            self.archesproject.dlg.tabWidget.setTabVisible(1, True)
-            self.archesproject.dlg.tabWidget.setCurrentIndex(1)
+            self.dlg.tabWidget.setTabVisible(0, False)
+            self.dlg.tabWidget.setTabVisible(1, True)
+            self.dlg.tabWidget.setCurrentIndex(1)
 
             logged_in_tab = LoggedIn(
-                dlg=self.archesproject.dlg,
+                dlg=self.dlg,
                 username=self.username,
                 url=self.url,
-                arches_user_info=self.archesproject.arches_user_info,
+                arches_user_info=arches_api.arches_user_info,
             )
             logged_in_tab.update_logged_in_view()
-            # self.archesproject.dlg.displayTextLabel.setText(f"Connected to {self.url} as {self.archesproject.dlg.usernameInput.text()}.")
-            # self.archesproject.dlg.displayUrlLabel.setOpenExternalLinks(True) #TODO
+            # self.dlg.displayTextLabel.setText(f"Connected to {self.url} as {self.dlg.usernameInput.text()}.")
+            # self.dlg.displayUrlLabel.setOpenExternalLinks(True) #TODO
 
         def update_create_resources_tab():
-            self.archesproject.dlg.createResModelSelect.clear()
-            self.archesproject.dlg.createResFeatureSelect.setEnabled(True)
-            self.archesproject.dlg.createResFeatureSelect.clear()
-            self.archesproject.dlg.createResFeatureSelect.addItems(
-                [layer.name() for layer in self.archesproject.layers]
+            self.dlg.createResModelSelect.clear()
+            self.dlg.createResFeatureSelect.setEnabled(True)
+            self.dlg.createResFeatureSelect.clear()
+            self.dlg.createResFeatureSelect.addItems(
+                [layer.name() for layer in arches_api.layers]
             )
 
-            if self.archesproject.arches_graphs_list:
-                self.archesproject.dlg.createResModelSelect.setEnabled(True)
-                self.archesproject.dlg.createResModelSelect.addItems(
-                    [graph["name"] for graph in self.archesproject.arches_graphs_list]
+            if arches_api.arches_graphs_list:
+                self.dlg.createResModelSelect.setEnabled(True)
+                self.dlg.createResModelSelect.addItems(
+                    [graph["name"] for graph in arches_api.arches_graphs_list]
                 )
-                self.archesproject.dlg.addNewRes.setEnabled(True)
+                self.dlg.addNewRes.setEnabled(True)
 
         def update_edit_resources_tab():
-            self.archesproject.dlg.addEditRes.setEnabled(False)
-            self.archesproject.dlg.replaceEditRes.setEnabled(False)
-            if self.archesproject.arches_selected_resource["resourceinstanceid"]:
-                self.archesproject.dlg.addEditRes.setEnabled(True)
-                self.archesproject.dlg.replaceEditRes.setEnabled(True)
-            self.archesproject.dlg.editResSelectFeatures.setEnabled(True)
-            self.archesproject.dlg.editResSelectFeatures.clear()
-            self.archesproject.dlg.editResSelectFeatures.addItems(
-                [layer.name() for layer in self.archesproject.layers]
+            self.dlg.addEditRes.setEnabled(False)
+            self.dlg.replaceEditRes.setEnabled(False)
+            if arches_api.arches_selected_resource["resourceinstanceid"]:
+                self.dlg.addEditRes.setEnabled(True)
+                self.dlg.replaceEditRes.setEnabled(True)
+            self.dlg.editResSelectFeatures.setEnabled(True)
+            self.dlg.editResSelectFeatures.clear()
+            self.dlg.editResSelectFeatures.addItems(
+                [layer.name() for layer in arches_api.layers]
             )
-            self.archesproject.dlg.selectedResAttributeTable.setEnabled(True)
-            self.archesproject.dlg.selectedResUUID.setText(
+            self.dlg.selectedResAttributeTable.setEnabled(True)
+            self.dlg.selectedResUUID.setText(
                 "Connected to Arches. Select an Arches resource to proceed."
             )
 
-        triggerSpinner(arches_obj=self.archesproject).hide_spinner()
+        triggerSpinner(dlg=self.dlg, plugin_dir=self.plugin_dir).hide_spinner()
 
         if result:
-            if 2 in self.archesproject.arches_user_info["groups"]:
+            if 2 in arches_api.arches_user_info["groups"]:
                 # THIS IS THE RESOURCE EDITOR PERMISSION
                 # This must be in result, in order to display that login failed due to permissions rather than other
 
                 # get all vector layers
-                self.archesproject.layers = [
+                arches_api.layers = [
                     l
                     for l in QgsProject.instance().mapLayers().values()
                     if l.type() == QgsVectorLayer.VectorLayer
@@ -319,36 +323,36 @@ class ConnectionProcess(QgsTask):
                 update_create_resources_tab()
             else:
                 ArchesConnection(None, None, None).connection_reset(
-                    hard_reset=True, self_obj=self.archesproject
+                    hard_reset=True, dlg=self.dlg, iface=self.iface
                 )
                 show_message(
-                    self.archesproject.iface,
+                    self.iface,
                     "Warning",
                     "Login prevented: This user does not have the permissions to create Arches resources.",
                     duration=-1,
                 )
-                self.archesproject.dlg.loginErrorMessageFrame.show()
-                self.archesproject.dlg.loginErrorMessageLabel.show()
-                self.archesproject.dlg.loginErrorMessageLabel.setText(
+                self.dlg.loginErrorMessageFrame.show()
+                self.dlg.loginErrorMessageLabel.show()
+                self.dlg.loginErrorMessageLabel.setText(
                     "Login prevented: This user does not have the permissions to create Arches resources."
                 )
         else:
             show_message(
-                self.archesproject.iface,
+                self.iface,
                 "Error",
                 "Failed to connect to Arches instance.",
                 duration=-1,
             )
-            self.archesproject.dlg.loginErrorMessageFrame.show()
-            self.archesproject.dlg.loginErrorMessageLabel.show()
-            self.archesproject.dlg.loginErrorMessageLabel.setText(
+            self.dlg.loginErrorMessageFrame.show()
+            self.dlg.loginErrorMessageLabel.show()
+            self.dlg.loginErrorMessageLabel.setText(
                 "Failed to connect to Arches instance."
             )
             ArchesConnection(None, None, None).connection_reset(
-                hard_reset=True, self_obj=self.archesproject
+                hard_reset=True, dlg=self.dlg, iface=self.iface
             )
 
     def cancel(self):
-        triggerSpinner(arches_obj=self.archesproject).hide_spinner()
+        triggerSpinner(dlg=self.dlg, plugin_dir=self.plugin_dir).hide_spinner()
         QgsMessageLog.logMessage("task was canceled")
         super().cancel()

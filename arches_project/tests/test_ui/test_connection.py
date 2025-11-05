@@ -73,4 +73,3 @@ class ConnectionTests(ArchesQGISTestCase):
         QTest.mouseClick(self.dlg.btnConnect, Qt.LeftButton)
 
         # arches_connection object only exists on successful
-        print(self.arches_project.arches_token)
