@@ -21,11 +21,9 @@
  *                                                                         *
  ***************************************************************************/
 """
-from PyQt5.QtCore import Qt
 from qgis.PyQt.QtCore import QSettings, QTranslator, QCoreApplication
 from qgis.PyQt.QtGui import QIcon
 from qgis.PyQt.QtWidgets import QAction, QTableWidgetItem
-from qgis.core import QgsProject, QgsVectorLayer, QgsMessageLog, QgsApplication
 
 # Initialize Qt resources from file resources.py
 from arches_project.resources import *
@@ -33,16 +31,8 @@ from arches_project.resources import *
 # Import the code for the dialog
 from arches_project.ui.arches_project_dialog import ArchesProjectDialog
 
-# Import the confirmation dialogs
-from arches_project.ui.create_resource_confirmation_dialog import (
-    CreateResourceConfirmation,
-)
-from arches_project.ui.edit_resource_add_confirmation_dialog import (
-    EditResourceAddConfirmation,
-)
-from arches_project.ui.edit_resource_replace_confirmation_dialog import (
-    EditResourceReplaceConfirmation,
-)
+# Import the confirmation dialog
+from .ui.resource_confirmation_dialog import ResourceConfirmation
 
 from arches_project.core.views.stylesheets import PluginStylesheets
 from arches_project.core.views.components.map import update_map_layers, map_selection
@@ -86,9 +76,7 @@ class ArchesProject:
         self.first_start = None
 
         # Confirmation dialogs
-        self.dlg_resource_creation = CreateResourceConfirmation()
-        self.dlg_edit_resource_add = EditResourceAddConfirmation()
-        self.dlg_edit_resource_replace = EditResourceReplaceConfirmation()
+        self.dlg_resource_confirmation = ResourceConfirmation()
         self.dlg = ArchesProjectDialog(archesproject=self)
 
         # initialise self.layers
@@ -227,9 +215,7 @@ class ArchesProject:
             # Setup Arches Stylesheet
             PluginStylesheets(
                 dlg=self.dlg,
-                dlg_resource_creation=self.dlg_resource_creation,
-                dlg_edit_resource_add=self.dlg_edit_resource_add,
-                dlg_edit_resource_replace=self.dlg_edit_resource_replace,
+                dlg_resource_confirmation=self.dlg_resource_confirmation,
                 on_start=True,
                 plugin_dir=self.plugin_dir,
             )
@@ -238,9 +224,7 @@ class ArchesProject:
                 partial(
                     PluginStylesheets,
                     dlg=self.dlg,
-                    dlg_resource_creation=self.dlg_resource_creation,
-                    dlg_edit_resource_add=self.dlg_edit_resource_add,
-                    dlg_edit_resource_replace=self.dlg_edit_resource_replace,
+                    dlg_resource_confirmation=self.dlg_resource_confirmation,
                     on_start=False,
                     plugin_dir=self.plugin_dir,
                 )

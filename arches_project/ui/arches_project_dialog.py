@@ -59,9 +59,7 @@ class ArchesProjectDialog(QtWidgets.QDialog, FORM_CLASS):
         self.iface = archesproject.iface
         self.plugin_dir = archesproject.plugin_dir
 
-        self.dlg_resource_creation = archesproject.dlg_resource_creation
-        self.dlg_edit_resource_add = archesproject.dlg_edit_resource_add
-        self.dlg_edit_resource_replace = archesproject.dlg_edit_resource_replace
+        self.dlg_resource_confirmation = archesproject.dlg_resource_confirmation
 
         # Set tab index to 0 always
         self.tabWidget.setCurrentIndex(0)
@@ -132,7 +130,7 @@ class ArchesProjectDialog(QtWidgets.QDialog, FORM_CLASS):
         self.addNewRes.clicked.connect(
             partial(
                 self.resources_object.create_resource,
-                dlg_resource_creation=self.dlg_resource_creation,
+                dlg_resource_confirmation=self.dlg_resource_confirmation,
             )
         )
 
@@ -140,15 +138,13 @@ class ArchesProjectDialog(QtWidgets.QDialog, FORM_CLASS):
             partial(
                 self.resources_object.edit_resource,
                 replace=False,
-                dlg_edit_resource_replace=self.dlg_edit_resource_replace,
-                dlg_edit_resource_add=self.dlg_edit_resource_add,
+                dlg_resource_confirmation=self.dlg_resource_confirmation,
             )
         )
         self.replaceEditRes.clicked.connect(
             partial(
                 self.resources_object.edit_resource,
                 replace=True,
-                dlg_edit_resource_replace=self.dlg_edit_resource_replace,
-                dlg_edit_resource_add=self.dlg_edit_resource_add,
+                dlg_resource_confirmation=self.dlg_resource_confirmation,
             )
         )

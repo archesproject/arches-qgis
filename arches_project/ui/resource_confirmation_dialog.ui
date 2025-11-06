@@ -11,7 +11,7 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Replace Geometries</string>
+   <string>Create Arches Resource</string>
   </property>
   <property name="windowIcon">
    <iconset>
@@ -22,9 +22,9 @@
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
    <item>
-    <widget class="QLabel" name="label">
+    <widget class="QLabel" name="messageLabel">
      <property name="text">
-      <string>Are you sure you want to REPLACE geometries?</string>
+      <string>Confirmation prompt</string>
      </property>
      <property name="alignment">
       <set>Qt::AlignCenter</set>
@@ -115,14 +115,14 @@ li.checked::marker { content: &quot;\2612&quot;; }
        </spacer>
       </item>
       <item>
-       <widget class="QPushButton" name="editDialogCreate">
+       <widget class="QPushButton" name="confirmDialogConfirm">
         <property name="text">
-         <string>Replace</string>
+         <string>Action</string>
         </property>
        </widget>
       </item>
       <item>
-       <widget class="QPushButton" name="editDialogCancel">
+       <widget class="QPushButton" name="confirmDialogCancel">
         <property name="text">
          <string>Cancel</string>
         </property>

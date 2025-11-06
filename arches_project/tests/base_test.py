@@ -31,15 +31,11 @@ class ArchesQGISTestCase(unittest.TestCase):
 
         # Call the dialogs from within the plugin rather than establishing new ones.
         self.dlg = self.arches_project.dlg
-        self.dlg_resource_creation = self.arches_project.dlg_resource_creation
-        self.dlg_edit_resource_add = self.arches_project.dlg_edit_resource_add
-        self.dlg_edit_resource_replace = self.arches_project.dlg_edit_resource_replace
+        self.dlg_resource_confirmation = self.arches_project.dlg_resource_confirmation
 
         PluginStylesheets(
             self.dlg,
-            self.dlg_resource_creation,
-            self.dlg_edit_resource_add,
-            self.dlg_edit_resource_replace,
+            self.dlg_resource_confirmation,
             self.arches_project.plugin_dir,
             True,
         )
@@ -62,8 +58,5 @@ class ArchesQGISTestCase(unittest.TestCase):
         self.arches_project = None
 
         self.dlg = None
-        self.dlg_resource_creation = None
-        self.dlg_edit_resource_add = None
-        self.dlg_edit_resource_replace = None
-
+        self.dlg_resource_confirmation = None
         self.arches_url = None

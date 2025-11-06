@@ -11,7 +11,7 @@ class ResourcesView:
         self.dlg = dlg
         self.iface = iface
 
-    def create_resource(self, dlg_resource_creation):
+    def create_resource(self, dlg_resource_confirmation):
         """
         Create Resource dialog and functionality
         """
@@ -21,11 +21,11 @@ class ResourcesView:
         )
         arches_create_resource.create_resource(
             dlg=self.dlg,
-            dlg_resource_creation=dlg_resource_creation,
+            dlg_resource_confirmation=dlg_resource_confirmation,
             iface=self.iface,
         )
 
-    def edit_resource(self, replace, dlg_edit_resource_replace, dlg_edit_resource_add):
+    def edit_resource(self, replace, dlg_resource_confirmation):
         """Save geometries to existing resource - either replace or add"""
 
         arches_edit_resource = ArchesResources(
@@ -35,7 +35,6 @@ class ResourcesView:
         arches_edit_resource.edit_resource(
             replace=replace,
             dlg=self.dlg,
-            dlg_edit_resource_replace=dlg_edit_resource_replace,
-            dlg_edit_resource_add=dlg_edit_resource_add,
+            dlg_resource_confirmation=dlg_resource_confirmation,
             iface=self.iface,
         )
