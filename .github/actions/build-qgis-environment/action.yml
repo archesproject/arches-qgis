@@ -1,0 +1,21 @@
+name: 'Build QGIS test environment'
+description: 'Builds the QGIS testing environment'
+inputs: 
+  qgis_version:
+    description: 'String denoting the QGIS version, to be used for the image.'
+    required: true
+runs:
+  using: 'composite'
+  steps:
+    - name: Set up QGIS ${{ matrix.qgis_version }}
+      run: |
+        docker run -dt --name qgis-testing-environment -v .:/tests_directory -e QT_QPA_PLATFORM="offscreen" qgis/qgis:${{ matrix.qgis_version }}
+        sleep 10 
+        docker exec qgis-testing-environment bash -c "cp -a /tests_directory/test/scripts/. /usr/bin/"
+        docker exec qgis-testing-environment bash -c "/tests_directory/test/scripts/qgis_setup.sh arches_project"
+        docker exec qgis-testing-environment bash -c "rm -f  /root/.local/share/QGIS/QGIS3/profiles/default/python/plugins/arches_project"
+        docker exec qgis-testing-environment bash -c "ln -s /tests_directory/ /root/.local/share/QGIS/QGIS3/profiles/default/python/plugins/arches_project"
+        docker exec qgis-testing-environment bash -c "apt-get update && apt-get install -y pre-commit python3-coverage python3-dotenv"
+        docker exec qgis-testing-environment bash -c "git config --global --add safe.directory /tests_directory"
+        docker network connect arches-qgis-network qgis-testing-environment
+      shell: bash

@@ -26,19 +26,31 @@ All QGIS plugins can be viewed and downloaded from the [QGIS website](https://pl
 2. Download the plugin zip.
 3. Extract the folder, and move it to your local QGIS installation path (see below).
 
-## Installation via GitHub
+## Installation via GitHub (for developers)
+Note that the entire arches-qgis git repository is not the QGIS plugin, only the `arches_project/` directory should be added to the QGIS plugins path. If the entire directory is added to the QGIS plugin path it will not be recognised and produce errors.
 1. Find your local path for the QGIS installation:
-    If on Windows, this should look similar to `C:\Users\USERNAME\AppData\Roaming\QGIS\QGIS3\profiles\default\python\plugins\`
+    If on Windows, this should look similar to `C:\Users\USERNAME\AppData\Roaming\QGIS\QGIS3\profiles\default\python\plugins\`   
     If on MacOS, this should look similar to `/Users/USERNAME/Library/Application Support/QGIS/QGIS3/profiles/default/python/plugins/`
-2. Clone this repository under the respective plugins path.
-```
-git clone https://github.com/archesproject/arches-qgis.git
-```
+2. Clone the arches-qgis repository in your working directory.
+    ```
+    git clone https://github.com/archesproject/arches-qgis.git
+    ```
+    
+3. Create a symbolic link from `arches-qgis/arches_project` to the QGIS plugins path.   
+
+    On ubuntu this can be done with the following:
+    ```
+    ln -s arches-qgis/arches_project/ /PATH/TO/QGIS/PLUGINS/arches_project/
+    ```
+    On windows (or WSL), this must be done using powershell (as administrator) and the arches-qgis repository must be cloned on the mounted c drive rather than the Ubuntu virtual drive, as sym links from WSL to Windows do not work. e.g.
+    ```
+    cmd /c mklink /d "C:\PATH\TO\QGIS\PLUGINS\arches_project" "C:\arches-qgis\arches_project"
+    ``` 
 3. Head to the QGIS Plugins tab and select "Manage and Install Plugins".
 4. Search for and select "Arches Project" from the list of all plugins.
 
 ## Information for developers
-If you wish to develop with the QGIS Arches plugin, below are some helpful tips that will help, and make life easier.
+If you wish to develop with the QGIS Arches plugin, below are some helpful tips that will help and make life easier.
 - Installation via GitHub is the easiest method to develop.  This can be done by git cloning in the plugins path (shown above) and (optionally) creating a symbolic link to somewhere much easier to find e.g. your home directory.
 - The QGIS plugin "Plugin Reloader" is incredibly useful for reloading plugins to reflect code changes.  This can be found on the QGIS plugins repository, and configured to reload specific plugins with Ctrl+F5.
 
@@ -58,3 +70,19 @@ Once installed, add the new version of Qt as a kit in the QtCreator preferences,
 
 Open a new project in QtCreator by selecting the .pro file found in `arches_project/ui/arches_project_ui.pro`, and Qt 5.15.   
 This .pro file will load all plugin `.ui` files into the project tree found in the Edit tab (on the left side of QtCreator) where they can be easily opened and switched between. 
+
+## Testing
+The Arches QGIS plugin includes tests found in `arches_project/tests/`.    
+The root `test/` directory contains scripts for setting up the Arches testing environment.   
+
+### Interacting with the testing suite
+Docker needs to be installed, as the testing environment uses docker to build QGIS and Arches containers. See here to install docker: https://docs.docker.com/engine/install/ubuntu/.
+
+Various functions are set up in the [Makefile](/Makefile) which can be used to interact with the testing suite:
+- `make run-testing` - this runs the entire testing process and shuts down, removes containers and volumes at the end. This command runs the following functions in the order below.
+- `make setup-arches-docker` - this runs the docker-compose file found in `test/arches` and spins up Arches, postgres and elasticsearch containers. In the Arches container, the project is created and run. This does not include webpack as Arches is only being fetched via API, thus in a partially headless state.
+- `make setup-qgis-docker` - runs various docker run commands to spin up the QGIS testing container. This is placed on the same network as the Arches container, therefore should be run after.
+- `make test <file=path/to/file>` - runs all (or a specified) plugin tests in the QGIS environment. Displays coverage at the end.
+- `make black` - runs black formatting on all python files in the plugin.
+- `make shutdown-qgis-docker` - stops and removes the QGIS docker container.
+- `make shutdown-arches-docker <remove_volumes=true|false>` - runs docker compose down for the Arches testing environment and optionally removes volumes.

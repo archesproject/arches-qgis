@@ -23,17 +23,30 @@
 """
 
 import os
+from functools import partial
+
+from arches_project.core.arches.connection import ArchesConnection
+from arches_project.core.views.logging import enable_logging
+from arches_project.core.views.components.map import update_map_layers
+from arches_project.core.views.components.psql_layers import show_hide_psql_layers
+from arches_project.core.views.components.multiple_graph_nodes import (
+    multiple_geometry_node_check,
+)
+from arches_project.core.views.resources import ResourcesView
+from arches_project.core.views.connection import ArchesConnectionView
+
 
 from qgis.PyQt import uic
 from qgis.PyQt import QtWidgets
 
 # This loads your .ui file so that PyQt can populate your plugin with the elements from Qt Designer
-FORM_CLASS, _ = uic.loadUiType(os.path.join(
-    os.path.dirname(__file__), 'arches_project_dialog_base.ui'))
+FORM_CLASS, _ = uic.loadUiType(
+    os.path.join(os.path.dirname(__file__), "arches_project_dialog_base.ui")
+)
 
 
 class ArchesProjectDialog(QtWidgets.QDialog, FORM_CLASS):
-    def __init__(self, parent=None):
+    def __init__(self, archesproject, parent=None):
         """Constructor."""
         super(ArchesProjectDialog, self).__init__(parent)
         # Set up the user interface from Designer through FORM_CLASS.
@@ -42,3 +55,96 @@ class ArchesProjectDialog(QtWidgets.QDialog, FORM_CLASS):
         # http://qt-project.org/doc/qt-4.8/designer-using-a-ui-file.html
         # #widgets-and-dialogs-with-auto-connect
         self.setupUi(self)
+
+        self.iface = archesproject.iface
+        self.plugin_dir = archesproject.plugin_dir
+
+        self.dlg_resource_confirmation = archesproject.dlg_resource_confirmation
+
+        # Set tab index to 0 always
+        self.tabWidget.setCurrentIndex(0)
+        self.tabWidget.setTabVisible(1, False)
+        self.tabWidget.setTabVisible(5, False)
+
+        self.enableLoggingCheckbox.stateChanged.connect(enable_logging)
+
+        # to run when layer is changed in create resource and edit resource tabs
+        self.hidePostgresLayers.setChecked(True)
+        self.createResFeatureSelect.highlighted.connect(
+            partial(update_map_layers, checkbox=self.hidePostgresLayers)
+        )
+        self.editResSelectFeatures.highlighted.connect(
+            partial(update_map_layers, checkbox=self.hidePostgresLayers)
+        )
+
+        self.hidePostgresLayers.stateChanged.connect(
+            partial(
+                show_hide_psql_layers,
+                combobox1=self.createResFeatureSelect,
+                combobox2=self.editResSelectFeatures,
+                dlg=self,
+            )
+        )
+
+        ## Set "Create resource" to false to begin with and only update once Arches connection made
+        self.createResModelSelect.setEnabled(False)
+        self.createResFeatureSelect.setEnabled(False)
+        self.addNewRes.setEnabled(False)
+
+        ## Set "Edit Resource" to false to begin with
+        self.selectedResUUID.setText(
+            "Connect to your Arches instance to edit resources."
+        )
+        self.addEditRes.setEnabled(False)
+        self.replaceEditRes.setEnabled(False)
+        self.editResSelectFeatures.setEnabled(False)
+        self.selectedResAttributeTable.setEnabled(False)
+
+        # Check if selected graph has multiple geometry nodes
+        self.createResModelSelect.currentIndexChanged.connect(
+            partial(multiple_geometry_node_check, dlg=self)
+        )
+        # Hide multiple geometry node selection by default
+        self.geometryNodeSelectFrame.hide()
+
+        # Connection to Arches instance
+        self.arches_connection = ArchesConnectionView(
+            dlg=self, plugin_dir=self.plugin_dir, iface=self.iface
+        )
+        self.btnConnect.clicked.connect(self.arches_connection.arches_connection_save)
+        self.btnLogout.clicked.connect(
+            partial(
+                ArchesConnection(None, None, None).connection_reset,
+                hard_reset=True,
+                dlg=self,
+                iface=self.iface,
+                manual_logout=True,
+            )
+        )
+
+        # click add button - should bring up new dialog for confirmation
+        self.resources_object = ResourcesView(
+            dlg=self,
+            iface=self.iface,
+        )
+        self.addNewRes.clicked.connect(
+            partial(
+                self.resources_object.create_resource,
+                dlg_resource_confirmation=self.dlg_resource_confirmation,
+            )
+        )
+
+        self.addEditRes.clicked.connect(
+            partial(
+                self.resources_object.edit_resource,
+                replace=False,
+                dlg_resource_confirmation=self.dlg_resource_confirmation,
+            )
+        )
+        self.replaceEditRes.clicked.connect(
+            partial(
+                self.resources_object.edit_resource,
+                replace=True,
+                dlg_resource_confirmation=self.dlg_resource_confirmation,
+            )
+        )
