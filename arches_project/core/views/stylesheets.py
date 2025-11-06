@@ -6,11 +6,7 @@ import os
 
 
 class PluginStylesheets:
-    def __init__(self, 
-                 dlg,
-                 dlg_resource_confirmation, 
-                 plugin_dir,
-                 on_start):
+    def __init__(self, dlg, dlg_resource_confirmation, plugin_dir, on_start):
         self.dlg = dlg
         self.dlg_resource_confirmation = dlg_resource_confirmation
         self.plugin_dir = plugin_dir
@@ -105,13 +101,25 @@ class PluginStylesheets:
             self.dlg.replaceEditRes.setIconSize(QSize(12, 12))
             self.dlg.replaceEditRes.setCursor(QCursor(Qt.PointingHandCursor))
 
-            self.dlg_resource_confirmation.confirmDialogCancel.setIcon(QIcon(os.path.join(self.plugin_dir, "icons", "fa-times.svg")))
-            self.dlg_resource_confirmation.confirmDialogCancel.setIconSize(QSize(12,12))
-            self.dlg_resource_confirmation.confirmDialogCancel.setCursor(QCursor(Qt.PointingHandCursor))
+            self.dlg_resource_confirmation.confirmDialogCancel.setIcon(
+                QIcon(os.path.join(self.plugin_dir, "icons", "fa-times.svg"))
+            )
+            self.dlg_resource_confirmation.confirmDialogCancel.setIconSize(
+                QSize(12, 12)
+            )
+            self.dlg_resource_confirmation.confirmDialogCancel.setCursor(
+                QCursor(Qt.PointingHandCursor)
+            )
 
-            self.dlg_resource_confirmation.confirmDialogConfirm.setIcon(QIcon(os.path.join(self.plugin_dir, "icons", "fa-plus.svg")))
-            self.dlg_resource_confirmation.confirmDialogConfirm.setIconSize(QSize(12,12))
-            self.dlg_resource_confirmation.confirmDialogConfirm.setCursor(QCursor(Qt.PointingHandCursor))
+            self.dlg_resource_confirmation.confirmDialogConfirm.setIcon(
+                QIcon(os.path.join(self.plugin_dir, "icons", "fa-plus.svg"))
+            )
+            self.dlg_resource_confirmation.confirmDialogConfirm.setIconSize(
+                QSize(12, 12)
+            )
+            self.dlg_resource_confirmation.confirmDialogConfirm.setCursor(
+                QCursor(Qt.PointingHandCursor)
+            )
 
             self.dlg.tabWidget.setDocumentMode(True)
 

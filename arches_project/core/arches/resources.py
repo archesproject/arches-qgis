@@ -76,8 +76,6 @@ class ArchesResources:
                 print(f"Cannot create new resource: {e}")
         return None
 
-
-
     def create_resource(self, dlg, dlg_resource_confirmation, iface):
         """
         Create Resource dialog and functionality
@@ -152,15 +150,21 @@ class ArchesResources:
         geomcoll, geometry_type_dict = geom_convert.geometry_conversion()
 
         # Format text box
-        dlg_resource_confirmation.infoText.viewport().setAutoFillBackground(False) # Sets the text box to be invisible
+        dlg_resource_confirmation.infoText.viewport().setAutoFillBackground(
+            False
+        )  # Sets the text box to be invisible
         dlg_resource_confirmation.infoText.setText("")
-        dlg_resource_confirmation.infoText.append("An Arches resource will be created with the following geometries:\n")
-        for k,v in geometry_type_dict.items():
+        dlg_resource_confirmation.infoText.append(
+            "An Arches resource will be created with the following geometries:\n"
+        )
+        for k, v in geometry_type_dict.items():
             dlg_resource_confirmation.infoText.append(f"{k}: {v}")
 
         # open dialog
         dlg_resource_confirmation.confirmDialogConfirm.setText("Create")
-        dlg_resource_confirmation.messageLabel.setText("Are you sure you want to CREATE an Arches resource?")
+        dlg_resource_confirmation.messageLabel.setText(
+            "Are you sure you want to CREATE an Arches resource?"
+        )
         dlg_resource_confirmation.show()
 
         # Push button responses
@@ -261,7 +265,9 @@ class ArchesResources:
                 )
                 # Show confirmation dialog
                 dlg_resource_confirmation.confirmDialogConfirm.setText("Replace")
-                dlg_resource_confirmation.messageLabel.setText("Are you sure you want to REPLACE geometries?")
+                dlg_resource_confirmation.messageLabel.setText(
+                    "Are you sure you want to REPLACE geometries?"
+                )
                 dlg_resource_confirmation.show()
 
             # Add geometry to the resource
@@ -289,7 +295,9 @@ class ArchesResources:
                 dlg_resource_confirmation.confirmDialogCancel.clicked.connect(
                     partial(close_dialog, dialog=dlg_resource_confirmation)
                 )
-                # Show confirmation 
+                # Show confirmation
                 dlg_resource_confirmation.confirmDialogConfirm.setText("Add")
-                dlg_resource_confirmation.messageLabel.setText("Are you sure you want to ADD geometries?")
+                dlg_resource_confirmation.messageLabel.setText(
+                    "Are you sure you want to ADD geometries?"
+                )
                 dlg_resource_confirmation.show()
