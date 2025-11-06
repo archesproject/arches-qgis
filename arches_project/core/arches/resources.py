@@ -28,13 +28,6 @@ class ArchesResources:
                     "format": (None, geometry_format),
                     "operation": (None, arches_operation),
                 }
-                print(
-                    geometry_collection,
-                    geometry_format,
-                    arches_operation,
-                    tileid,
-                    nodeid,
-                )
 
                 headers = {
                     "Authorization": "Bearer %s"
