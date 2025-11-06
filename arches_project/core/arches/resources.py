@@ -126,6 +126,7 @@ class ArchesResources:
 
         def close_dialog():
             dlg_resource_confirmation.close()
+            dlg_resource_confirmation.messageLabel.setText("Confirmation prompt")
 
         # Get info on current layer and selected graph
         selectedLayerIndex = dlg.createResFeatureSelect.currentIndex()
@@ -223,6 +224,7 @@ class ArchesResources:
 
         def close_dialog(dialog):
             dialog.close()
+            dlg_resource_confirmation.messageLabel.setText("Confirmation prompt")
 
         if arches_api.arches_selected_resource:
             selectedLayerIndex = dlg.editResSelectFeatures.currentIndex()
