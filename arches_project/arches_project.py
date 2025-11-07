@@ -37,8 +37,6 @@ from .ui.resource_confirmation_dialog import ResourceConfirmation
 from arches_project.core.views.stylesheets import PluginStylesheets
 from arches_project.core.views.components.map import update_map_layers, map_selection
 
-from .widgets.hover_list_view import HoverListView
-
 import os.path
 from functools import partial
 
