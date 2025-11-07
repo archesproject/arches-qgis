@@ -1,5 +1,6 @@
 from qgis.PyQt.QtWidgets import QListView
 
+
 class HoverListView(QListView):
     def __init__(self, parent=None):
         super().__init__(parent)

@@ -17,6 +17,7 @@ from qgis.core import (
 from qgis.PyQt.QtCore import QSettings
 from PyQt5.QtCore import pyqtSignal
 
+
 class ArchesConnection:
     """Class for Arches APIs"""
 
@@ -260,13 +261,13 @@ class ConnectionProcess(QgsTask):
 
         saved_urls = QSettings().value("urls", [])
         saved_usernames = QSettings().value("usernames", [])
-        
+
         if self.url not in saved_urls:
             saved_urls.append(self.url)
 
             if len(saved_urls) > 5:
                 del saved_urls[0]
-            
+
             QSettings().setValue("urls", saved_urls)
 
         if self.username not in saved_usernames:
@@ -274,9 +275,9 @@ class ConnectionProcess(QgsTask):
 
             if len(saved_usernames) > 5:
                 del saved_usernames[0]
-            
+
             QSettings().setValue("usernames", saved_usernames)
-                            
+
         return True
 
     def finished(self, result):
