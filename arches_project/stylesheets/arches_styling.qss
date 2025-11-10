@@ -64,7 +64,6 @@ QTabBar {
 QTabBar::tab {
     background-color: #2d3c4b;
     width: 50px;
-    length: 40px;
 } 
 QTabBar::tab:selected { 
     background-color: #2986b8;    
