@@ -257,30 +257,30 @@ class ConnectionProcess(QgsTask):
             "username": self.dlg.usernameInput.text(),
         }
 
-        # Store url for future autocomplete
-
-        saved_urls = QSettings().value("urls", [])
-        saved_usernames = QSettings().value("usernames", [])
-
-        if self.url not in saved_urls:
-            saved_urls.append(self.url)
-
-            if len(saved_urls) > 5:
-                del saved_urls[0]
-
-            QSettings().setValue("urls", saved_urls)
-
-        if self.username not in saved_usernames:
-            saved_usernames.append(self.username)
-
-            if len(saved_usernames) > 5:
-                del saved_usernames[0]
-
-            QSettings().setValue("usernames", saved_usernames)
-
         return True
 
     def finished(self, result):
+        def store_auto_complete_credentials():
+
+            saved_urls = QSettings().value("urls", [])
+            saved_usernames = QSettings().value("usernames", [])
+
+            if self.url not in saved_urls:
+                saved_urls.append(self.url)
+
+                if len(saved_urls) > 5:
+                    del saved_urls[0]
+
+                QSettings().setValue("urls", saved_urls)
+
+            if self.username not in saved_usernames:
+                saved_usernames.append(self.username)
+
+                if len(saved_usernames) > 5:
+                    del saved_usernames[0]
+
+            QSettings().setValue("usernames", saved_usernames)
+
         def update_login_tab():
             # Replace login tab with logged in tab
             self.dlg.tabWidget.setTabVisible(0, False)
@@ -343,6 +343,7 @@ class ConnectionProcess(QgsTask):
                     if str(l.dataProvider().name()) != "postgres"
                 ]
 
+                store_auto_complete_credentials()
                 update_login_tab()
                 update_edit_resources_tab()
                 update_create_resources_tab()
