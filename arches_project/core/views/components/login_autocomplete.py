@@ -1,4 +1,4 @@
-from arches_project.widgets.hover_list_view import HoverListView
+from arches_project.ui.widgets.hover_list_view import HoverListView
 
 from PyQt5.QtCore import Qt
 from qgis.PyQt.QtWidgets import QCompleter
