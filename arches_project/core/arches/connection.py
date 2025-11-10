@@ -174,7 +174,8 @@ class ArchesConnection:
         dlg.createResModelSelectCombo.setEnabled(False)
         dlg.createResGeomSelectCombo.setEnabled(False)
         dlg.createResButton.setEnabled(False)
-        dlg.createResOutputBox.setText("")
+        dlg.createResOutputBoxLabel.setText("")
+        dlg.createResOutputBoxFrame.hide()
         ## Set "Edit Resource" to false to begin with
         dlg.addEditRes.setEnabled(False)
         dlg.replaceEditRes.setEnabled(False)
