@@ -27,7 +27,9 @@ from functools import partial
 
 from arches_project.core.arches.connection import ArchesConnection
 from arches_project.core.views.logging import enable_logging
-from arches_project.core.views.components.login_autocomplete import load_saved_credentials
+from arches_project.core.views.components.login_autocomplete import (
+    load_saved_credentials,
+)
 from arches_project.core.views.components.map import update_map_layers
 from arches_project.core.views.components.psql_layers import show_hide_psql_layers
 from arches_project.core.views.components.multiple_graph_nodes import (
@@ -43,6 +45,7 @@ from qgis.PyQt import QtWidgets
 FORM_CLASS, _ = uic.loadUiType(
     os.path.join(os.path.dirname(__file__), "arches_project_dialog_base.ui")
 )
+
 
 class ArchesProjectDialog(QtWidgets.QDialog, FORM_CLASS):
     def __init__(self, archesproject, parent=None):
