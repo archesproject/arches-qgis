@@ -4,7 +4,9 @@ from datetime import datetime, timedelta
 from arches_project.core.views.login import LoggedIn
 from arches_project.core.views.components.qgis_messaging import show_message
 from arches_project.core.views.components.spinner import triggerSpinner
-from arches_project.core.views.components.login_autocomplete import load_saved_credentials
+from arches_project.core.views.components.login_autocomplete import (
+    load_saved_credentials,
+)
 
 from arches_project.core.arches.api import arches_api
 
