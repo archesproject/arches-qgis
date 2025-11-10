@@ -90,17 +90,17 @@ class PluginStylesheets:
             self.dlg.createResButton.setIconSize(QSize(12, 12))
             self.dlg.createResButton.setCursor(QCursor(Qt.PointingHandCursor))
 
-            self.dlg.addEditRes.setIcon(
+            self.dlg.editResAddGeom.setIcon(
                 QIcon(os.path.join(self.plugin_dir, "icons", "fa-plus.svg"))
             )
-            self.dlg.addEditRes.setIconSize(QSize(12, 12))
-            self.dlg.addEditRes.setCursor(QCursor(Qt.PointingHandCursor))
+            self.dlg.editResAddGeom.setIconSize(QSize(12, 12))
+            self.dlg.editResAddGeom.setCursor(QCursor(Qt.PointingHandCursor))
 
-            self.dlg.replaceEditRes.setIcon(
+            self.dlg.editResReplaceGeom.setIcon(
                 QIcon(os.path.join(self.plugin_dir, "icons", "mi-replace.svg"))
             )
-            self.dlg.replaceEditRes.setIconSize(QSize(12, 12))
-            self.dlg.replaceEditRes.setCursor(QCursor(Qt.PointingHandCursor))
+            self.dlg.editResReplaceGeom.setIconSize(QSize(12, 12))
+            self.dlg.editResReplaceGeom.setCursor(QCursor(Qt.PointingHandCursor))
 
             self.dlg_resource_confirmation.confirmDialogCancel.setIcon(
                 QIcon(os.path.join(self.plugin_dir, "icons", "fa-times.svg"))

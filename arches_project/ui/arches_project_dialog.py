@@ -78,7 +78,7 @@ class ArchesProjectDialog(QtWidgets.QDialog, FORM_CLASS):
         self.createResGeomSelectCombo.highlighted.connect(
             partial(update_map_layers, checkbox=self.hidePostgresLayers)
         )
-        self.editResSelectFeatures.highlighted.connect(
+        self.editResGeomSelectCombo.highlighted.connect(
             partial(update_map_layers, checkbox=self.hidePostgresLayers)
         )
 
@@ -86,7 +86,7 @@ class ArchesProjectDialog(QtWidgets.QDialog, FORM_CLASS):
             partial(
                 show_hide_psql_layers,
                 combobox1=self.createResGeomSelectCombo,
-                combobox2=self.editResSelectFeatures,
+                combobox2=self.editResGeomSelectCombo,
                 dlg=self,
             )
         )
@@ -97,13 +97,13 @@ class ArchesProjectDialog(QtWidgets.QDialog, FORM_CLASS):
         self.createResButton.setEnabled(False)
 
         ## Set "Edit Resource" to false to begin with
-        self.selectedResUUID.setText(
+        self.editResSelectedResId.setText(
             "Connect to your Arches instance to edit resources."
         )
-        self.addEditRes.setEnabled(False)
-        self.replaceEditRes.setEnabled(False)
-        self.editResSelectFeatures.setEnabled(False)
-        self.selectedResAttributeTable.setEnabled(False)
+        self.editResAddGeom.setEnabled(False)
+        self.editResReplaceGeom.setEnabled(False)
+        self.editResGeomSelectCombo.setEnabled(False)
+        self.editResSelectedResAttributeTable.setEnabled(False)
 
         # Check if selected graph has multiple geometry nodes
         self.createResModelSelectCombo.currentIndexChanged.connect(
@@ -142,14 +142,14 @@ class ArchesProjectDialog(QtWidgets.QDialog, FORM_CLASS):
             )
         )
 
-        self.addEditRes.clicked.connect(
+        self.editResAddGeom.clicked.connect(
             partial(
                 self.resources_object.edit_resource,
                 replace=False,
                 dlg_resource_confirmation=self.dlg_resource_confirmation,
             )
         )
-        self.replaceEditRes.clicked.connect(
+        self.editResReplaceGeom.clicked.connect(
             partial(
                 self.resources_object.edit_resource,
                 replace=True,
