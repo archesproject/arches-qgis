@@ -33,7 +33,7 @@ class PluginStylesheets:
         # remove icons from buttons
         self.dlg.btnConnect.setIcon(QIcon(""))
         self.dlg.btnLogout.setIcon(QIcon(""))
-        self.dlg.addNewRes.setIcon(QIcon(""))
+        self.dlg.createResButton.setIcon(QIcon(""))
         self.dlg.addEditRes.setIcon(QIcon(""))
         self.dlg.replaceEditRes.setIcon(QIcon(""))
         self.dlg_resource_confirmation.confirmDialogCancel.setIcon(QIcon(""))
@@ -83,11 +83,11 @@ class PluginStylesheets:
             self.dlg.btnLogout.setIconSize(QSize(12, 12))
             self.dlg.btnLogout.setCursor(QCursor(Qt.PointingHandCursor))
 
-            self.dlg.addNewRes.setIcon(
+            self.dlg.createResButton.setIcon(
                 QIcon(os.path.join(self.plugin_dir, "icons", "mdi-pencil.svg"))
             )
-            self.dlg.addNewRes.setIconSize(QSize(12, 12))
-            self.dlg.addNewRes.setCursor(QCursor(Qt.PointingHandCursor))
+            self.dlg.createResButton.setIconSize(QSize(12, 12))
+            self.dlg.createResButton.setCursor(QCursor(Qt.PointingHandCursor))
 
             self.dlg.addEditRes.setIcon(
                 QIcon(os.path.join(self.plugin_dir, "icons", "fa-plus.svg"))

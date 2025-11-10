@@ -122,13 +122,13 @@ class ArchesResources:
             dlg_resource_confirmation.messageLabel.setText("Confirmation prompt")
 
         # Get info on current layer and selected graph
-        selectedLayerIndex = dlg.createResFeatureSelect.currentIndex()
+        selectedLayerIndex = dlg.createResGeomSelectCombo.currentIndex()
         selectedLayer = arches_api.layers[selectedLayerIndex]
-        selectedGraphIndex = dlg.createResModelSelect.currentIndex()
+        selectedGraphIndex = dlg.createResModelSelectCombo.currentIndex()
         selectedGraph = arches_api.arches_graphs_list[selectedGraphIndex]
 
         if selectedGraph["multiple_geometry_nodes"] == True:
-            selectedNodeIndex = dlg.geometryNodeSelect.currentIndex()
+            selectedNodeIndex = dlg.createResNodeSelectCombo.currentIndex()
             selectedNode = arches_api.geometry_nodes[selectedNodeIndex]
 
         elif selectedGraph["multiple_geometry_nodes"] == False:

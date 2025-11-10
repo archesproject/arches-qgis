@@ -171,9 +171,9 @@ class ArchesConnection:
         arches_api.arches_token = {}
         arches_api.arches_graphs_list = []
         # Reset Create Resource tab as no longer useable
-        dlg.createResModelSelect.setEnabled(False)
-        dlg.createResFeatureSelect.setEnabled(False)
-        dlg.addNewRes.setEnabled(False)
+        dlg.createResModelSelectCombo.setEnabled(False)
+        dlg.createResGeomSelectCombo.setEnabled(False)
+        dlg.createResButton.setEnabled(False)
         dlg.createResOutputBox.setText("")
         ## Set "Edit Resource" to false to begin with
         dlg.addEditRes.setEnabled(False)
@@ -185,7 +185,7 @@ class ArchesConnection:
             "Connect to your Arches instance to edit resources."
         )
         # Hide multiple nodegroup dropdown
-        dlg.geometryNodeSelect.setEnabled(False)
+        dlg.createResNodeSelectCombo.setEnabled(False)
         # Reload saved credentials for the autocompletes
         load_saved_credentials(dlg)
 
@@ -302,19 +302,19 @@ class ConnectionProcess(QgsTask):
             # self.dlg.displayUrlLabel.setOpenExternalLinks(True) #TODO
 
         def update_create_resources_tab():
-            self.dlg.createResModelSelect.clear()
-            self.dlg.createResFeatureSelect.setEnabled(True)
-            self.dlg.createResFeatureSelect.clear()
-            self.dlg.createResFeatureSelect.addItems(
+            self.dlg.createResModelSelectCombo.clear()
+            self.dlg.createResGeomSelectCombo.setEnabled(True)
+            self.dlg.createResGeomSelectCombo.clear()
+            self.dlg.createResGeomSelectCombo.addItems(
                 [layer.name() for layer in arches_api.layers]
             )
 
             if arches_api.arches_graphs_list:
-                self.dlg.createResModelSelect.setEnabled(True)
-                self.dlg.createResModelSelect.addItems(
+                self.dlg.createResModelSelectCombo.setEnabled(True)
+                self.dlg.createResModelSelectCombo.addItems(
                     [graph["name"] for graph in arches_api.arches_graphs_list]
                 )
-                self.dlg.addNewRes.setEnabled(True)
+                self.dlg.createResButton.setEnabled(True)
 
         def update_edit_resources_tab():
             self.dlg.addEditRes.setEnabled(False)
