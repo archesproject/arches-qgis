@@ -222,7 +222,7 @@ class ArchesResources:
             dlg_resource_confirmation.messageLabel.setText("Confirmation prompt")
 
         if arches_api.arches_selected_resource:
-            selectedLayerIndex = dlg.editResSelectFeatures.currentIndex()
+            selectedLayerIndex = dlg.editResGeomSelectCombo.currentIndex()
             selectedLayer = arches_api.layers[selectedLayerIndex]
 
             geom_convert = Geometries(selectedLayer)

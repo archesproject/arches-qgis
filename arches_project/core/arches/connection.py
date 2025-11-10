@@ -177,12 +177,12 @@ class ArchesConnection:
         dlg.createResOutputBoxLabel.setText("")
         dlg.createResOutputBoxFrame.hide()
         ## Set "Edit Resource" to false to begin with
-        dlg.addEditRes.setEnabled(False)
-        dlg.replaceEditRes.setEnabled(False)
-        dlg.editResSelectFeatures.setEnabled(False)
-        dlg.selectedResAttributeTable.setRowCount(0)
-        dlg.selectedResAttributeTable.setEnabled(False)
-        dlg.selectedResUUID.setText(
+        dlg.editResAddGeom.setEnabled(False)
+        dlg.editResReplaceGeom.setEnabled(False)
+        dlg.editResGeomSelectCombo.setEnabled(False)
+        dlg.editResSelectedResAttributeTable.setRowCount(0)
+        dlg.editResSelectedResAttributeTable.setEnabled(False)
+        dlg.editResSelectedResId.setText(
             "Connect to your Arches instance to edit resources."
         )
         # Hide multiple nodegroup dropdown
@@ -318,18 +318,18 @@ class ConnectionProcess(QgsTask):
                 self.dlg.createResButton.setEnabled(True)
 
         def update_edit_resources_tab():
-            self.dlg.addEditRes.setEnabled(False)
-            self.dlg.replaceEditRes.setEnabled(False)
+            self.dlg.editResAddGeom.setEnabled(False)
+            self.dlg.editResReplaceGeom.setEnabled(False)
             if arches_api.arches_selected_resource["resourceinstanceid"]:
-                self.dlg.addEditRes.setEnabled(True)
-                self.dlg.replaceEditRes.setEnabled(True)
-            self.dlg.editResSelectFeatures.setEnabled(True)
-            self.dlg.editResSelectFeatures.clear()
-            self.dlg.editResSelectFeatures.addItems(
+                self.dlg.editResAddGeom.setEnabled(True)
+                self.dlg.editResReplaceGeom.setEnabled(True)
+            self.dlg.editResGeomSelectCombo.setEnabled(True)
+            self.dlg.editResGeomSelectCombo.clear()
+            self.dlg.editResGeomSelectCombo.addItems(
                 [layer.name() for layer in arches_api.layers]
             )
-            self.dlg.selectedResAttributeTable.setEnabled(True)
-            self.dlg.selectedResUUID.setText(
+            self.dlg.editResSelectedResAttributeTable.setEnabled(True)
+            self.dlg.editResSelectedResId.setText(
                 "Connected to Arches. Select an Arches resource to proceed."
             )
 

@@ -15,16 +15,11 @@ QLabel {
     font-weight: 500;
     color: #666;
 }
-QLabel#loginSuccess {
-    font-size: 15px;
-    font-weight: 550;
-    color: #2f527a;
-}
-QLabel#signInLabel, QLabel#loginSuccessLabel, QLabel#createResTitleText {
+QLabel#signInLabel, QLabel#loginSuccessLabel, QLabel#createResTitleText, QLabel#editResTitleLabel {
     font-size: 34px;
     font-weight: 300;
 }
-QLabel#signInDescriptionLabel, QLabel#displayTextLabel, QLabel#createResDescriptionLabel {
+QLabel#signInDescriptionLabel, QLabel#displayTextLabel, QLabel#createResDescriptionLabel, QLabel#editResDescriptionLabel {
     font-size: 18px;
     font-weight: 300;
 }
@@ -94,15 +89,15 @@ QPushButton#btnConnect:hover {
     background-color: #337ab7;
     border-color: #2e6da4;
 }
-QPushButton#btnLogout, QPushButton#createResButton, QPushButton#addEditRes, QPushButton#replaceEditRes, QPushButton#connectedLogoutBtn, QPushButton#createDialogCreate, QPushButton#editDialogCreate {
+QPushButton#btnLogout, QPushButton#createResButton, QPushButton#editResAddGeom, QPushButton#editResReplaceGeom, QPushButton#connectedLogoutBtn, QPushButton#createDialogCreate, QPushButton#editDialogCreate {
     background-color: #3acaa1;
     border-color: #42cca5;
 }
-QPushButton#btnLogout:disabled, QPushButton#createResButton:disabled, QPushButton#addEditRes:disabled, QPushButton#replaceEditRes:disabled, QPushButton#connectedLogoutBtn:disabled, QPushButton#createDialogCreate:disabled, QPushButton#editDialogCreate:disabled {
+QPushButton#btnLogout:disabled, QPushButton#createResButton:disabled, QPushButton#editResAddGeom:disabled, QPushButton#editResReplaceGeom:disabled, QPushButton#connectedLogoutBtn:disabled, QPushButton#createDialogCreate:disabled, QPushButton#editDialogCreate:disabled {
     background-color: #89c4b4;
     border-color: #8bcbb9;
 }
-QPushButton#btnLogout:hover, QPushButton#createResButton:hover, QPushButton#addEditRes:hover, QPushButton#replaceEditRes:hover, QPushButton#connectedLogoutBtn:hover, QPushButton#createDialogCreate:hover, QPushButton#editDialogCreate:hover {
+QPushButton#btnLogout:hover, QPushButton#createResButton:hover, QPushButton#editResAddGeom:hover, QPushButton#editResReplaceGeom:hover, QPushButton#connectedLogoutBtn:hover, QPushButton#createDialogCreate:hover, QPushButton#editDialogCreate:hover {
     background-color: #22b78c;
     border-color: #1d9d78;
 }

@@ -25,26 +25,26 @@ def map_selection(iface, dlg):
 
         if len(features) > 1:
             print("Select one feature")
-            dlg.selectedResAttributeTable.setRowCount(0)
+            dlg.editResSelectedResAttributeTable.setRowCount(0)
             if arches_api.arches_token:
-                dlg.selectedResUUID.setText(
+                dlg.editResSelectedResId.setText(
                     "Multiple features selected, select one feature to proceed."
                 )
             else:
-                dlg.selectedResUUID.setText(
+                dlg.editResSelectedResId.setText(
                     "Connect to your Arches instance to edit resources."
                 )
             return
 
         elif len(features) == 0:
             print("No feature selected")
-            dlg.selectedResAttributeTable.setRowCount(0)
+            dlg.editResSelectedResAttributeTable.setRowCount(0)
             if arches_api.arches_token:
-                dlg.selectedResUUID.setText("Select a feature to proceed.")
-                dlg.addEditRes.setEnabled(False)
-                dlg.replaceEditRes.setEnabled(False)
+                dlg.editResSelectedResId.setText("Select a feature to proceed.")
+                dlg.editResAddGeom.setEnabled(False)
+                dlg.editResReplaceGeom.setEnabled(False)
             else:
-                dlg.selectedResUUID.setText(
+                dlg.editResSelectedResId.setText(
                     "Connect to your Arches instance to edit resources."
                 )
             return
@@ -58,16 +58,16 @@ def map_selection(iface, dlg):
                     # if initialised when arches_token exists then would have to click off and back on to recognise
                     no_rows = len(f.attributes())
                     no_cols = 2
-                    dlg.selectedResAttributeTable.setRowCount(no_rows)
-                    dlg.selectedResAttributeTable.setColumnCount(no_cols)
+                    dlg.editResSelectedResAttributeTable.setRowCount(no_rows)
+                    dlg.editResSelectedResAttributeTable.setColumnCount(no_cols)
 
                     # Fill table with attributes
                     for i, (k, v) in enumerate(f.attributeMap().items()):
                         feat = QTableWidgetItem(str(k))
                         val = QTableWidgetItem(str(v))
-                        dlg.selectedResAttributeTable.setItem(i, 0, feat)
-                        dlg.selectedResAttributeTable.setItem(i, 1, val)
-                        dlg.selectedResAttributeTable.setRowHeight(i, 5)
+                        dlg.editResSelectedResAttributeTable.setItem(i, 0, feat)
+                        dlg.editResSelectedResAttributeTable.setItem(i, 1, val)
+                        dlg.editResSelectedResAttributeTable.setRowHeight(i, 5)
                         # Store current resource info
                         if k == "resourceinstanceid":
                             arches_api.arches_selected_resource[
@@ -78,33 +78,33 @@ def map_selection(iface, dlg):
                         elif k == "tileid":
                             arches_api.arches_selected_resource["tileid"] = v
 
-                    dlg.selectedResAttributeTable.setHorizontalHeaderLabels(
+                    dlg.editResSelectedResAttributeTable.setHorizontalHeaderLabels(
                         ["Feature", "Values"]
                     )
-                    dlg.selectedResAttributeTable.resizeColumnsToContents()
+                    dlg.editResSelectedResAttributeTable.resizeColumnsToContents()
 
                     # if the token exists then enable the UI elements
                     if arches_api.arches_token:
                         resource_string = "Resource: %s" % (f["resourceinstanceid"])
-                        dlg.selectedResUUID.setText(resource_string)
-                        dlg.addEditRes.setEnabled(True)
-                        dlg.replaceEditRes.setEnabled(True)
+                        dlg.editResSelectedResId.setText(resource_string)
+                        dlg.editResAddGeom.setEnabled(True)
+                        dlg.editResReplaceGeom.setEnabled(True)
 
                         # Save resource instance details once selected
                     else:
-                        dlg.selectedResUUID.setText(
+                        dlg.editResSelectedResId.setText(
                             "Connect to your Arches instance to edit resources."
                         )
-                        dlg.addEditRes.setEnabled(False)
-                        dlg.replaceEditRes.setEnabled(False)
+                        dlg.editResAddGeom.setEnabled(False)
+                        dlg.editResReplaceGeom.setEnabled(False)
 
                 else:
                     if arches_api.arches_token:
-                        dlg.selectedResUUID.setText(
+                        dlg.editResSelectedResId.setText(
                             "The feature selected is not an Arches resource."
                         )
                     else:
-                        dlg.selectedResUUID.setText(
+                        dlg.editResSelectedResId.setText(
                             "Connect to your Arches instance to edit resources."
                         )
 
