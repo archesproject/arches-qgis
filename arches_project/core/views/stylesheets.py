@@ -17,6 +17,7 @@ class PluginStylesheets:
         self.dlg.updateTextFrame.hide()
         self.dlg.loginErrorMessageFrame.hide()
         self.dlg.loadingWheelVerticalSpacerFrame.hide()
+        self.dlg.createResOutputBoxFrame.hide()
 
         if not self.dlg.useStylesheetCheckbox.isChecked():
             self.default_stylesheet()

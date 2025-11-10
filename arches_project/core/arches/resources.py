@@ -87,7 +87,8 @@ class ArchesResources:
                         geometry_format=None,
                         arches_operation="create",
                     )
-                    dlg.createResOutputBox.setText(
+                    dlg.createResOutputBoxFrame.show()
+                    dlg.createResOutputBoxLabel.setText(
                         """Successfully created a new resource with the selected geometry.
                                                         \nTo continue the creation of your new resource, navigate to...\n%s/resource/%s"""
                         % (
@@ -106,7 +107,8 @@ class ArchesResources:
                     )
                     dlg_resource_confirmation.close()
             else:
-                dlg.createResOutputBox.setText(
+                dlg.createResOutputBoxFrame.show()
+                dlg.createResOutputBoxLabel.setText(
                     "This user does not have permission to create data for the geometry nodegroup in this resource model. An Arches resource has not been created."
                 )
                 show_message(

@@ -156,5 +156,3 @@ class ArchesProjectDialog(QtWidgets.QDialog, FORM_CLASS):
                 dlg_resource_confirmation=self.dlg_resource_confirmation,
             )
         )
-
-        print("dialog")
