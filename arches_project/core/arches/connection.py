@@ -4,6 +4,7 @@ from datetime import datetime, timedelta
 from arches_project.core.views.login import LoggedIn
 from arches_project.core.views.components.qgis_messaging import show_message
 from arches_project.core.views.components.spinner import triggerSpinner
+from arches_project.core.views.components.login_autocomplete import load_saved_credentials
 
 from arches_project.core.arches.api import arches_api
 
@@ -184,7 +185,7 @@ class ArchesConnection:
         # Hide multiple nodegroup dropdown
         dlg.geometryNodeSelect.setEnabled(False)
         # Reload saved credentials for the autocompletes
-        dlg.load_saved_credentials()
+        load_saved_credentials(dlg)
 
         if manual_logout:
             show_message(

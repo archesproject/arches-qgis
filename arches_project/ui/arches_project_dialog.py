@@ -27,6 +27,7 @@ from functools import partial
 
 from arches_project.core.arches.connection import ArchesConnection
 from arches_project.core.views.logging import enable_logging
+from arches_project.core.views.components.login_autocomplete import load_saved_credentials
 from arches_project.core.views.components.map import update_map_layers
 from arches_project.core.views.components.psql_layers import show_hide_psql_layers
 from arches_project.core.views.components.multiple_graph_nodes import (
@@ -35,18 +36,13 @@ from arches_project.core.views.components.multiple_graph_nodes import (
 from arches_project.core.views.resources import ResourcesView
 from arches_project.core.views.connection import ArchesConnectionView
 
-from arches_project.widgets.hover_list_view import HoverListView
-from PyQt5.QtCore import Qt
 from qgis.PyQt import uic
 from qgis.PyQt import QtWidgets
-from qgis.PyQt.QtWidgets import QCompleter
-from qgis.PyQt.QtCore import QSettings
 
 # This loads your .ui file so that PyQt can populate your plugin with the elements from Qt Designer
 FORM_CLASS, _ = uic.loadUiType(
     os.path.join(os.path.dirname(__file__), "arches_project_dialog_base.ui")
 )
-
 
 class ArchesProjectDialog(QtWidgets.QDialog, FORM_CLASS):
     def __init__(self, archesproject, parent=None):
@@ -111,7 +107,7 @@ class ArchesProjectDialog(QtWidgets.QDialog, FORM_CLASS):
         self.geometryNodeSelectFrame.hide()
 
         # load saved credentials to auto completer
-        self.load_saved_credentials()
+        load_saved_credentials(self)
 
         # Connection to Arches instance
         self.arches_connection = ArchesConnectionView(
@@ -154,26 +150,3 @@ class ArchesProjectDialog(QtWidgets.QDialog, FORM_CLASS):
                 dlg_resource_confirmation=self.dlg_resource_confirmation,
             )
         )
-
-    def load_saved_credentials(self):
-        """Loads saved urls and usernames to the autocomplete"""
-        saved_urls = QSettings().value("urls", [])
-        saved_usernames = QSettings().value("usernames", [])
-
-        if len(saved_urls) > 0:
-            arches_server_completer = QCompleter(saved_urls, self.archesServerInput)
-            arches_server_completer.setCaseSensitivity(Qt.CaseInsensitive)
-            arches_server_completer.setCompletionMode(QCompleter.PopupCompletion)
-            self.archesServerInput.setCompleter(arches_server_completer)
-
-            arches_server_hover_popup = HoverListView()
-            arches_server_completer.setPopup(arches_server_hover_popup)
-
-        if len(saved_usernames) > 0:
-            username_completer = QCompleter(saved_usernames, self.usernameInput)
-            username_completer.setCaseSensitivity(Qt.CaseInsensitive)
-            username_completer.setCompletionMode(QCompleter.PopupCompletion)
-            self.usernameInput.setCompleter(username_completer)
-
-            username_hover_popup = HoverListView()
-            username_completer.setPopup(username_hover_popup)
