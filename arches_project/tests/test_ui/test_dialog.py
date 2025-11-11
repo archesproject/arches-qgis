@@ -42,7 +42,7 @@ class ArchesProjectDialogTest(ArchesQGISTestCase):
         model = completer.model()
         index = model.index(0, 0)
         value = model.data(index, Qt.DisplayRole)
-        self.assertEqual(value, "http://arches-qgis-arches:8002")
+        self.assertEqual(value, "http://127.0.0.1:8000")
 
     def test_username_first_autocomplete_value(self):
         completer = self.dlg.usernameInput.completer()
