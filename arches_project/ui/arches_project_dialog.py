@@ -41,6 +41,9 @@ from arches_project.core.views.connection import ArchesConnectionView
 from qgis.PyQt import uic
 from qgis.PyQt import QtWidgets
 
+from PyQt5.QtCore import QEvent
+from PyQt5.QtWidgets import QLineEdit, QCompleter
+
 # This loads your .ui file so that PyQt can populate your plugin with the elements from Qt Designer
 FORM_CLASS, _ = uic.loadUiType(
     os.path.join(os.path.dirname(__file__), "arches_project_dialog_base.ui")
@@ -153,3 +156,30 @@ class ArchesProjectDialog(QtWidgets.QDialog, FORM_CLASS):
                 dlg_resource_confirmation=self.dlg_resource_confirmation,
             )
         )
+
+        self.archesServerInput.installEventFilter(self)
+        self.usernameInput.installEventFilter(self)
+
+    def eventFilter(self, source, event):
+        if event.type() == QEvent.FocusIn:
+            if isinstance(source, QLineEdit):
+                self._show_completer_on_focus(source)
+                
+        return super().eventFilter(source, event)
+    
+    def _show_completer_on_focus(self, line_edit):
+        """
+        Manually triggers the QCompleter popup for a QLineEdit.
+        """
+        completer = line_edit.completer()
+        if completer is not None:
+
+            current_text = line_edit.text()
+            
+            # Trick the completer: Temporarily empty the text to show all options
+            line_edit.setText("")
+            completer.complete()
+            
+            # Restore the original text and cursor position
+            line_edit.setText(current_text) 
+            line_edit.setCursorPosition(len(current_text))
