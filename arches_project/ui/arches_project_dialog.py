@@ -164,9 +164,9 @@ class ArchesProjectDialog(QtWidgets.QDialog, FORM_CLASS):
         if event.type() == QEvent.FocusIn:
             if isinstance(source, QLineEdit):
                 self._show_completer_on_focus(source)
-                
+
         return super().eventFilter(source, event)
-    
+
     def _show_completer_on_focus(self, line_edit):
         """
         Manually triggers the QCompleter popup for a QLineEdit.
@@ -175,11 +175,11 @@ class ArchesProjectDialog(QtWidgets.QDialog, FORM_CLASS):
         if completer is not None:
 
             current_text = line_edit.text()
-            
+
             # Trick the completer: Temporarily empty the text to show all options
             line_edit.setText("")
             completer.complete()
-            
+
             # Restore the original text and cursor position
-            line_edit.setText(current_text) 
+            line_edit.setText(current_text)
             line_edit.setCursorPosition(len(current_text))
