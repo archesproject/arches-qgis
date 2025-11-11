@@ -195,7 +195,26 @@ class ArchesConnection:
                 "information",
                 "Logged out of Arches instance. Please reconnect to use the plugin.",
             )
+    def store_auto_complete_credentials(self):
 
+        saved_urls = QSettings().value("urls", [])
+        saved_usernames = QSettings().value("usernames", [])
+
+        if self.url not in saved_urls:
+            saved_urls.append(self.url)
+
+            if len(saved_urls) > 5:
+                del saved_urls[0]
+
+            QSettings().setValue("urls", saved_urls)
+
+        if self.username not in saved_usernames:
+            saved_usernames.append(self.username)
+
+            if len(saved_usernames) > 5:
+                del saved_usernames[0]
+
+            QSettings().setValue("usernames", saved_usernames)
 
 class ConnectionProcess(QgsTask):
     """Connecting to Arches via QGIS task and updating the UI"""
@@ -214,12 +233,12 @@ class ConnectionProcess(QgsTask):
         self.plugin_dir = plugin_dir
 
     def run(self):
-        arches_connection = ArchesConnection(
+        self.arches_connection = ArchesConnection(
             url=self.url, username=self.username, password=self.password
         )
 
         self.login_updates.emit("Fetching client id ...")
-        arches_api.client_id = arches_connection.get_client_id()
+        arches_api.client_id = self.arches_connection.get_client_id()
         self.percent_progress.emit(True, 0, 0)
         if not arches_api.client_id:
             return False
@@ -227,7 +246,7 @@ class ConnectionProcess(QgsTask):
         # get/update user info on the logged in user
         arches_api.arches_user_info = {}
         self.login_updates.emit("Fetching user permissions ...")
-        arches_api.arches_user_info = arches_connection.get_user_permissions(
+        arches_api.arches_user_info = self.arches_connection.get_user_permissions(
             arches_api.arches_user_info
         )
         self.percent_progress.emit(True, 0, 0)
@@ -239,13 +258,13 @@ class ConnectionProcess(QgsTask):
             # if user does not have permissions return early and deal with in finished()
             return True
 
-        arches_api.arches_graphs_list = arches_connection.get_graphs(
+        arches_api.arches_graphs_list = self.arches_connection.get_graphs(
             arches_api.arches_graphs_list,
             self.login_updates,
             self.percent_progress,
         )
 
-        arches_api.arches_token = arches_connection.get_token(
+        arches_api.arches_token = self.arches_connection.get_token(
             arches_api.client_id, arches_api.arches_token
         )
 
@@ -263,26 +282,6 @@ class ConnectionProcess(QgsTask):
         return True
 
     def finished(self, result):
-        def store_auto_complete_credentials():
-
-            saved_urls = QSettings().value("urls", [])
-            saved_usernames = QSettings().value("usernames", [])
-
-            if self.url not in saved_urls:
-                saved_urls.append(self.url)
-
-                if len(saved_urls) > 5:
-                    del saved_urls[0]
-
-                QSettings().setValue("urls", saved_urls)
-
-            if self.username not in saved_usernames:
-                saved_usernames.append(self.username)
-
-                if len(saved_usernames) > 5:
-                    del saved_usernames[0]
-
-                QSettings().setValue("usernames", saved_usernames)
 
         def update_login_tab():
             # Replace login tab with logged in tab
@@ -346,7 +345,7 @@ class ConnectionProcess(QgsTask):
                     if str(l.dataProvider().name()) != "postgres"
                 ]
 
-                store_auto_complete_credentials()
+                self.arches_connection.store_auto_complete_credentials()
                 update_login_tab()
                 update_edit_resources_tab()
                 update_create_resources_tab()
