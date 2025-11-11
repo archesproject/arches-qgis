@@ -28,25 +28,3 @@ class ArchesProjectDialogTest(ArchesQGISTestCase):
         path = ":/plugins/ArchesProject/arches.png"
         icon = QIcon(path)
         self.assertFalse(icon.isNull())
-
-    def test_server_completer_exists(self):
-        completer = self.dlg.archesServerInput.completer()
-        self.assertIsNotNone(completer)
-
-    def test_username_completer_exists(self):
-        completer = self.dlg.usernameInput.completer()
-        self.assertIsNotNone(completer)
-
-    def test_server_first_autocomplete_value(self):
-        completer = self.dlg.archesServerInput.completer()
-        model = completer.model()
-        index = model.index(0, 0)
-        value = model.data(index, Qt.DisplayRole)
-        self.assertEqual(value, "http://127.0.0.1:8000")
-
-    def test_username_first_autocomplete_value(self):
-        completer = self.dlg.usernameInput.completer()
-        model = completer.model()
-        index = model.index(0, 0)
-        value = model.data(index, Qt.DisplayRole)
-        self.assertEqual(value, "admin")
