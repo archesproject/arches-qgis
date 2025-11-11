@@ -282,7 +282,7 @@ class ConnectionProcess(QgsTask):
                 if len(saved_usernames) > 5:
                     del saved_usernames[0]
 
-            QSettings().setValue("usernames", saved_usernames)
+                QSettings().setValue("usernames", saved_usernames)
 
         def update_login_tab():
             # Replace login tab with logged in tab
