@@ -50,6 +50,3 @@ class ArchesProjectDialogTest(ArchesQGISTestCase):
         index = model.index(0, 0)
         value = model.data(index, Qt.DisplayRole)
         self.assertEqual(value, "admin")
-        
-
-
