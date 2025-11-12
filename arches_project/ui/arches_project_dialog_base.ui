@@ -303,7 +303,7 @@
                   </widget>
                  </item>
                  <item>
-                  <widget class="QLineEdit" name="archesServerInput">
+                  <widget class="AutoCompleteLineEdit" name="archesServerInput">
                    <property name="placeholderText">
                     <string>e.g. http://arches-server.com[/language]</string>
                    </property>
@@ -332,7 +332,7 @@
                   </widget>
                  </item>
                  <item>
-                  <widget class="QLineEdit" name="usernameInput">
+                  <widget class="AutoCompleteLineEdit" name="usernameInput">
                    <property name="placeholderText">
                     <string>e.g. admin</string>
                    </property>
@@ -1263,6 +1263,13 @@
    </item>
   </layout>
  </widget>
+  <customwidgets>
+    <customwidget>
+      <class>AutoCompleteLineEdit</class>
+      <extends>QLineEdit</extends>
+      <header>arches_project.ui.widgets.auto_complete_line_edit</header>
+    </customwidget>
+  </customwidgets>
  <resources/>
  <connections/>
 </ui>
