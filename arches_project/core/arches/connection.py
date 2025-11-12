@@ -195,6 +195,7 @@ class ArchesConnection:
                 "information",
                 "Logged out of Arches instance. Please reconnect to use the plugin.",
             )
+
     def store_auto_complete_credentials(self):
 
         saved_urls = QSettings().value("urls", [])
@@ -215,6 +216,7 @@ class ArchesConnection:
                 del saved_usernames[0]
 
             QSettings().setValue("usernames", saved_usernames)
+
 
 class ConnectionProcess(QgsTask):
     """Connecting to Arches via QGIS task and updating the UI"""
