@@ -65,6 +65,13 @@ class TestInit(unittest.TestCase):
 
             self.assertIn(expectation, dict(metadata), message)
 
+    def test_license_file(self):
+        """Test that the QGIS plugin package includes a LICENSE file."""
+        file_path = os.path.abspath(
+            os.path.join(os.path.dirname(__file__), os.pardir, os.pardir, "LICENSE")
+        )
+        self.assertTrue(os.path.exists(file_path))
+
 
 if __name__ == "__main__":
     unittest.main()
