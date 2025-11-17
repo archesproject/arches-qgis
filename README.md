@@ -31,12 +31,12 @@ Note that the entire arches-qgis git repository is not the QGIS plugin, only the
 1. Find your local path for the QGIS installation:
     If on Windows, this should look similar to `C:\Users\USERNAME\AppData\Roaming\QGIS\QGIS3\profiles\default\python\plugins\`   
     If on MacOS, this should look similar to `/Users/USERNAME/Library/Application Support/QGIS/QGIS3/profiles/default/python/plugins/`
-2. Clone the arches-qgis repository in your working directory.
+2. Clone the arches-qgis repository wherever you want to locate your working directory for developing the QGIS plugin.
     ```
     git clone https://github.com/archesproject/arches-qgis.git
     ```
     
-3. Create a symbolic link from `arches-qgis/arches_project` to the QGIS plugins path.   
+3. Create a symbolic link from the QGIS plugins path to the newly cloned `arches-qgis/arches_project`.   
 
     On ubuntu this can be done with the following:
     ```
@@ -51,7 +51,6 @@ Note that the entire arches-qgis git repository is not the QGIS plugin, only the
 
 ## Information for developers
 If you wish to develop with the QGIS Arches plugin, below are some helpful tips that will help and make life easier.
-- Installation via GitHub is the easiest method to develop.  This can be done by git cloning in the plugins path (shown above) and (optionally) creating a symbolic link to somewhere much easier to find e.g. your home directory.
 - The QGIS plugin "Plugin Reloader" is incredibly useful for reloading plugins to reflect code changes.  This can be found on the QGIS plugins repository, and configured to reload specific plugins with Ctrl+F5.
 
 ### Developing the user interface
