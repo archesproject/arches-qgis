@@ -14,6 +14,7 @@ from dotenv import load_dotenv
 
 load_dotenv("test/arches/.env")
 
+
 class ArchesQGISTestCase(unittest.TestCase):
     """
     Extended unittest TestCase including plugin setup and configuration.
