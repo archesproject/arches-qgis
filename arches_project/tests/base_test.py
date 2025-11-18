@@ -20,42 +20,50 @@ class ArchesQGISTestCase(unittest.TestCase):
     Extended unittest TestCase including plugin setup and configuration.
     """
 
-    def setUp(self):
+    @classmethod
+    def setUpClass(cls):
         """
-        Runs before each test.
+        Runs once at start of all testing.
         """
-
         QSettings().setValue("locale/userLocale", "en")
+        QSettings().setValue("urls", ["http://127.0.0.1:8000"])
+        QSettings().setValue("usernames", ["admin"])
 
-        self.arches_project = ArchesProject(IFACE)
+        cls.iface = IFACE
+        cls.arches_project = ArchesProject(cls.iface)
+        cls.plugin_dir = "/tests_directory/arches_project"
 
         # Call the dialogs from within the plugin rather than establishing new ones.
-        self.dlg = self.arches_project.dlg
-        self.dlg_resource_confirmation = self.arches_project.dlg_resource_confirmation
+        cls.dlg = cls.arches_project.dlg
+        cls.dlg_resource_confirmation = cls.arches_project.dlg_resource_confirmation
 
         PluginStylesheets(
-            self.dlg,
-            self.dlg_resource_confirmation,
-            self.arches_project.plugin_dir,
+            cls.dlg,
+            cls.dlg_resource_confirmation,
+            cls.arches_project.plugin_dir,
             True,
         )
 
-        self.arches_url = (
+        cls.arches_url = (
             f"http://{os.environ.get('ARCHES_HOST')}:{os.environ.get('DJANGO_PORT')}"
         )
 
-        self.arches_project.first_start = True
-        self.arches_project.initGui()
+        cls.arches_project.first_start = True
+        cls.arches_project.initGui()
+        cls.arches_project.run()
 
-    def tearDown(self):
+    @classmethod
+    def tearDownClass(cls):
         """
-        Runs after each test.
+        Runs once after end of all testing.
         """
         QSettings().setValue("locale/userLocale", None)
+        QSettings().setValue("urls", [])
+        QSettings().setValue("usernames", [])
 
-        self.arches_project.unload()
-        self.arches_project = None
+        cls.arches_project.unload()
+        cls.arches_project = None
 
-        self.dlg = None
-        self.dlg_resource_confirmation = None
-        self.arches_url = None
+        cls.dlg = None
+        cls.dlg_resource_confirmation = None
+        cls.arches_url = None
