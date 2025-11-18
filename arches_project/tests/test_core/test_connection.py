@@ -38,7 +38,7 @@ class ConnectionTests(ArchesQGISTestCase):
         response = requests.post(self.arches_url + "/o/token/", data=files)
         self.assertEqual(response.status_code, 200)
 
-    @patch('qgis.core.QgsApplication.taskManager')
+    @patch("qgis.core.QgsApplication.taskManager")
     def test_connection_task_is_added_on_save(self, mock_task_manager):
         mock_add_task = MagicMock()
         mock_task_manager.return_value.addTask = mock_add_task
@@ -57,4 +57,3 @@ class ConnectionTests(ArchesQGISTestCase):
         self.assertEqual(added_task.username, "admin")
         self.assertEqual(added_task.password, "admin")
         self.assertEqual(added_task.dlg, self.dlg)
-

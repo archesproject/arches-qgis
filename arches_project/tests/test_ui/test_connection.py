@@ -10,6 +10,7 @@ from arches_project.tests.utils.utilities import get_qgis_app
 
 CANVAS, PARENT, IFACE, QGIS_APP = get_qgis_app()
 
+
 class ConnectionTests(ArchesQGISTestCase):
     """
     Test connection to Arches UI.
@@ -67,26 +68,41 @@ class ConnectionTests(ArchesQGISTestCase):
 
     def test_changes_to_ui_after_connection(self):
         self.arches_connection = ConnectionProcess(
-                url=self.arches_url,
-                username="admin",
-                password="admin",
-                dlg=self.dlg,
-                iface=IFACE,
-                plugin_dir=self.arches_project.plugin_dir,
-            )
-        
+            url=self.arches_url,
+            username="admin",
+            password="admin",
+            dlg=self.dlg,
+            iface=IFACE,
+            plugin_dir=self.arches_project.plugin_dir,
+        )
+
         result = self.arches_connection.run()
         self.arches_connection.finished(result)
 
-        self.assertTrue(result, "ConnectionProcess.run() should return True when given valid credentials")
+        self.assertTrue(
+            result,
+            "ConnectionProcess.run() should return True when given valid credentials",
+        )
 
-        self.assertEqual(self.dlg.tabWidget.currentIndex(), 1, "Logged-in tab should be current tab")
-        self.assertTrue(self.dlg.tabWidget.isTabVisible(1), "Logged-in tab should be visible")
-        self.assertFalse(self.dlg.tabWidget.isTabVisible(0), "Log-in tab should not be visible")
-            
+        self.assertEqual(
+            self.dlg.tabWidget.currentIndex(), 1, "Logged-in tab should be current tab"
+        )
+        self.assertTrue(
+            self.dlg.tabWidget.isTabVisible(1), "Logged-in tab should be visible"
+        )
+        self.assertFalse(
+            self.dlg.tabWidget.isTabVisible(0), "Log-in tab should not be visible"
+        )
+
         # Logged-in tab display changes (when user has no fullname stored)
-        self.assertEqual(self.dlg.displayFullNameLabel.text(), "admin", "Full name label is username")
-        self.assertFalse(self.dlg.displayUsernameLabel.isVisible(), "Username label should be hidden")
-        self.assertFalse(self.dlg.displayUsernameFrame.isVisible(), "Username frame should be hidden")
+        self.assertEqual(
+            self.dlg.displayFullNameLabel.text(), "admin", "Full name label is username"
+        )
+        self.assertFalse(
+            self.dlg.displayUsernameLabel.isVisible(), "Username label should be hidden"
+        )
+        self.assertFalse(
+            self.dlg.displayUsernameFrame.isVisible(), "Username frame should be hidden"
+        )
 
         # TODO: add tests for Create and Edit resource tab UIs once test layers are available in test Arches and QGIS instances
