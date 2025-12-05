@@ -26,6 +26,9 @@
   <layout class="QVBoxLayout" name="verticalLayout_15">
    <item>
     <widget class="QFrame" name="loadingWheelVerticalSpacerFrame">
+     <property name="styleSheet">
+      <string/>
+     </property>
      <property name="frameShape">
       <enum>QFrame::NoFrame</enum>
      </property>
@@ -41,6 +44,9 @@
       </property>
       <item>
        <spacer name="loadingWheelVerticalSpacer">
+        <property name="styleSheet">
+         <string/>
+        </property>
         <property name="orientation">
          <enum>Qt::Vertical</enum>
         </property>
@@ -57,6 +63,9 @@
    </item>
    <item>
     <widget class="QFrame" name="loadingWheelFrame">
+     <property name="styleSheet">
+      <string/>
+     </property>
      <property name="frameShape">
       <enum>QFrame::NoFrame</enum>
      </property>
@@ -75,6 +84,9 @@
         <property name="enabled">
          <bool>true</bool>
         </property>
+        <property name="styleSheet">
+         <string/>
+        </property>
         <property name="text">
          <string>loadingWheel</string>
         </property>
@@ -88,6 +100,9 @@
    </item>
    <item>
     <widget class="QFrame" name="updateTextFrame">
+     <property name="styleSheet">
+      <string/>
+     </property>
      <property name="frameShape">
       <enum>QFrame::NoFrame</enum>
      </property>
@@ -103,6 +118,9 @@
       </property>
       <item>
        <spacer name="updateTextSpacer2">
+        <property name="styleSheet">
+         <string/>
+        </property>
         <property name="orientation">
          <enum>Qt::Vertical</enum>
         </property>
@@ -116,6 +134,9 @@
       </item>
       <item>
        <widget class="QLabel" name="updateText">
+        <property name="styleSheet">
+         <string/>
+        </property>
         <property name="text">
          <string>updateText</string>
         </property>
@@ -126,6 +147,9 @@
       </item>
       <item>
        <widget class="QLabel" name="percentProgressText">
+        <property name="styleSheet">
+         <string/>
+        </property>
         <property name="text">
          <string>percentText</string>
         </property>
@@ -136,6 +160,9 @@
       </item>
       <item>
        <spacer name="updateTextSpacer1">
+        <property name="styleSheet">
+         <string/>
+        </property>
         <property name="orientation">
          <enum>Qt::Vertical</enum>
         </property>
@@ -159,6 +186,9 @@
       <font>
        <bold>false</bold>
       </font>
+     </property>
+     <property name="styleSheet">
+      <string/>
      </property>
      <property name="currentIndex">
       <number>0</number>
@@ -184,6 +214,9 @@
          <property name="enabled">
           <bool>true</bool>
          </property>
+         <property name="styleSheet">
+          <string/>
+         </property>
          <property name="frameShape">
           <enum>QFrame::NoFrame</enum>
          </property>
@@ -195,8 +228,8 @@
            <rect>
             <x>0</x>
             <y>0</y>
-            <width>506</width>
-            <height>435</height>
+            <width>490</width>
+            <height>398</height>
            </rect>
           </property>
           <layout class="QVBoxLayout" name="verticalLayout_3">
@@ -207,6 +240,9 @@
                <horstretch>0</horstretch>
                <verstretch>0</verstretch>
               </sizepolicy>
+             </property>
+             <property name="styleSheet">
+              <string/>
              </property>
              <property name="frameShape">
               <enum>QFrame::StyledPanel</enum>
@@ -223,6 +259,9 @@
               </property>
               <item>
                <widget class="QFrame" name="signInFrame">
+                <property name="styleSheet">
+                 <string/>
+                </property>
                 <property name="frameShape">
                  <enum>QFrame::NoFrame</enum>
                 </property>
@@ -238,11 +277,21 @@
                      <bold>false</bold>
                     </font>
                    </property>
+                   <property name="styleSheet">
+                    <string/>
+                   </property>
                    <property name="text">
-                    <string>Sign in</string>
+                    <string>Sign ins</string>
                    </property>
                    <property name="alignment">
                     <set>Qt::AlignCenter</set>
+                   </property>
+                  </widget>
+                 </item>
+                 <item>
+                  <widget class="QComboBox" name="auth_config_combobox">
+                   <property name="styleSheet">
+                    <string notr="true"/>
                    </property>
                   </widget>
                  </item>
@@ -250,7 +299,17 @@
                </widget>
               </item>
               <item>
+               <widget class="QWidget" name="auth_config_placeholder" native="true">
+                <property name="styleSheet">
+                 <string/>
+                </property>
+               </widget>
+              </item>
+              <item>
                <widget class="QFrame" name="signInDescriptionFrame">
+                <property name="styleSheet">
+                 <string/>
+                </property>
                 <property name="frameShape">
                  <enum>QFrame::NoFrame</enum>
                 </property>
@@ -261,30 +320,14 @@
                  <property name="topMargin">
                   <number>0</number>
                  </property>
-                 <item>
-                  <widget class="QLabel" name="signInDescriptionLabel">
-                   <property name="font">
-                    <font>
-                     <pointsize>9</pointsize>
-                     <bold>false</bold>
-                    </font>
-                   </property>
-                   <property name="text">
-                    <string>Sign in to the Arches QGIS plugin using your Arches user information. </string>
-                   </property>
-                   <property name="alignment">
-                    <set>Qt::AlignCenter</set>
-                   </property>
-                   <property name="wordWrap">
-                    <bool>true</bool>
-                   </property>
-                  </widget>
-                 </item>
                 </layout>
                </widget>
               </item>
               <item>
                <widget class="QFrame" name="archesServerFrame">
+                <property name="styleSheet">
+                 <string/>
+                </property>
                 <property name="frameShape">
                  <enum>QFrame::NoFrame</enum>
                 </property>
@@ -295,25 +338,14 @@
                  <property name="topMargin">
                   <number>0</number>
                  </property>
-                 <item>
-                  <widget class="QLabel" name="archesServerLabel">
-                   <property name="text">
-                    <string>Arches Server</string>
-                   </property>
-                  </widget>
-                 </item>
-                 <item>
-                  <widget class="QLineEdit" name="archesServerInput">
-                   <property name="placeholderText">
-                    <string>e.g. http://arches-server.com[/language]</string>
-                   </property>
-                  </widget>
-                 </item>
                 </layout>
                </widget>
               </item>
               <item>
                <widget class="QFrame" name="usernameFrame">
+                <property name="styleSheet">
+                 <string/>
+                </property>
                 <property name="frameShape">
                  <enum>QFrame::NoFrame</enum>
                 </property>
@@ -324,25 +356,14 @@
                  <property name="topMargin">
                   <number>0</number>
                  </property>
-                 <item>
-                  <widget class="QLabel" name="usernameLabel">
-                   <property name="text">
-                    <string>Username</string>
-                   </property>
-                  </widget>
-                 </item>
-                 <item>
-                  <widget class="QLineEdit" name="usernameInput">
-                   <property name="placeholderText">
-                    <string>e.g. admin</string>
-                   </property>
-                  </widget>
-                 </item>
                 </layout>
                </widget>
               </item>
               <item>
                <widget class="QFrame" name="passwordInputFrame">
+                <property name="styleSheet">
+                 <string/>
+                </property>
                 <property name="frameShape">
                  <enum>QFrame::NoFrame</enum>
                 </property>
@@ -353,31 +374,14 @@
                  <property name="topMargin">
                   <number>0</number>
                  </property>
-                 <item>
-                  <widget class="QLabel" name="passwordLabel">
-                   <property name="text">
-                    <string>Password</string>
-                   </property>
-                  </widget>
-                 </item>
-                 <item>
-                  <widget class="QLineEdit" name="passwordInput">
-                   <property name="text">
-                    <string/>
-                   </property>
-                   <property name="echoMode">
-                    <enum>QLineEdit::Password</enum>
-                   </property>
-                   <property name="clearButtonEnabled">
-                    <bool>false</bool>
-                   </property>
-                  </widget>
-                 </item>
                 </layout>
                </widget>
               </item>
               <item>
                <widget class="QFrame" name="loginErrorMessageFrame">
+                <property name="styleSheet">
+                 <string/>
+                </property>
                 <property name="frameShape">
                  <enum>QFrame::NoFrame</enum>
                 </property>
@@ -396,6 +400,9 @@
                    <property name="enabled">
                     <bool>true</bool>
                    </property>
+                   <property name="styleSheet">
+                    <string/>
+                   </property>
                    <property name="text">
                     <string/>
                    </property>
@@ -409,6 +416,9 @@
               </item>
               <item>
                <widget class="QFrame" name="btnConnectFrame">
+                <property name="styleSheet">
+                 <string/>
+                </property>
                 <property name="frameShape">
                  <enum>QFrame::NoFrame</enum>
                 </property>
@@ -418,6 +428,9 @@
                 <layout class="QVBoxLayout" name="verticalLayout_40">
                  <item>
                   <spacer name="btnConnectSpacer">
+                   <property name="styleSheet">
+                    <string/>
+                   </property>
                    <property name="orientation">
                     <enum>Qt::Horizontal</enum>
                    </property>
@@ -431,6 +444,9 @@
                  </item>
                  <item>
                   <widget class="QPushButton" name="btnConnect">
+                   <property name="styleSheet">
+                    <string/>
+                   </property>
                    <property name="text">
                     <string>Connect</string>
                    </property>
@@ -444,6 +460,9 @@
            </item>
            <item>
             <spacer name="verticalSpacer_7">
+             <property name="styleSheet">
+              <string/>
+             </property>
              <property name="orientation">
               <enum>Qt::Vertical</enum>
              </property>
@@ -479,8 +498,8 @@
            <rect>
             <x>0</x>
             <y>0</y>
-            <width>520</width>
-            <height>386</height>
+            <width>490</width>
+            <height>454</height>
            </rect>
           </property>
           <layout class="QVBoxLayout" name="verticalLayout_28">
@@ -719,8 +738,8 @@
            <rect>
             <x>0</x>
             <y>0</y>
-            <width>504</width>
-            <height>495</height>
+            <width>488</width>
+            <height>612</height>
            </rect>
           </property>
           <layout class="QVBoxLayout" name="verticalLayout_11">
@@ -941,8 +960,8 @@
            <rect>
             <x>0</x>
             <y>0</y>
-            <width>518</width>
-            <height>384</height>
+            <width>488</width>
+            <height>421</height>
            </rect>
           </property>
           <layout class="QVBoxLayout" name="verticalLayout_13">
@@ -1112,7 +1131,7 @@
            <rect>
             <x>0</x>
             <y>0</y>
-            <width>518</width>
+            <width>488</width>
             <height>384</height>
            </rect>
           </property>
@@ -1232,7 +1251,7 @@
            <rect>
             <x>0</x>
             <y>0</y>
-            <width>518</width>
+            <width>488</width>
             <height>384</height>
            </rect>
           </property>
