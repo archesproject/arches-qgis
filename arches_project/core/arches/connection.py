@@ -1,7 +1,5 @@
 from functools import partial
 import json
-import requests
-from datetime import datetime, timedelta
 
 from PyQt5.QtCore import pyqtSlot, QObject, pyqtSignal
 from arches_project.core.views.components.qgis_messaging import show_message
@@ -20,11 +18,10 @@ from arches_project.core.utils.network import ArchesRequester
 
 from qgis.core import (
     Qgis,
-    QgsProject,
-    QgsVectorLayer,
-    QgsTask,
+    QgsApplication,
     QgsMessageLog,
 )
+
 
 class ArchesConnection(QObject):
     """Class for Arches APIs"""
@@ -90,8 +87,6 @@ class ArchesConnection(QObject):
         requester.make_authenticated_request(
             "/auth/user_profile", self.config_id, method="POST"
         )
-
-
 
     def _process_get_graphs(
         self, arches_graphs_list, login_updates, percent_progress, response_data
@@ -194,7 +189,6 @@ class ArchesConnection(QObject):
         requester.make_authenticated_request(f"/graphs/", self.config_id)
 
 
-
 class ConnectionProcess(QObject):
     """Connecting to Arches via QGIS task and updating the UI"""
 
@@ -208,31 +202,6 @@ class ConnectionProcess(QObject):
         self.dlg = dlg
         self.iface = iface
         self.plugin_dir = plugin_dir
-
-    def _after_permissions_returned(self, payload):
-        QgsMessageLog.logMessage(
-            f"Processing permissions...",
-            "Arches Plugin",
-            level=Qgis.Info,
-        )
-
-        # re-fetch graphs before checking cache as updates may have occurred
-        arches_api.arches_graphs_list = []
-        arches_api.config_id = self.config_id
-
-        if 2 not in arches_api.arches_user_info["groups"]:
-            # if user does not have permissions return early and deal with in finished()
-            return True
-
-        self.arches_connection.finished_graphs.connect(self.finished)
-
-        self.arches_connection.get_graphs(
-            arches_api.arches_graphs_list,
-            self.login_updates,
-            self.percent_progress,
-        )
-
-        self.percent_progress.emit(True, 0, 0)
 
     def _after_permissions_returned(self, payload):
         QgsMessageLog.logMessage(
@@ -278,12 +247,22 @@ class ConnectionProcess(QObject):
         )
 
         self.arches_connection.get_user_permissions(arches_api.arches_user_info)
+        QgsMessageLog.logMessage(
+            f"Fetching permissions completed...",
+            "Arches Plugin",
+            level=Qgis.Info,
+        )
 
         self.arches_connection.retrieved_permissions.connect(
             self._after_permissions_returned
         )
 
     def finished(self, result):
+        QgsMessageLog.logMessage(
+            f"In finished() {result}...",
+            "Arches Plugin",
+            level=Qgis.Info,
+        )
 
         triggerSpinner(dlg=self.dlg, plugin_dir=self.plugin_dir).hide_spinner()
 
@@ -292,8 +271,6 @@ class ConnectionProcess(QObject):
                 # THIS IS THE RESOURCE EDITOR PERMISSION
                 # This must be in result, in order to display that login failed due to permissions rather than other
 
-                self.arches_connection.store_auto_complete_credentials()
-                update_login_tab(dlg=self.dlg, username=self.username, url=self.url)
                 update_edit_resources_tab(dlg=self.dlg)
                 update_create_resources_tab(dlg=self.dlg)
             else:

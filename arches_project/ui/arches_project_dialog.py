@@ -28,10 +28,6 @@ from functools import partial
 from qgis.core import QgsApplication, QgsMessageLog, Qgis
 from qgis.PyQt import uic, QtWidgets
 from PyQt5 import QtGui
-from arches_project.core.arches.connection import ArchesConnection
-from arches_project.core.views.logging import enable_logging
-from arches_project.core.views.components.map import update_map_layers
-from arches_project.core.views.components.psql_layers import show_hide_psql_layers
 from arches_project.core.views.components.multiple_graph_nodes import (
     multiple_geometry_node_check,
 )
@@ -43,6 +39,7 @@ from arches_project.core.views.stylesheets.stylesheets import Stylesheets
 
 from PyQt5.QtCore import QEvent
 from PyQt5.QtWidgets import QLineEdit, QCompleter, QGraphicsOpacityEffect
+
 # This loads your .ui file so that PyQt can populate your plugin with the elements from Qt Designer
 FORM_CLASS, _ = uic.loadUiType(
     os.path.join(os.path.dirname(__file__), "arches_project_dialog_base.ui")
@@ -118,9 +115,6 @@ class ArchesProjectDialog(QtWidgets.QDialog, FORM_CLASS):
         )
         # Hide multiple geometry node selection by default
         self.createResNodeSelectFrame.hide()
-
-        # load saved credentials to auto completer
-        load_saved_credentials(self)
 
         # Connection to Arches instance
         self.arches_connection = ArchesConnectionView(

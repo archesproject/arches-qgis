@@ -4,7 +4,13 @@ from urllib.parse import urlencode
 from qgis.core import QgsApplication, QgsNetworkAccessManager, QgsMessageLog, Qgis
 from qgis.PyQt.QtNetwork import QNetworkReply
 
-from PyQt5.QtCore import QUrl, pyqtSignal, QObject, QByteArray
+from PyQt5.QtCore import (
+    QUrl,
+    pyqtSignal,
+    QObject,
+    QByteArray,
+    QTimer,
+)
 from PyQt5.QtNetwork import QNetworkRequest
 
 
@@ -12,7 +18,7 @@ class ArchesRequester(QObject):
     complete_signal = pyqtSignal(str)
 
     def make_authenticated_request(
-        self, target_url, config_id, method="GET", payload={}
+        self, target_url, config_id, method="GET", payload={}, retry_count=0
     ):
         auth_manager = QgsApplication.authManager()
 
@@ -39,8 +45,20 @@ class ArchesRequester(QObject):
             )
             self.network_reply = network_manager.post(request, body)
 
-        handler = partial(self.handle_network_reply, self.network_reply, config_id)
-        self.network_reply.finished.connect(handler)
+        # This works but is brittle. It addresses a race condition that wasn't present in the original
+        # OAuth branch
+        QTimer.singleShot(
+            100, lambda: self._connect_reply_handler(self.network_reply, config_id)
+        )
+
+    def _connect_reply_handler(self, reply, config_id):
+        QgsMessageLog.logMessage(
+            "Connecting reply handler after delay",
+            "Arches Plugin",
+            level=Qgis.Info,
+        )
+        handler = partial(self.handle_network_reply, reply, config_id)
+        reply.finished.connect(handler)
 
     def handle_network_reply(self, reply, config_id):
 
