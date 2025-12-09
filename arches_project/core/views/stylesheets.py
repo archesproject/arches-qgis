@@ -35,8 +35,8 @@ class PluginStylesheets:
         self.dlg.btnConnect.setIcon(QIcon(""))
         self.dlg.btnLogout.setIcon(QIcon(""))
         self.dlg.createResButton.setIcon(QIcon(""))
-        self.dlg.addEditRes.setIcon(QIcon(""))
-        self.dlg.replaceEditRes.setIcon(QIcon(""))
+        self.dlg.editResAddGeom.setIcon(QIcon(""))
+        self.dlg.editResReplaceGeom.setIcon(QIcon(""))
         self.dlg_resource_confirmation.confirmDialogCancel.setIcon(QIcon(""))
         self.dlg_resource_confirmation.confirmDialogConfirm.setIcon(QIcon(""))
         # nav bar
