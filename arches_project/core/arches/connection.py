@@ -180,6 +180,8 @@ class ArchesConnection:
         dlg.editResAddGeom.setEnabled(False)
         dlg.editResReplaceGeom.setEnabled(False)
         dlg.editResGeomSelectCombo.setEnabled(False)
+        dlg.editResOutputBoxLabel.setText("")
+        dlg.editResOutputBoxFrame.hide()
         dlg.editResSelectedResAttributeTable.setRowCount(0)
         dlg.editResSelectedResAttributeTable.setEnabled(False)
         dlg.editResSelectedResId.setText(
