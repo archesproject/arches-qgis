@@ -1,3 +1,5 @@
+from qgis.core import QgsApplication
+
 from arches_project.core.arches.api import arches_api
 
 
@@ -6,10 +8,9 @@ class LoggedIn:
     Class for logged in/user profile view
     """
 
-    def __init__(self, dlg, username, url, arches_user_info):
+    def __init__(self, dlg):
         self.dlg = dlg
-        self.username = username
-        self.url = url
+        self.username = arches_api.arches_user_info["username"]
 
     def update_logged_in_view(self):
         full_name = ""
@@ -25,13 +26,19 @@ class LoggedIn:
             self.dlg.displayFullNameLabel.setText(full_name)
             self.dlg.displayUsernameLabel.setText(self.username)
 
-        self.dlg.displayConnectionInfoLabel.setText(f"You are connected to {self.url}.")
+        auth_manager = QgsApplication.authManager()
+
+        available_configs = auth_manager.availableAuthMethodConfigs()
+
+        self.dlg.displayConnectionInfoLabel.setText(
+            f"You are connected to {available_configs[arches_api.config_id].uri()}."
+        )
 
 
 class UpdateLogin:
     def __init__(self, dlg_label, step=0):
         self.updateTextLabel = dlg_label
-        self.total_number_steps = 4
+        self.total_number_steps = 5
         self.percentage_chunks = (1 / self.total_number_steps) * 100
         self.percent_progress = 0
         self.step = step
@@ -46,10 +53,9 @@ class UpdateLogin:
     def update_percent(self, main, inner_iter=None, inner_total=None):
         """
         Must hard-code x number of steps in order to get percentage completion.
-        1. clientid 25
-        2. permissions 50
-        3. graphs 75
-        4. token 100
+        1. permissions 33
+        2. graph 66
+        3. graphs 100
         """
         if main:
             self.step += 1

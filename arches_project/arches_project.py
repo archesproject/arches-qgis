@@ -21,9 +21,12 @@
  *                                                                         *
  ***************************************************************************/
 """
+import os.path
+from functools import partial
+
 from qgis.PyQt.QtCore import QSettings, QTranslator, QCoreApplication
 from qgis.PyQt.QtGui import QIcon
-from qgis.PyQt.QtWidgets import QAction, QTableWidgetItem
+from qgis.PyQt.QtWidgets import QAction
 
 # Initialize Qt resources from file resources.py
 from arches_project.resources import *
@@ -32,13 +35,10 @@ from arches_project.resources import *
 from arches_project.ui.arches_project_dialog import ArchesProjectDialog
 
 # Import the confirmation dialog
-from .ui.resource_confirmation_dialog import ResourceConfirmation
+from arches_project.ui.resource_confirmation_dialog import ResourceConfirmation
 
 from arches_project.core.views.stylesheets import PluginStylesheets
 from arches_project.core.views.components.map import update_map_layers, map_selection
-
-import os.path
-from functools import partial
 
 
 class ArchesProject:

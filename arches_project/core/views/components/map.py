@@ -1,5 +1,5 @@
 from qgis.PyQt.QtWidgets import QTableWidgetItem
-from qgis.core import QgsProject, QgsVectorLayer
+from qgis.core import QgsProject, QgsVectorLayer, QgsMessageLog, Qgis
 
 from arches_project.core.arches.api import arches_api
 
@@ -18,15 +18,26 @@ def map_selection(iface, dlg):
     except AttributeError:
         features = None
 
-    print("\nmap selection has been fired because selection changed")
-    print("layer:", active_layer, "features:", features)
+    QgsMessageLog.logMessage(
+        "Map selection has been fired because selection changed",
+        "Arches Plugin",
+        level=Qgis.Info,
+    )
+    QgsMessageLog.logMessage(
+        f"layer: {str(active_layer)}, features: {str(features)}",
+        "Arches Plugin",
+        level=Qgis.Info,
+    )
 
     if features:
-
         if len(features) > 1:
-            print("Select one feature")
+            QgsMessageLog.logMessage(
+                "Select one feature",
+                "Arches Plugin",
+                level=Qgis.Info,
+            )
             dlg.selectedResAttributeTable.setRowCount(0)
-            if arches_api.arches_token:
+            if arches_api.arches_user_info:
                 dlg.selectedResUUID.setText(
                     "Multiple features selected, select one feature to proceed."
                 )
@@ -37,9 +48,13 @@ def map_selection(iface, dlg):
             return
 
         elif len(features) == 0:
-            print("No feature selected")
+            QgsMessageLog.logMessage(
+                "No feature selected",
+                "Arches Plugin",
+                level=Qgis.Info,
+            )
             dlg.selectedResAttributeTable.setRowCount(0)
-            if arches_api.arches_token:
+            if arches_api.arches_user_info:
                 dlg.selectedResUUID.setText("Select a feature to proceed.")
                 dlg.addEditRes.setEnabled(False)
                 dlg.replaceEditRes.setEnabled(False)
@@ -50,12 +65,16 @@ def map_selection(iface, dlg):
             return
 
         else:
-            print("FEATURE SELECTED")
+            QgsMessageLog.logMessage(
+                "A feature was selected",
+                "Arches Plugin",
+                level=Qgis.Info,
+            )
             for f in features:
                 if "resourceinstanceid" in f.attributeMap():
 
                     # Initialise attribute table in the plugin window if the geom is recognised as an Arches res
-                    # if initialised when arches_token exists then would have to click off and back on to recognise
+                    # if initialised when arches_user_info exists then would have to click off and back on to recognise
                     no_rows = len(f.attributes())
                     no_cols = 2
                     dlg.selectedResAttributeTable.setRowCount(no_rows)
@@ -83,8 +102,8 @@ def map_selection(iface, dlg):
                     )
                     dlg.selectedResAttributeTable.resizeColumnsToContents()
 
-                    # if the token exists then enable the UI elements
-                    if arches_api.arches_token:
+                    # if the arches_user_info exists then enable the UI elements
+                    if arches_api.arches_user_info:
                         resource_string = "Resource: %s" % (f["resourceinstanceid"])
                         dlg.selectedResUUID.setText(resource_string)
                         dlg.addEditRes.setEnabled(True)
@@ -99,7 +118,7 @@ def map_selection(iface, dlg):
                         dlg.replaceEditRes.setEnabled(False)
 
                 else:
-                    if arches_api.arches_token:
+                    if arches_api.arches_user_info:
                         dlg.selectedResUUID.setText(
                             "The feature selected is not an Arches resource."
                         )

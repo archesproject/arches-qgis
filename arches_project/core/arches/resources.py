@@ -1,17 +1,38 @@
-from datetime import datetime
-import requests
+import json
 from functools import partial
 
+from qgis.core import QgsMessageLog, Qgis, QgsApplication
+from PyQt5.QtCore import QObject, pyqtSignal
+
 from arches_project.core.utils.geometry_conversion import Geometries
+from arches_project.core.utils.network import ArchesRequester
 from arches_project.core.views.components.qgis_messaging import show_message
-from arches_project.core.utils.refresh_token import refresh_token
 from arches_project.core.arches.api import arches_api
 
 
-class ArchesResources:
+class ArchesResources(QObject):
+
+    resource_creation_finished = pyqtSignal(dict)
+
     def __init__(self, nodeid, tileid):
+        super().__init__()
         self.nodeid = nodeid
         self.tileid = tileid
+
+    def process_new_resource(self, data):
+        try:
+            resource_data = json.loads(data)
+        except:
+            self.resource_creation_finished.emit(
+                {"error": f"Could not create resource {data}"}
+            )
+            return
+        arches_created_resource = {
+            "nodegroup_id": resource_data["nodegroup_id"],
+            "resourceinstance_id": resource_data["resourceinstance_id"],
+            "tile_id": resource_data["tileid"],
+        }
+        self.resource_creation_finished.emit(arches_created_resource)
 
     def save_to_arches(
         self, tileid, nodeid, geometry_collection, geometry_format, arches_operation
@@ -19,92 +40,76 @@ class ArchesResources:
         """
         Save data to arches resource
         """
-        if arches_api.arches_token:
-            try:
-                files = {
-                    "tileid": (None, tileid),
-                    "nodeid": (None, nodeid),
-                    "data": (None, geometry_collection),
-                    "format": (None, geometry_format),
-                    "operation": (None, arches_operation),
-                }
 
-                headers = {
-                    "Authorization": "Bearer %s"
-                    % (arches_api.arches_token["access_token"])
-                }
-                response = requests.post(
-                    f"{arches_api.arches_token['formatted_url']}/api/node_value/",
-                    headers=headers,
-                    data=files,
-                )
+        data = {
+            "tileid": tileid,
+            "nodeid": nodeid,
+            "data": geometry_collection,
+            "format": geometry_format,
+            "operation": arches_operation,
+        }
 
-                if arches_api.arches_token["expires_at"] < datetime.now():
-                    refresh_token()
-                    headers = {
-                        "Authorization": "Bearer %s"
-                        % (arches_api.arches_token["access_token"])
-                    }
-                    response = requests.post(
-                        f"{arches_api.arches_token['formatted_url']}/api/node_value/",
-                        headers=headers,
-                        data=files,
-                    )
+        QgsMessageLog.logMessage(
+            f"Getting Node Value {str(data)}",
+            "Arches Plugin",
+            level=Qgis.Info,
+        )
 
-                if response.ok == True:
-                    arches_created_resource = {
-                        "nodegroup_id": response.json()["nodegroup_id"],
-                        "resourceinstance_id": response.json()["resourceinstance_id"],
-                        "tile_id": response.json()["tileid"],
-                    }
-                    return arches_created_resource
+        requester = ArchesRequester()
+        requester.make_authenticated_request(
+            f"/api/node_value/", arches_api.config_id, method="POST", payload=data
+        )
 
-                else:
-                    print(
-                        "Resource creation failed with response code:%s"
-                        % (response.status_code)
-                    )
-                    return None
-            except Exception as e:
-                print(f"Cannot create new resource: {e}")
-        return None
+        requester.complete_signal.connect(self.process_new_resource)
 
     def create_resource(self, dlg, dlg_resource_confirmation, iface):
         """
         Create Resource dialog and functionality
         """
 
+        def update_ui(dlg, result):
+            if not result["error"]:
+                available_configs = (
+                    QgsApplication.authManager().availableAuthMethodConfigs()
+                )
+                dlg.createResOutputBox.setText(
+                    """Successfully created a new resource with the selected geometry.
+                                                    \nTo continue the creation of your new resource, navigate to...\n%s/resource/%s"""
+                    % (
+                        available_configs[arches_api.config_id].uri(),
+                        result["resourceinstance_id"],
+                    )
+                )
+                show_message(
+                    iface, "Success", "A new Arches resource has been created."
+                )
+                dlg_resource_creation.close()
+            else:
+                dlg.createResOutputBox.setText("Resource creation FAILED.")
+                show_message(
+                    iface,
+                    "Error",
+                    f"Resource creation failed. {result['error']}",
+                    duration=-1,
+                )
+                dlg_resource_creation.close()
+
         def send_new_resource_to_arches():
             if (
                 selectedNode["nodegroup_id"]
                 in arches_api.arches_user_info["editable_nodegroups"]
             ):
-                try:
-                    results = self.save_to_arches(
-                        tileid=self.tileid,
-                        nodeid=selectedNode["node_id"],
-                        geometry_collection=geomcoll,
-                        geometry_format=None,
-                        arches_operation="create",
-                    )
-                    dlg.createResOutputBox.setText(
-                        """Successfully created a new resource with the selected geometry.
-                                                        \nTo continue the creation of your new resource, navigate to...\n%s/resource/%s"""
-                        % (
-                            arches_api.arches_token["formatted_url"],
-                            results["resourceinstance_id"],
-                        )
-                    )
-                    show_message(
-                        iface, "Success", "A new Arches resource has been created."
-                    )
-                    dlg_resource_confirmation.close()
-                except:
-                    dlg.createResOutputBox.setText("Resource creation FAILED.")
-                    show_message(
-                        iface, "Error", "Resource creation failed.", duration=-1
-                    )
-                    dlg_resource_confirmation.close()
+                self.save_to_arches(
+                    tileid=self.tileid,
+                    nodeid=selectedNode["node_id"],
+                    geometry_collection=geomcoll,
+                    geometry_format=None,
+                    arches_operation="create",
+                )
+                update_ui_handler = partial(update_ui, dlg)
+
+                self.resource_creation_finished.connect(update_ui_handler)
+
             else:
                 dlg.createResOutputBox.setText(
                     "This user does not have permission to create data for the geometry nodegroup in this resource model. An Arches resource has not been created."
@@ -181,7 +186,7 @@ class ArchesResources:
         def send_edited_data_to_arches(operation_type, dialog):
             if nodegroup_value in arches_api.arches_user_info["editable_nodegroups"]:
                 try:
-                    results = self.save_to_arches(
+                    self.save_to_arches(
                         tileid=self.tileid,
                         nodeid=self.nodeid,
                         geometry_collection=geomcoll,

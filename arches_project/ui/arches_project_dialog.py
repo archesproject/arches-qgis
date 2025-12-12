@@ -25,6 +25,12 @@
 import os
 from functools import partial
 
+from qgis.core import QgsApplication, QgsMessageLog, Qgis
+from qgis.PyQt import uic, QtWidgets
+
+from PyQt5 import QtGui
+
+
 from arches_project.core.arches.connection import ArchesConnection
 from arches_project.core.views.logging import enable_logging
 from arches_project.core.views.components.map import update_map_layers
@@ -35,9 +41,6 @@ from arches_project.core.views.components.multiple_graph_nodes import (
 from arches_project.core.views.resources import ResourcesView
 from arches_project.core.views.connection import ArchesConnectionView
 
-
-from qgis.PyQt import uic
-from qgis.PyQt import QtWidgets
 
 # This loads your .ui file so that PyQt can populate your plugin with the elements from Qt Designer
 FORM_CLASS, _ = uic.loadUiType(
@@ -60,7 +63,28 @@ class ArchesProjectDialog(QtWidgets.QDialog, FORM_CLASS):
         self.plugin_dir = archesproject.plugin_dir
 
         self.dlg_resource_confirmation = archesproject.dlg_resource_confirmation
+        self.auth_combobox = self.auth_config_combobox
+        palette = self.auth_combobox.palette()
+        palette.setColor(palette.Text, QtGui.QColor("black"))
 
+        self.auth_combobox.clear()
+        auth_manager = QgsApplication.authManager()
+
+        # Get available authentication configurations
+        # This returns a dictionary where keys are IDs and values are names
+        self.available_configs = auth_manager.availableAuthMethodConfigs()
+
+        if not self.available_configs:
+            self.auth_combobox.addItem("None", "")
+        else:
+            for config_id, config_obj in self.available_configs.items():
+                QgsMessageLog.logMessage(config_id, "Arches Plugin", level=Qgis.Info)
+                self.auth_combobox.addItem(config_obj.name(), config_id)
+
+            self.auth_combobox.currentIndexChanged.connect(
+                self.handle_auth_config_changed
+            )
+        self.selected_config_id = self.auth_combobox.itemData(0)
         # Set tab index to 0 always
         self.tabWidget.setCurrentIndex(0)
         self.tabWidget.setTabVisible(1, False)
@@ -114,7 +138,7 @@ class ArchesProjectDialog(QtWidgets.QDialog, FORM_CLASS):
         self.btnConnect.clicked.connect(self.arches_connection.arches_connection_save)
         self.btnLogout.clicked.connect(
             partial(
-                ArchesConnection(None, None, None).connection_reset,
+                ArchesConnection(None).connection_reset,
                 hard_reset=True,
                 dlg=self,
                 iface=self.iface,
@@ -148,3 +172,9 @@ class ArchesProjectDialog(QtWidgets.QDialog, FORM_CLASS):
                 dlg_resource_confirmation=self.dlg_resource_confirmation,
             )
         )
+
+    def handle_auth_config_changed(self, index):
+        config_id = self.auth_combobox.itemData(index)
+        self.selected_config_id = config_id
+
+        # self.make_authenticated_request(target_url, config_id)
