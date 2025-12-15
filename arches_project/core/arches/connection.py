@@ -101,7 +101,8 @@ class ArchesConnection:
 
     def get_graphs(self, arches_graphs_list, login_updates, percent_progress):
         try:
-            login_updates.emit("Fetching graphs ...")
+            if login_updates:
+                login_updates.emit("Fetching graphs ...")
             response = requests.get(f"{self.url}/graphs/")
             graphids = [
                 x["graphid"]
@@ -109,7 +110,8 @@ class ArchesConnection:
                 if x["graphid"] != "ff623370-fa12-11e6-b98b-6c4008b05c4c"
                 and x["isresource"]
             ]
-            percent_progress.emit(True, 0, 0)
+            if percent_progress:
+                percent_progress.emit(True, 0, 0)
 
             for x, graph in enumerate(graphids):
                 geometry_node_data = {}
@@ -145,9 +147,11 @@ class ArchesConnection:
                                 "multiple_geometry_nodes": multiple,
                             }
                         )
-                    percent_progress.emit(False, x + 1, len(graphids))
-        except:
-            pass
+                    if percent_progress:
+                        percent_progress.emit(False, x + 1, len(graphids))
+
+        except Exception as e:
+            print("Exception", e)
         return arches_graphs_list
 
     def store_auto_complete_credentials(self):
