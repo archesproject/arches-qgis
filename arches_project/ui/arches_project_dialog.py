@@ -132,6 +132,10 @@ class ArchesProjectDialog(QtWidgets.QDialog, FORM_CLASS):
             )
         )
 
+        self.btnRefresh.clicked.connect(
+            partial(ArchesConnection(None, None, None).connection_refresh)
+        )
+
         # click add button - should bring up new dialog for confirmation
         self.resources_object = ResourcesView(
             dlg=self,
