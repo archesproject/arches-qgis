@@ -229,7 +229,6 @@ class ConnectionProcess(QgsTask):
             return True
 
         arches_api.arches_graphs_list = self.arches_connection.get_graphs(
-            arches_api.arches_graphs_list,
             self.login_updates,
             self.percent_progress,
         )
