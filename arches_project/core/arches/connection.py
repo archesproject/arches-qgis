@@ -154,6 +154,9 @@ class ArchesConnection:
             print("Exception", e)
         return arches_graphs_list
 
+    def connection_refresh(self):
+            self.get_graphs(arches_api.arches_graphs_list, None, None)
+            
     def store_auto_complete_credentials(self):
 
         saved_urls = QSettings().value("urls", [])
