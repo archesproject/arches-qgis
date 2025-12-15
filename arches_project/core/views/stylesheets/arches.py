@@ -37,6 +37,16 @@ class ArchesStylesheet:
             self.dlg.btnLogout.setIconSize(QSize(12, 12))
             self.dlg.btnLogout.setCursor(QCursor(Qt.PointingHandCursor))
 
+            self.dlg.btnRefresh.setIcon(
+                QIcon(
+                    os.path.join(
+                        self.plugin_dir, "icons", "arrows-rotate-solid-full-white.svg"
+                    )
+                )
+            )
+            self.dlg.btnRefresh.setIconSize(QSize(12, 12))
+            self.dlg.btnRefresh.setCursor(QCursor(Qt.PointingHandCursor))
+
             self.dlg.createResButton.setIcon(
                 QIcon(os.path.join(self.plugin_dir, "icons", "mdi-pencil.svg"))
             )

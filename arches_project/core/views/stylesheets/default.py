@@ -16,6 +16,7 @@ class DefaultStylesheet:
         self.dlg.createResButton.setIcon(QIcon(""))
         self.dlg.editResAddGeom.setIcon(QIcon(""))
         self.dlg.editResReplaceGeom.setIcon(QIcon(""))
+        self.dlg.btnRefresh.setIcon(QIcon(""))
         self.dlg_resource_confirmation.confirmDialogCancel.setIcon(QIcon(""))
         self.dlg_resource_confirmation.confirmDialogConfirm.setIcon(QIcon(""))
         # nav bar
