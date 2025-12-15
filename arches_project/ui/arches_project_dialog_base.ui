@@ -682,6 +682,25 @@
                 </layout>
                </widget>
               </item>
+              <item>
+               <widget class="QFrame" name="refreshFrame">
+                <property name="frameShape">
+                 <enum>QFrame::StyledPanel</enum>
+                </property>
+                <property name="frameShadow">
+                 <enum>QFrame::Raised</enum>
+                </property>
+                <layout class="QVBoxLayout" name="verticalLayout_44">
+                 <item>
+                  <widget class="QPushButton" name="btnRefresh">
+                   <property name="text">
+                    <string>Refresh connection</string>
+                   </property>
+                  </widget>
+                 </item>
+                </layout>
+               </widget>
+              </item>
              </layout>
             </widget>
            </item>
