@@ -161,7 +161,7 @@ class ArchesConnection:
         return arches_graphs_list
 
     def connection_refresh(self):
-            self.get_graphs(arches_api.arches_graphs_list, None, None)
+        self.get_graphs(None, None)
             
     def store_auto_complete_credentials(self):
 
