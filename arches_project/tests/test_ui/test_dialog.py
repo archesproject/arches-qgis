@@ -17,7 +17,6 @@ import unittest
 from arches_project.tests.base_test import ArchesQGISTestCase
 
 from qgis.PyQt.QtGui import QIcon
-from PyQt5.QtCore import Qt
 
 
 class ArchesProjectDialogTest(ArchesQGISTestCase):
