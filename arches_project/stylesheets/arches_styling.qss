@@ -64,6 +64,7 @@ QFrame {
 }
 
 QFrame#connectionButtons, 
+QFrame#refreshFrame,
 QFrame#logoutFrame, 
 QFrame#archesURLFrame, 
 QFrame#archesUserFrame {
@@ -102,12 +103,12 @@ QPushButton {
     border-radius: 0;
 }
 
-QPushButton#btnConnect {
+QPushButton#btnConnect, QPushButton#btnRefresh {
     background-color: #579ddb;
     border-color: #5fa2dd;
 }
 
-QPushButton#btnConnect:hover {
+QPushButton#btnConnect:hover, QPushButton#btnRefresh:hover {
     background-color: #337ab7;
     border-color: #2e6da4;
 }
