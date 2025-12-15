@@ -162,7 +162,7 @@ class ArchesConnection:
 
     def connection_refresh(self):
         self.url = arches_api.arches_token["formatted_url"]
-        self.get_graphs(None, None)
+        arches_api.arches_graphs_list = self.get_graphs(None, None)
             
     def store_auto_complete_credentials(self):
 
