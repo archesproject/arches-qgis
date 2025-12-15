@@ -124,7 +124,10 @@ class ArchesConnection:
                 req = requests.get(f"{self.url}/graphs/{graph}")
 
                 if req.json()["graph"]["publication_id"]:  # if graph is published
-                    login_updates.emit(f"Fetching graphs ... ({x+1}/{len(graphids)})")
+                    if login_updates:
+                        login_updates.emit(
+                            f"Fetching graphs ... ({x+1}/{len(graphids)})"
+                        )
                     for nodes in req.json()["graph"]["nodes"]:
                         if nodes["datatype"] == "geojson-feature-collection":
                             contains_geom = True
