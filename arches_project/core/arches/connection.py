@@ -99,11 +99,14 @@ class ArchesConnection:
             print(f"Failed to get OAuth token: {e}")
             return arches_token
 
-    def get_graphs(self, arches_graphs_list, login_updates, percent_progress):
+    def get_graphs(self, login_updates, percent_progress):
         try:
             if login_updates:
                 login_updates.emit("Fetching graphs ...")
             response = requests.get(f"{self.url}/graphs/")
+
+            arches_graphs_list = []
+
             graphids = [
                 x["graphid"]
                 for x in response.json()
