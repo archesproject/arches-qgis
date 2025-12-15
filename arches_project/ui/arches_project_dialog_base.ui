@@ -161,7 +161,7 @@
       </font>
      </property>
      <property name="currentIndex">
-      <number>4</number>
+      <number>3</number>
      </property>
      <property name="usesScrollButtons">
       <bool>true</bool>
@@ -721,7 +721,7 @@
           <property name="geometry">
            <rect>
             <x>0</x>
-            <y>-94</y>
+            <y>-82</y>
             <width>495</width>
             <height>554</height>
            </rect>
@@ -931,6 +931,9 @@
                    <property name="wordWrap">
                     <bool>true</bool>
                    </property>
+                   <property name="openExternalLinks">
+                    <bool>true</bool>
+                   </property>
                   </widget>
                  </item>
                 </layout>
@@ -975,7 +978,7 @@
           <property name="geometry">
            <rect>
             <x>0</x>
-            <y>0</y>
+            <y>-220</y>
             <width>495</width>
             <height>680</height>
            </rect>
@@ -1179,6 +1182,9 @@
                     <string/>
                    </property>
                    <property name="wordWrap">
+                    <bool>true</bool>
+                   </property>
+                   <property name="openExternalLinks">
                     <bool>true</bool>
                    </property>
                   </widget>

@@ -88,13 +88,9 @@ class ArchesResources:
                         arches_operation="create",
                     )
                     dlg.createResOutputBoxFrame.show()
+                    created_resource_url = f"{arches_api.arches_token['formatted_url']}/resource/{results['resourceinstance_id']}"
                     dlg.createResOutputBoxLabel.setText(
-                        """Successfully created a new resource with the selected geometry.
-                                                        \nTo continue the creation of your new resource, navigate to...\n%s/resource/%s"""
-                        % (
-                            arches_api.arches_token["formatted_url"],
-                            results["resourceinstance_id"],
-                        )
+                        f'Successfully created a new resource with the selected geometry.<br>To continue the creation of your new resource, navigate to...<br><a href="{created_resource_url}">{created_resource_url}</a>'
                     )
                     show_message(
                         iface, "Success", "A new Arches resource has been created."
@@ -192,9 +188,9 @@ class ArchesResources:
                         arches_operation=operation_type,
                     )
                     dlg.editResOutputBoxFrame.show()
+                    edited_resource_url = f"{arches_api.arches_token['formatted_url']}/resource/{results['resourceinstance_id']}"
                     dlg.editResOutputBoxLabel.setText(
-                        """Successfully edited the selected resource with the selected geometry.
-                                                        \nTo continue editing the resource navigate to...\n%s/resource/%s"""
+                        f'Successfully edited the selected resource with the selected geometry.<br>To continue editing the resource navigate to...<br><a href="{edited_resource_url}">{edited_resource_url}</a>'
                         % (
                             arches_api.arches_token["formatted_url"],
                             results["resourceinstance_id"],
