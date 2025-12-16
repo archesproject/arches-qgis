@@ -2,6 +2,7 @@ from arches_project.core.arches.connection import ConnectionProcess
 from arches_project.core.views.components.missing_credentials import missing_credentials
 from arches_project.core.views.login import UpdateLoginProgress
 from arches_project.core.views.components.spinner import triggerSpinner
+from arches_project.core.arches.api import arches_api
 
 from qgis.core import QgsMessageLog, QgsApplication
 
@@ -97,3 +98,34 @@ class ArchesConnectionView:
             # A log message (or print) is required for the task to be run.
             # It is an existing QGIS issue https://github.com/qgis/QGIS/issues/37655
             QgsMessageLog.logMessage("Connection task started")
+
+    def update_create_resources_tab(self):
+        self.dlg.createResModelSelect.clear()
+        self.dlg.createResFeatureSelect.setEnabled(True)
+        self.dlg.createResFeatureSelect.clear()
+        self.dlg.createResFeatureSelect.addItems(
+            [layer.name() for layer in arches_api.layers]
+        )
+
+        if arches_api.arches_graphs_list:
+            self.dlg.createResModelSelect.setEnabled(True)
+            self.dlg.createResModelSelect.addItems(
+                [graph["name"] for graph in arches_api.arches_graphs_list]
+            )
+            self.dlg.addNewRes.setEnabled(True)
+
+    def update_edit_resources_tab(self):
+        self.dlg.addEditRes.setEnabled(False)
+        self.dlg.replaceEditRes.setEnabled(False)
+        if arches_api.arches_selected_resource["resourceinstanceid"]:
+            self.dlg.addEditRes.setEnabled(True)
+            self.dlg.replaceEditRes.setEnabled(True)
+        self.dlg.editResSelectFeatures.setEnabled(True)
+        self.dlg.editResSelectFeatures.clear()
+        self.dlg.editResSelectFeatures.addItems(
+            [layer.name() for layer in arches_api.layers]
+        )
+        self.dlg.selectedResAttributeTable.setEnabled(True)
+        self.dlg.selectedResUUID.setText(
+            "Connected to Arches. Select an Arches resource to proceed."
+        )
