@@ -102,7 +102,7 @@ class ArchesResources:
                     dlg_resource_confirmation.close()
                 except:
                     dlg.createResOutputBoxFrame.show()
-                    dlg.createResOutputBox.setText("Resource creation FAILED.")
+                    dlg.createResOutputBoxLabel.setText("Resource creation FAILED.")
                     show_message(
                         iface, "Error", "Resource creation failed.", duration=-1
                     )

@@ -9,7 +9,7 @@ def refresh_token():
     try:
         files = {
             "grant_type": (None, "refresh_token"),
-            "client_id": (None, arches_api.clientid),
+            "client_id": (None, arches_api.client_id),
             "refresh_token": (None, arches_api.arches_token["refresh_token"]),
         }
 
