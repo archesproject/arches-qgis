@@ -36,19 +36,6 @@ def map_selection(iface, dlg):
                 )
             return
 
-        elif len(features) == 0:
-            print("No feature selected")
-            dlg.editResSelectedResAttributeTable.setRowCount(0)
-            if arches_api.arches_token:
-                dlg.editResSelectedResId.setText("Select a feature to proceed.")
-                dlg.editResAddGeom.setEnabled(False)
-                dlg.editResReplaceGeom.setEnabled(False)
-            else:
-                dlg.editResSelectedResId.setText(
-                    "Connect to your Arches instance to edit resources."
-                )
-            return
-
         else:
             print("FEATURE SELECTED")
             for f in features:
@@ -107,6 +94,19 @@ def map_selection(iface, dlg):
                         dlg.editResSelectedResId.setText(
                             "Connect to your Arches instance to edit resources."
                         )
+
+    elif len(features) == 0:
+        print("No feature selected")
+        dlg.editResSelectedResAttributeTable.setRowCount(0)
+        if arches_api.arches_token:
+            dlg.editResSelectedResId.setText("Select a feature to proceed.")
+            dlg.editResAddGeom.setEnabled(False)
+            dlg.editResReplaceGeom.setEnabled(False)
+        else:
+            dlg.editResSelectedResId.setText(
+                "Connect to your Arches instance to edit resources."
+            )
+        return
 
 
 def update_map_layers(checkbox):
