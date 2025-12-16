@@ -4,6 +4,9 @@ from datetime import datetime, timedelta
 from arches_project.core.views.login import LoggedIn
 from arches_project.core.views.components.qgis_messaging import show_message
 from arches_project.core.views.components.spinner import triggerSpinner
+from arches_project.core.views.components.login_autocomplete import (
+    load_saved_credentials,
+)
 
 from arches_project.core.arches.api import arches_api
 
@@ -13,6 +16,8 @@ from qgis.core import (
     QgsTask,
     QgsMessageLog,
 )
+
+from qgis.PyQt.QtCore import QSettings
 from PyQt5.QtCore import pyqtSignal
 
 
@@ -166,21 +171,26 @@ class ArchesConnection:
         arches_api.arches_token = {}
         arches_api.arches_graphs_list = []
         # Reset Create Resource tab as no longer useable
-        dlg.createResModelSelect.setEnabled(False)
-        dlg.createResFeatureSelect.setEnabled(False)
-        dlg.addNewRes.setEnabled(False)
-        dlg.createResOutputBox.setText("")
+        dlg.createResModelSelectCombo.setEnabled(False)
+        dlg.createResGeomSelectCombo.setEnabled(False)
+        dlg.createResButton.setEnabled(False)
+        dlg.createResOutputBoxLabel.setText("")
+        dlg.createResOutputBoxFrame.hide()
         ## Set "Edit Resource" to false to begin with
-        dlg.addEditRes.setEnabled(False)
-        dlg.replaceEditRes.setEnabled(False)
-        dlg.editResSelectFeatures.setEnabled(False)
-        dlg.selectedResAttributeTable.setRowCount(0)
-        dlg.selectedResAttributeTable.setEnabled(False)
-        dlg.selectedResUUID.setText(
+        dlg.editResAddGeom.setEnabled(False)
+        dlg.editResReplaceGeom.setEnabled(False)
+        dlg.editResGeomSelectCombo.setEnabled(False)
+        dlg.editResOutputBoxLabel.setText("")
+        dlg.editResOutputBoxFrame.hide()
+        dlg.editResSelectedResAttributeTable.setRowCount(0)
+        dlg.editResSelectedResAttributeTable.setEnabled(False)
+        dlg.editResSelectedResId.setText(
             "Connect to your Arches instance to edit resources."
         )
         # Hide multiple nodegroup dropdown
-        dlg.geometryNodeSelect.setEnabled(False)
+        dlg.createResNodeSelectCombo.setEnabled(False)
+        # Reload saved credentials for the autocompletes
+        load_saved_credentials(dlg)
 
         if manual_logout:
             show_message(
@@ -188,6 +198,27 @@ class ArchesConnection:
                 "information",
                 "Logged out of Arches instance. Please reconnect to use the plugin.",
             )
+
+    def store_auto_complete_credentials(self):
+
+        saved_urls = QSettings().value("urls", [])
+        saved_usernames = QSettings().value("usernames", [])
+
+        if self.url not in saved_urls:
+            saved_urls.append(self.url)
+
+            if len(saved_urls) > 5:
+                del saved_urls[0]
+
+            QSettings().setValue("urls", saved_urls)
+
+        if self.username not in saved_usernames:
+            saved_usernames.append(self.username)
+
+            if len(saved_usernames) > 5:
+                del saved_usernames[0]
+
+            QSettings().setValue("usernames", saved_usernames)
 
 
 class ConnectionProcess(QgsTask):
@@ -207,12 +238,12 @@ class ConnectionProcess(QgsTask):
         self.plugin_dir = plugin_dir
 
     def run(self):
-        arches_connection = ArchesConnection(
+        self.arches_connection = ArchesConnection(
             url=self.url, username=self.username, password=self.password
         )
 
         self.login_updates.emit("Fetching client id ...")
-        arches_api.client_id = arches_connection.get_client_id()
+        arches_api.client_id = self.arches_connection.get_client_id()
         self.percent_progress.emit(True, 0, 0)
         if not arches_api.client_id:
             return False
@@ -220,7 +251,7 @@ class ConnectionProcess(QgsTask):
         # get/update user info on the logged in user
         arches_api.arches_user_info = {}
         self.login_updates.emit("Fetching user permissions ...")
-        arches_api.arches_user_info = arches_connection.get_user_permissions(
+        arches_api.arches_user_info = self.arches_connection.get_user_permissions(
             arches_api.arches_user_info
         )
         self.percent_progress.emit(True, 0, 0)
@@ -232,13 +263,13 @@ class ConnectionProcess(QgsTask):
             # if user does not have permissions return early and deal with in finished()
             return True
 
-        arches_api.arches_graphs_list = arches_connection.get_graphs(
+        arches_api.arches_graphs_list = self.arches_connection.get_graphs(
             arches_api.arches_graphs_list,
             self.login_updates,
             self.percent_progress,
         )
 
-        arches_api.arches_token = arches_connection.get_token(
+        arches_api.arches_token = self.arches_connection.get_token(
             arches_api.client_id, arches_api.arches_token
         )
 
@@ -256,6 +287,7 @@ class ConnectionProcess(QgsTask):
         return True
 
     def finished(self, result):
+
         def update_login_tab():
             # Replace login tab with logged in tab
             self.dlg.tabWidget.setTabVisible(0, False)
@@ -273,33 +305,33 @@ class ConnectionProcess(QgsTask):
             # self.dlg.displayUrlLabel.setOpenExternalLinks(True) #TODO
 
         def update_create_resources_tab():
-            self.dlg.createResModelSelect.clear()
-            self.dlg.createResFeatureSelect.setEnabled(True)
-            self.dlg.createResFeatureSelect.clear()
-            self.dlg.createResFeatureSelect.addItems(
+            self.dlg.createResModelSelectCombo.clear()
+            self.dlg.createResGeomSelectCombo.setEnabled(True)
+            self.dlg.createResGeomSelectCombo.clear()
+            self.dlg.createResGeomSelectCombo.addItems(
                 [layer.name() for layer in arches_api.layers]
             )
 
             if arches_api.arches_graphs_list:
-                self.dlg.createResModelSelect.setEnabled(True)
-                self.dlg.createResModelSelect.addItems(
+                self.dlg.createResModelSelectCombo.setEnabled(True)
+                self.dlg.createResModelSelectCombo.addItems(
                     [graph["name"] for graph in arches_api.arches_graphs_list]
                 )
-                self.dlg.addNewRes.setEnabled(True)
+                self.dlg.createResButton.setEnabled(True)
 
         def update_edit_resources_tab():
-            self.dlg.addEditRes.setEnabled(False)
-            self.dlg.replaceEditRes.setEnabled(False)
+            self.dlg.editResAddGeom.setEnabled(False)
+            self.dlg.editResReplaceGeom.setEnabled(False)
             if arches_api.arches_selected_resource["resourceinstanceid"]:
-                self.dlg.addEditRes.setEnabled(True)
-                self.dlg.replaceEditRes.setEnabled(True)
-            self.dlg.editResSelectFeatures.setEnabled(True)
-            self.dlg.editResSelectFeatures.clear()
-            self.dlg.editResSelectFeatures.addItems(
+                self.dlg.editResAddGeom.setEnabled(True)
+                self.dlg.editResReplaceGeom.setEnabled(True)
+            self.dlg.editResGeomSelectCombo.setEnabled(True)
+            self.dlg.editResGeomSelectCombo.clear()
+            self.dlg.editResGeomSelectCombo.addItems(
                 [layer.name() for layer in arches_api.layers]
             )
-            self.dlg.selectedResAttributeTable.setEnabled(True)
-            self.dlg.selectedResUUID.setText(
+            self.dlg.editResSelectedResAttributeTable.setEnabled(True)
+            self.dlg.editResSelectedResId.setText(
                 "Connected to Arches. Select an Arches resource to proceed."
             )
 
@@ -318,6 +350,7 @@ class ConnectionProcess(QgsTask):
                     if str(l.dataProvider().name()) != "postgres"
                 ]
 
+                self.arches_connection.store_auto_complete_credentials()
                 update_login_tab()
                 update_edit_resources_tab()
                 update_create_resources_tab()

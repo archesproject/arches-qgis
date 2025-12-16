@@ -161,7 +161,7 @@
       </font>
      </property>
      <property name="currentIndex">
-      <number>0</number>
+      <number>4</number>
      </property>
      <property name="usesScrollButtons">
       <bool>true</bool>
@@ -195,8 +195,8 @@
            <rect>
             <x>0</x>
             <y>0</y>
-            <width>506</width>
-            <height>435</height>
+            <width>495</width>
+            <height>534</height>
            </rect>
           </property>
           <layout class="QVBoxLayout" name="verticalLayout_3">
@@ -212,7 +212,7 @@
               <enum>QFrame::StyledPanel</enum>
              </property>
              <property name="frameShadow">
-              <enum>QFrame::Raised</enum>
+              <enum>QFrame::Plain</enum>
              </property>
              <layout class="QVBoxLayout" name="verticalLayout_39">
               <property name="leftMargin">
@@ -303,7 +303,7 @@
                   </widget>
                  </item>
                  <item>
-                  <widget class="QLineEdit" name="archesServerInput">
+                  <widget class="AutoCompleteLineEdit" name="archesServerInput">
                    <property name="placeholderText">
                     <string>e.g. http://arches-server.com[/language]</string>
                    </property>
@@ -332,7 +332,7 @@
                   </widget>
                  </item>
                  <item>
-                  <widget class="QLineEdit" name="usernameInput">
+                  <widget class="AutoCompleteLineEdit" name="usernameInput">
                    <property name="placeholderText">
                     <string>e.g. admin</string>
                    </property>
@@ -479,8 +479,8 @@
            <rect>
             <x>0</x>
             <y>0</y>
-            <width>520</width>
-            <height>386</height>
+            <width>512</width>
+            <height>460</height>
            </rect>
           </property>
           <layout class="QVBoxLayout" name="verticalLayout_28">
@@ -490,7 +490,7 @@
               <enum>QFrame::StyledPanel</enum>
              </property>
              <property name="frameShadow">
-              <enum>QFrame::Raised</enum>
+              <enum>QFrame::Plain</enum>
              </property>
              <layout class="QVBoxLayout" name="verticalLayout_9">
               <property name="leftMargin">
@@ -711,6 +711,9 @@
       <layout class="QVBoxLayout" name="verticalLayout">
        <item>
         <widget class="QScrollArea" name="scrollArea_2">
+         <property name="frameShape">
+          <enum>QFrame::NoFrame</enum>
+         </property>
          <property name="widgetResizable">
           <bool>true</bool>
          </property>
@@ -718,95 +721,157 @@
           <property name="geometry">
            <rect>
             <x>0</x>
-            <y>0</y>
-            <width>504</width>
-            <height>495</height>
+            <y>-94</y>
+            <width>495</width>
+            <height>554</height>
            </rect>
           </property>
           <layout class="QVBoxLayout" name="verticalLayout_11">
            <item>
-            <widget class="QGroupBox" name="groupBox_2">
-             <property name="title">
-              <string>Create New Arches Resource</string>
+            <widget class="QFrame" name="createResFrame">
+             <property name="frameShape">
+              <enum>QFrame::StyledPanel</enum>
              </property>
-             <layout class="QVBoxLayout" name="verticalLayout_14">
+             <property name="frameShadow">
+              <enum>QFrame::Plain</enum>
+             </property>
+             <layout class="QVBoxLayout" name="verticalLayout_42">
+              <property name="leftMargin">
+               <number>18</number>
+              </property>
+              <property name="rightMargin">
+               <number>18</number>
+              </property>
               <item>
-               <widget class="QFrame" name="frame_7">
+               <widget class="QFrame" name="createResTitleFrame">
                 <property name="frameShape">
-                 <enum>QFrame::StyledPanel</enum>
+                 <enum>QFrame::NoFrame</enum>
                 </property>
                 <property name="frameShadow">
                  <enum>QFrame::Raised</enum>
                 </property>
                 <layout class="QVBoxLayout" name="verticalLayout_10">
                  <item>
-                  <widget class="QFrame" name="frame_9">
-                   <property name="frameShape">
-                    <enum>QFrame::StyledPanel</enum>
+                  <widget class="QLabel" name="createResTitleText">
+                   <property name="font">
+                    <font>
+                     <pointsize>13</pointsize>
+                     <bold>false</bold>
+                    </font>
                    </property>
-                   <property name="frameShadow">
-                    <enum>QFrame::Raised</enum>
+                   <property name="text">
+                    <string>Create Resource</string>
                    </property>
-                   <layout class="QVBoxLayout" name="verticalLayout_16">
-                    <item>
-                     <widget class="QLabel" name="label_6">
-                      <property name="text">
-                       <string>Select Arches Resource Model</string>
-                      </property>
-                     </widget>
-                    </item>
-                    <item>
-                     <widget class="QComboBox" name="createResModelSelect"/>
-                    </item>
-                   </layout>
+                   <property name="alignment">
+                    <set>Qt::AlignCenter</set>
+                   </property>
                   </widget>
                  </item>
+                </layout>
+               </widget>
+              </item>
+              <item>
+               <widget class="QFrame" name="createResDescriptionFrame">
+                <property name="frameShape">
+                 <enum>QFrame::NoFrame</enum>
+                </property>
+                <property name="frameShadow">
+                 <enum>QFrame::Raised</enum>
+                </property>
+                <layout class="QVBoxLayout" name="verticalLayout_12">
+                 <property name="topMargin">
+                  <number>0</number>
+                 </property>
                  <item>
-                  <widget class="QFrame" name="geometryNodeSelectFrame">
-                   <property name="enabled">
+                  <widget class="QLabel" name="createResDescriptionLabel">
+                   <property name="text">
+                    <string>Create a new Arches resource using geometries from a QGIS layer.</string>
+                   </property>
+                   <property name="alignment">
+                    <set>Qt::AlignCenter</set>
+                   </property>
+                   <property name="wordWrap">
                     <bool>true</bool>
                    </property>
-                   <property name="frameShape">
-                    <enum>QFrame::StyledPanel</enum>
+                  </widget>
+                 </item>
+                </layout>
+               </widget>
+              </item>
+              <item>
+               <widget class="QFrame" name="createResModelSelectFrame">
+                <property name="frameShape">
+                 <enum>QFrame::NoFrame</enum>
+                </property>
+                <property name="frameShadow">
+                 <enum>QFrame::Raised</enum>
+                </property>
+                <layout class="QVBoxLayout" name="verticalLayout_16">
+                 <property name="topMargin">
+                  <number>0</number>
+                 </property>
+                 <item>
+                  <widget class="QLabel" name="createResModelSelectLabel">
+                   <property name="text">
+                    <string>Select Arches Resource Model</string>
                    </property>
-                   <property name="frameShadow">
-                    <enum>QFrame::Raised</enum>
-                   </property>
-                   <layout class="QVBoxLayout" name="verticalLayout_18">
-                    <item>
-                     <widget class="QLabel" name="selectGeomNodeLabel">
-                      <property name="text">
-                       <string>Select Geometry Node</string>
-                      </property>
-                     </widget>
-                    </item>
-                    <item>
-                     <widget class="QComboBox" name="geometryNodeSelect"/>
-                    </item>
-                   </layout>
                   </widget>
                  </item>
                  <item>
-                  <widget class="QFrame" name="frame_10">
-                   <property name="frameShape">
-                    <enum>QFrame::StyledPanel</enum>
+                  <widget class="QComboBox" name="createResModelSelectCombo"/>
+                 </item>
+                </layout>
+               </widget>
+              </item>
+              <item>
+               <widget class="QFrame" name="createResNodeSelectFrame">
+                <property name="enabled">
+                 <bool>true</bool>
+                </property>
+                <property name="frameShape">
+                 <enum>QFrame::NoFrame</enum>
+                </property>
+                <property name="frameShadow">
+                 <enum>QFrame::Raised</enum>
+                </property>
+                <layout class="QVBoxLayout" name="verticalLayout_18">
+                 <property name="topMargin">
+                  <number>0</number>
+                 </property>
+                 <item>
+                  <widget class="QLabel" name="createResNodeSelectLabel">
+                   <property name="text">
+                    <string>Select Geometry Node</string>
                    </property>
-                   <property name="frameShadow">
-                    <enum>QFrame::Raised</enum>
-                   </property>
-                   <layout class="QVBoxLayout" name="verticalLayout_17">
-                    <item>
-                     <widget class="QLabel" name="label_7">
-                      <property name="text">
-                       <string>Select Feature(s) to Upload</string>
-                      </property>
-                     </widget>
-                    </item>
-                    <item>
-                     <widget class="QComboBox" name="createResFeatureSelect"/>
-                    </item>
-                   </layout>
                   </widget>
+                 </item>
+                 <item>
+                  <widget class="QComboBox" name="createResNodeSelectCombo"/>
+                 </item>
+                </layout>
+               </widget>
+              </item>
+              <item>
+               <widget class="QFrame" name="createResGeomSelectFrame">
+                <property name="frameShape">
+                 <enum>QFrame::NoFrame</enum>
+                </property>
+                <property name="frameShadow">
+                 <enum>QFrame::Raised</enum>
+                </property>
+                <layout class="QVBoxLayout" name="verticalLayout_17">
+                 <property name="topMargin">
+                  <number>0</number>
+                 </property>
+                 <item>
+                  <widget class="QLabel" name="createResGeomSelectLabel">
+                   <property name="text">
+                    <string>Select Feature(s) to Upload</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item>
+                  <widget class="QComboBox" name="createResGeomSelectCombo"/>
                  </item>
                 </layout>
                </widget>
@@ -825,83 +890,50 @@
                </spacer>
               </item>
               <item>
-               <widget class="QFrame" name="frame_11">
+               <widget class="QFrame" name="createResButtonFrame">
                 <property name="frameShape">
-                 <enum>QFrame::StyledPanel</enum>
+                 <enum>QFrame::NoFrame</enum>
                 </property>
                 <property name="frameShadow">
                  <enum>QFrame::Raised</enum>
                 </property>
                 <layout class="QHBoxLayout" name="horizontalLayout_3">
                  <item>
-                  <spacer name="horizontalSpacer_2">
-                   <property name="orientation">
-                    <enum>Qt::Horizontal</enum>
-                   </property>
-                   <property name="sizeHint" stdset="0">
-                    <size>
-                     <width>40</width>
-                     <height>20</height>
-                    </size>
-                   </property>
-                  </spacer>
-                 </item>
-                 <item>
-                  <widget class="QPushButton" name="addNewRes">
+                  <widget class="QPushButton" name="createResButton">
                    <property name="text">
                     <string>Create resource</string>
                    </property>
                   </widget>
                  </item>
-                 <item>
-                  <spacer name="horizontalSpacer_5">
-                   <property name="orientation">
-                    <enum>Qt::Horizontal</enum>
-                   </property>
-                   <property name="sizeHint" stdset="0">
-                    <size>
-                     <width>40</width>
-                     <height>20</height>
-                    </size>
-                   </property>
-                  </spacer>
-                 </item>
                 </layout>
                </widget>
               </item>
-             </layout>
-            </widget>
-           </item>
-           <item>
-            <spacer name="verticalSpacer">
-             <property name="orientation">
-              <enum>Qt::Vertical</enum>
-             </property>
-             <property name="sizeType">
-              <enum>QSizePolicy::Fixed</enum>
-             </property>
-             <property name="sizeHint" stdset="0">
-              <size>
-               <width>20</width>
-               <height>20</height>
-              </size>
-             </property>
-            </spacer>
-           </item>
-           <item>
-            <widget class="QFrame" name="frame_6">
-             <property name="frameShape">
-              <enum>QFrame::StyledPanel</enum>
-             </property>
-             <property name="frameShadow">
-              <enum>QFrame::Raised</enum>
-             </property>
-             <layout class="QVBoxLayout" name="verticalLayout_12">
               <item>
-               <widget class="QTextEdit" name="createResOutputBox">
-                <property name="readOnly">
-                 <bool>true</bool>
+               <widget class="QFrame" name="createResOutputBoxFrame">
+                <property name="frameShape">
+                 <enum>QFrame::NoFrame</enum>
                 </property>
+                <property name="frameShadow">
+                 <enum>QFrame::Raised</enum>
+                </property>
+                <layout class="QVBoxLayout" name="verticalLayout_14">
+                 <property name="topMargin">
+                  <number>0</number>
+                 </property>
+                 <property name="bottomMargin">
+                  <number>0</number>
+                 </property>
+                 <item>
+                  <widget class="QLabel" name="createResOutputBoxLabel">
+                   <property name="text">
+                    <string/>
+                   </property>
+                   <property name="wordWrap">
+                    <bool>true</bool>
+                   </property>
+                  </widget>
+                 </item>
+                </layout>
                </widget>
               </item>
              </layout>
@@ -915,7 +947,7 @@
              <property name="sizeHint" stdset="0">
               <size>
                <width>20</width>
-               <height>40</height>
+               <height>60</height>
               </size>
              </property>
             </spacer>
@@ -933,6 +965,9 @@
       <layout class="QVBoxLayout" name="verticalLayout_19">
        <item>
         <widget class="QScrollArea" name="scrollArea_3">
+         <property name="frameShape">
+          <enum>QFrame::NoFrame</enum>
+         </property>
          <property name="widgetResizable">
           <bool>true</bool>
          </property>
@@ -941,42 +976,113 @@
            <rect>
             <x>0</x>
             <y>0</y>
-            <width>518</width>
-            <height>384</height>
+            <width>495</width>
+            <height>680</height>
            </rect>
           </property>
           <layout class="QVBoxLayout" name="verticalLayout_13">
            <item>
-            <widget class="QGroupBox" name="groupBox_3">
-             <property name="title">
-              <string>Edit Existing Arches Resource</string>
+            <widget class="QFrame" name="editResFrame">
+             <property name="frameShape">
+              <enum>QFrame::StyledPanel</enum>
              </property>
-             <layout class="QVBoxLayout" name="verticalLayout_20">
+             <property name="frameShadow">
+              <enum>QFrame::Plain</enum>
+             </property>
+             <layout class="QVBoxLayout" name="verticalLayout_44">
+              <property name="leftMargin">
+               <number>18</number>
+              </property>
+              <property name="rightMargin">
+               <number>18</number>
+              </property>
               <item>
-               <widget class="QFrame" name="frame_8">
+               <widget class="QFrame" name="editResTitleFrame">
                 <property name="frameShape">
-                 <enum>QFrame::StyledPanel</enum>
+                 <enum>QFrame::NoFrame</enum>
                 </property>
                 <property name="frameShadow">
                  <enum>QFrame::Raised</enum>
                 </property>
-                <layout class="QVBoxLayout" name="verticalLayout_22">
+                <layout class="QVBoxLayout" name="verticalLayout_45">
                  <item>
-                  <widget class="QLabel" name="label_5">
+                  <widget class="QLabel" name="editResTitleLabel">
+                   <property name="font">
+                    <font>
+                     <pointsize>13</pointsize>
+                     <bold>false</bold>
+                    </font>
+                   </property>
+                   <property name="text">
+                    <string>Edit Resource</string>
+                   </property>
+                   <property name="alignment">
+                    <set>Qt::AlignCenter</set>
+                   </property>
+                  </widget>
+                 </item>
+                </layout>
+               </widget>
+              </item>
+              <item>
+               <widget class="QFrame" name="editResDescriptionFrame">
+                <property name="frameShape">
+                 <enum>QFrame::NoFrame</enum>
+                </property>
+                <property name="frameShadow">
+                 <enum>QFrame::Raised</enum>
+                </property>
+                <layout class="QVBoxLayout" name="verticalLayout_46">
+                 <property name="topMargin">
+                  <number>0</number>
+                 </property>
+                 <item>
+                  <widget class="QLabel" name="editResDescriptionLabel">
+                   <property name="text">
+                    <string>Edit an existing Arches resource using geometries from a QGIS layer.</string>
+                   </property>
+                   <property name="alignment">
+                    <set>Qt::AlignCenter</set>
+                   </property>
+                   <property name="wordWrap">
+                    <bool>true</bool>
+                   </property>
+                  </widget>
+                 </item>
+                </layout>
+               </widget>
+              </item>
+              <item>
+               <widget class="QFrame" name="editResSelectedResFrame">
+                <property name="frameShape">
+                 <enum>QFrame::NoFrame</enum>
+                </property>
+                <property name="frameShadow">
+                 <enum>QFrame::Raised</enum>
+                </property>
+                <layout class="QVBoxLayout" name="verticalLayout_47">
+                 <property name="topMargin">
+                  <number>0</number>
+                 </property>
+                 <item>
+                  <widget class="QLabel" name="editResSelectedResLabel">
                    <property name="text">
                     <string>Selected Resource</string>
                    </property>
                   </widget>
                  </item>
                  <item>
-                  <widget class="QLineEdit" name="selectedResUUID">
+                  <widget class="QLineEdit" name="editResSelectedResId">
                    <property name="readOnly">
                     <bool>true</bool>
                    </property>
                   </widget>
                  </item>
                  <item>
-                  <widget class="QTableWidget" name="selectedResAttributeTable">
+                  <widget class="QTableWidget" name="editResSelectedResAttributeTable">
+                   <property name="frameShadow">
+                    <enum>QFrame::Plain</enum>
+                   </property>
                    <property name="editTriggers">
                     <set>QAbstractItemView::NoEditTriggers</set>
                    </property>
@@ -984,6 +1090,31 @@
                     <bool>true</bool>
                    </attribute>
                   </widget>
+                 </item>
+                </layout>
+               </widget>
+              </item>
+              <item>
+               <widget class="QFrame" name="editResGeomSelectFrame">
+                <property name="frameShape">
+                 <enum>QFrame::NoFrame</enum>
+                </property>
+                <property name="frameShadow">
+                 <enum>QFrame::Plain</enum>
+                </property>
+                <layout class="QVBoxLayout" name="verticalLayout_48">
+                 <property name="topMargin">
+                  <number>0</number>
+                 </property>
+                 <item>
+                  <widget class="QLabel" name="editResGeomSelectLabel">
+                   <property name="text">
+                    <string>Select Feature(s) to Upload</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item>
+                  <widget class="QComboBox" name="editResGeomSelectCombo"/>
                  </item>
                 </layout>
                </widget>
@@ -1002,94 +1133,74 @@
                </spacer>
               </item>
               <item>
-               <widget class="QFrame" name="frame_12">
+               <widget class="QFrame" name="editResButtonFrame">
                 <property name="frameShape">
-                 <enum>QFrame::StyledPanel</enum>
+                 <enum>QFrame::NoFrame</enum>
                 </property>
                 <property name="frameShadow">
-                 <enum>QFrame::Raised</enum>
+                 <enum>QFrame::Plain</enum>
                 </property>
-                <layout class="QVBoxLayout" name="verticalLayout_21">
+                <layout class="QHBoxLayout" name="horizontalLayout_2">
                  <item>
-                  <widget class="QLabel" name="label_8">
+                  <widget class="QPushButton" name="editResAddGeom">
                    <property name="text">
-                    <string>Select New Feature(s)</string>
+                    <string>Add geometry</string>
                    </property>
                   </widget>
                  </item>
                  <item>
-                  <widget class="QComboBox" name="editResSelectFeatures"/>
-                 </item>
-                 <item>
-                  <widget class="QFrame" name="frame_13">
-                   <property name="frameShape">
-                    <enum>QFrame::StyledPanel</enum>
+                  <widget class="QPushButton" name="editResReplaceGeom">
+                   <property name="text">
+                    <string>Replace geometry</string>
                    </property>
-                   <property name="frameShadow">
-                    <enum>QFrame::Raised</enum>
-                   </property>
-                   <layout class="QHBoxLayout" name="horizontalLayout_2">
-                    <item>
-                     <spacer name="horizontalSpacer_7">
-                      <property name="orientation">
-                       <enum>Qt::Horizontal</enum>
-                      </property>
-                      <property name="sizeHint" stdset="0">
-                       <size>
-                        <width>40</width>
-                        <height>20</height>
-                       </size>
-                      </property>
-                     </spacer>
-                    </item>
-                    <item>
-                     <widget class="QPushButton" name="addEditRes">
-                      <property name="text">
-                       <string>Add geometry</string>
-                      </property>
-                     </widget>
-                    </item>
-                    <item>
-                     <widget class="QPushButton" name="replaceEditRes">
-                      <property name="text">
-                       <string>Replace geometry</string>
-                      </property>
-                     </widget>
-                    </item>
-                    <item>
-                     <spacer name="horizontalSpacer_8">
-                      <property name="orientation">
-                       <enum>Qt::Horizontal</enum>
-                      </property>
-                      <property name="sizeHint" stdset="0">
-                       <size>
-                        <width>40</width>
-                        <height>20</height>
-                       </size>
-                      </property>
-                     </spacer>
-                    </item>
-                   </layout>
                   </widget>
                  </item>
                 </layout>
                </widget>
               </item>
               <item>
-               <spacer name="verticalSpacer_3">
-                <property name="orientation">
-                 <enum>Qt::Vertical</enum>
+               <widget class="QFrame" name="editResOutputBoxFrame">
+                <property name="frameShape">
+                 <enum>QFrame::NoFrame</enum>
                 </property>
-                <property name="sizeHint" stdset="0">
-                 <size>
-                  <width>20</width>
-                  <height>40</height>
-                 </size>
+                <property name="frameShadow">
+                 <enum>QFrame::Plain</enum>
                 </property>
-               </spacer>
+                <layout class="QVBoxLayout" name="verticalLayout_26">
+                 <property name="topMargin">
+                  <number>0</number>
+                 </property>
+                 <property name="bottomMargin">
+                  <number>0</number>
+                 </property>
+                 <item>
+                  <widget class="QLabel" name="editResOutputBoxLabel">
+                   <property name="text">
+                    <string/>
+                   </property>
+                   <property name="wordWrap">
+                    <bool>true</bool>
+                   </property>
+                  </widget>
+                 </item>
+                </layout>
+               </widget>
               </item>
              </layout>
             </widget>
+           </item>
+           <item>
+            <spacer name="verticalSpacer">
+             <property name="orientation">
+              <enum>Qt::Vertical</enum>
+             </property>
+             <property name="sizeHint" stdset="0">
+              <size>
+               <width>20</width>
+               <height>60</height>
+              </size>
+             </property>
+            </spacer>
            </item>
           </layout>
          </widget>
@@ -1104,6 +1215,9 @@
       <layout class="QVBoxLayout" name="verticalLayout_23">
        <item>
         <widget class="QScrollArea" name="scrollArea_4">
+         <property name="frameShape">
+          <enum>QFrame::NoFrame</enum>
+         </property>
          <property name="widgetResizable">
           <bool>true</bool>
          </property>
@@ -1112,104 +1226,157 @@
            <rect>
             <x>0</x>
             <y>0</y>
-            <width>518</width>
-            <height>384</height>
+            <width>512</width>
+            <height>460</height>
            </rect>
           </property>
-          <layout class="QHBoxLayout" name="horizontalLayout_4">
+          <layout class="QVBoxLayout" name="verticalLayout_34">
            <item>
-            <widget class="QGroupBox" name="groupBox_4">
-             <property name="title">
-              <string>Settings</string>
+            <widget class="QFrame" name="settingsFrame">
+             <property name="frameShape">
+              <enum>QFrame::StyledPanel</enum>
              </property>
-             <layout class="QVBoxLayout" name="verticalLayout_24">
+             <property name="frameShadow">
+              <enum>QFrame::Raised</enum>
+             </property>
+             <layout class="QVBoxLayout" name="verticalLayout_20">
+              <property name="leftMargin">
+               <number>18</number>
+              </property>
+              <property name="rightMargin">
+               <number>18</number>
+              </property>
               <item>
-               <widget class="QFrame" name="frame_14">
+               <widget class="QFrame" name="settingsTitleFrame">
                 <property name="frameShape">
-                 <enum>QFrame::StyledPanel</enum>
+                 <enum>QFrame::NoFrame</enum>
                 </property>
                 <property name="frameShadow">
                  <enum>QFrame::Raised</enum>
                 </property>
-                <layout class="QVBoxLayout" name="verticalLayout_26">
+                <layout class="QVBoxLayout" name="verticalLayout_24">
                  <item>
-                  <widget class="QFrame" name="frame_15">
+                  <widget class="QLabel" name="settingsTitleLabel">
+                   <property name="font">
+                    <font>
+                     <pointsize>13</pointsize>
+                     <bold>false</bold>
+                    </font>
+                   </property>
                    <property name="frameShape">
-                    <enum>QFrame::StyledPanel</enum>
+                    <enum>QFrame::NoFrame</enum>
                    </property>
-                   <property name="frameShadow">
-                    <enum>QFrame::Raised</enum>
+                   <property name="text">
+                    <string>Settings</string>
                    </property>
-                   <layout class="QVBoxLayout" name="verticalLayout_25">
-                    <item>
-                     <widget class="QCheckBox" name="useStylesheetCheckbox">
-                      <property name="enabled">
-                       <bool>true</bool>
-                      </property>
-                      <property name="text">
-                       <string>Use Arches theme</string>
-                      </property>
-                     </widget>
-                    </item>
-                   </layout>
+                   <property name="alignment">
+                    <set>Qt::AlignCenter</set>
+                   </property>
                   </widget>
                  </item>
+                </layout>
+               </widget>
+              </item>
+              <item>
+               <widget class="QFrame" name="settingsDescriptionFrame">
+                <property name="frameShape">
+                 <enum>QFrame::NoFrame</enum>
+                </property>
+                <property name="frameShadow">
+                 <enum>QFrame::Raised</enum>
+                </property>
+                <layout class="QVBoxLayout" name="verticalLayout_25">
                  <item>
-                  <widget class="QFrame" name="frame_17">
-                   <property name="frameShape">
-                    <enum>QFrame::StyledPanel</enum>
+                  <widget class="QLabel" name="settingsDescriptionLabel">
+                   <property name="text">
+                    <string>Change settings of your Arches QGIS Plugin session.</string>
                    </property>
-                   <property name="frameShadow">
-                    <enum>QFrame::Raised</enum>
+                   <property name="alignment">
+                    <set>Qt::AlignCenter</set>
                    </property>
-                   <layout class="QVBoxLayout" name="verticalLayout_34">
-                    <item>
-                     <widget class="QCheckBox" name="hidePostgresLayers">
-                      <property name="text">
-                       <string>Hide PostgreSQL layers</string>
-                      </property>
-                     </widget>
-                    </item>
-                   </layout>
+                   <property name="wordWrap">
+                    <bool>true</bool>
+                   </property>
                   </widget>
                  </item>
+                </layout>
+               </widget>
+              </item>
+              <item>
+               <widget class="QFrame" name="styleThemeFrame">
+                <property name="frameShape">
+                 <enum>QFrame::NoFrame</enum>
+                </property>
+                <property name="frameShadow">
+                 <enum>QFrame::Plain</enum>
+                </property>
+                <layout class="QVBoxLayout" name="verticalLayout_22">
                  <item>
-                  <widget class="QFrame" name="frame_18">
-                   <property name="frameShape">
-                    <enum>QFrame::StyledPanel</enum>
+                  <widget class="QCheckBox" name="useStylesheetCheckbox">
+                   <property name="enabled">
+                    <bool>true</bool>
                    </property>
-                   <property name="frameShadow">
-                    <enum>QFrame::Raised</enum>
+                   <property name="text">
+                    <string>Use Arches theme</string>
                    </property>
-                   <layout class="QVBoxLayout" name="verticalLayout_38">
-                    <item>
-                     <widget class="QCheckBox" name="enableLoggingCheckbox">
-                      <property name="text">
-                       <string>Enable logging</string>
-                      </property>
-                     </widget>
-                    </item>
-                   </layout>
                   </widget>
                  </item>
+                </layout>
+               </widget>
+              </item>
+              <item>
+               <widget class="QFrame" name="hidePsqlLayersFrame">
+                <property name="frameShape">
+                 <enum>QFrame::NoFrame</enum>
+                </property>
+                <property name="frameShadow">
+                 <enum>QFrame::Plain</enum>
+                </property>
+                <layout class="QVBoxLayout" name="verticalLayout_21">
                  <item>
-                  <spacer name="verticalSpacer_4">
-                   <property name="orientation">
-                    <enum>Qt::Vertical</enum>
+                  <widget class="QCheckBox" name="hidePostgresLayers">
+                   <property name="text">
+                    <string>Hide PostgreSQL layers</string>
                    </property>
-                   <property name="sizeHint" stdset="0">
-                    <size>
-                     <width>20</width>
-                     <height>40</height>
-                    </size>
+                  </widget>
+                 </item>
+                </layout>
+               </widget>
+              </item>
+              <item>
+               <widget class="QFrame" name="enableLoggingFrame">
+                <property name="frameShape">
+                 <enum>QFrame::NoFrame</enum>
+                </property>
+                <property name="frameShadow">
+                 <enum>QFrame::Plain</enum>
+                </property>
+                <layout class="QVBoxLayout" name="verticalLayout_49">
+                 <item>
+                  <widget class="QCheckBox" name="enableLoggingCheckbox">
+                   <property name="text">
+                    <string>Enable logging</string>
                    </property>
-                  </spacer>
+                  </widget>
                  </item>
                 </layout>
                </widget>
               </item>
              </layout>
             </widget>
+           </item>
+           <item>
+            <spacer name="verticalSpacer_4">
+             <property name="orientation">
+              <enum>Qt::Vertical</enum>
+             </property>
+             <property name="sizeHint" stdset="0">
+              <size>
+               <width>20</width>
+               <height>40</height>
+              </size>
+             </property>
+            </spacer>
            </item>
           </layout>
          </widget>
@@ -1232,8 +1399,8 @@
            <rect>
             <x>0</x>
             <y>0</y>
-            <width>518</width>
-            <height>384</height>
+            <width>510</width>
+            <height>458</height>
            </rect>
           </property>
           <layout class="QVBoxLayout" name="verticalLayout_35">
@@ -1263,6 +1430,13 @@
    </item>
   </layout>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>AutoCompleteLineEdit</class>
+   <extends>QLineEdit</extends>
+   <header>arches_project.ui.widgets.auto_complete_line_edit</header>
+  </customwidget>
+ </customwidgets>
  <resources/>
  <connections/>
 </ui>

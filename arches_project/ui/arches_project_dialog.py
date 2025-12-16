@@ -27,6 +27,9 @@ from functools import partial
 
 from arches_project.core.arches.connection import ArchesConnection
 from arches_project.core.views.logging import enable_logging
+from arches_project.core.views.components.login_autocomplete import (
+    load_saved_credentials,
+)
 from arches_project.core.views.components.map import update_map_layers
 from arches_project.core.views.components.psql_layers import show_hide_psql_layers
 from arches_project.core.views.components.multiple_graph_nodes import (
@@ -35,9 +38,11 @@ from arches_project.core.views.components.multiple_graph_nodes import (
 from arches_project.core.views.resources import ResourcesView
 from arches_project.core.views.connection import ArchesConnectionView
 
-
 from qgis.PyQt import uic
 from qgis.PyQt import QtWidgets
+
+from PyQt5.QtCore import QEvent
+from PyQt5.QtWidgets import QLineEdit, QCompleter
 
 # This loads your .ui file so that PyQt can populate your plugin with the elements from Qt Designer
 FORM_CLASS, _ = uic.loadUiType(
@@ -70,42 +75,45 @@ class ArchesProjectDialog(QtWidgets.QDialog, FORM_CLASS):
 
         # to run when layer is changed in create resource and edit resource tabs
         self.hidePostgresLayers.setChecked(True)
-        self.createResFeatureSelect.highlighted.connect(
+        self.createResGeomSelectCombo.highlighted.connect(
             partial(update_map_layers, checkbox=self.hidePostgresLayers)
         )
-        self.editResSelectFeatures.highlighted.connect(
+        self.editResGeomSelectCombo.highlighted.connect(
             partial(update_map_layers, checkbox=self.hidePostgresLayers)
         )
 
         self.hidePostgresLayers.stateChanged.connect(
             partial(
                 show_hide_psql_layers,
-                combobox1=self.createResFeatureSelect,
-                combobox2=self.editResSelectFeatures,
+                combobox1=self.createResGeomSelectCombo,
+                combobox2=self.editResGeomSelectCombo,
                 dlg=self,
             )
         )
 
         ## Set "Create resource" to false to begin with and only update once Arches connection made
-        self.createResModelSelect.setEnabled(False)
-        self.createResFeatureSelect.setEnabled(False)
-        self.addNewRes.setEnabled(False)
+        self.createResModelSelectCombo.setEnabled(False)
+        self.createResGeomSelectCombo.setEnabled(False)
+        self.createResButton.setEnabled(False)
 
         ## Set "Edit Resource" to false to begin with
-        self.selectedResUUID.setText(
+        self.editResSelectedResId.setText(
             "Connect to your Arches instance to edit resources."
         )
-        self.addEditRes.setEnabled(False)
-        self.replaceEditRes.setEnabled(False)
-        self.editResSelectFeatures.setEnabled(False)
-        self.selectedResAttributeTable.setEnabled(False)
+        self.editResAddGeom.setEnabled(False)
+        self.editResReplaceGeom.setEnabled(False)
+        self.editResGeomSelectCombo.setEnabled(False)
+        self.editResSelectedResAttributeTable.setEnabled(False)
 
         # Check if selected graph has multiple geometry nodes
-        self.createResModelSelect.currentIndexChanged.connect(
+        self.createResModelSelectCombo.currentIndexChanged.connect(
             partial(multiple_geometry_node_check, dlg=self)
         )
         # Hide multiple geometry node selection by default
-        self.geometryNodeSelectFrame.hide()
+        self.createResNodeSelectFrame.hide()
+
+        # load saved credentials to auto completer
+        load_saved_credentials(self)
 
         # Connection to Arches instance
         self.arches_connection = ArchesConnectionView(
@@ -127,21 +135,21 @@ class ArchesProjectDialog(QtWidgets.QDialog, FORM_CLASS):
             dlg=self,
             iface=self.iface,
         )
-        self.addNewRes.clicked.connect(
+        self.createResButton.clicked.connect(
             partial(
                 self.resources_object.create_resource,
                 dlg_resource_confirmation=self.dlg_resource_confirmation,
             )
         )
 
-        self.addEditRes.clicked.connect(
+        self.editResAddGeom.clicked.connect(
             partial(
                 self.resources_object.edit_resource,
                 replace=False,
                 dlg_resource_confirmation=self.dlg_resource_confirmation,
             )
         )
-        self.replaceEditRes.clicked.connect(
+        self.editResReplaceGeom.clicked.connect(
             partial(
                 self.resources_object.edit_resource,
                 replace=True,

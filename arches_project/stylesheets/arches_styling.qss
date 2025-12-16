@@ -3,11 +3,9 @@ QTabWidget {
     font-family: 'Open Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif;
 }
 
-
 QWidget {
     background-color: #FFF;
 }
-
 
 QLabel {
     font-family: 'Open Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif;
@@ -15,31 +13,44 @@ QLabel {
     font-weight: 500;
     color: #666;
 }
-QLabel#loginSuccess {
-    font-size: 15px;
-    font-weight: 550;
-    color: #2f527a;
-}
-QLabel#signInLabel, QLabel#loginSuccessLabel {
-    font-size: 34px;
+
+QCheckBox {
+    font-family: 'Open Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    font-size: 13px;
     font-weight: 300;
 }
-QLabel#signInDescriptionLabel, QLabel#displayTextLabel {
-    font-size: 18px;
-    font-weight: 300;
+
+QLabel#signInLabel, 
+QLabel#loginSuccessLabel, 
+QLabel#createResTitleText, 
+QLabel#editResTitleLabel,
+QLabel#settingsTitleLabel {
+    font-size: 30px;
+    font-weight: 400;
 }
+
+QLabel#signInDescriptionLabel, 
+QLabel#displayTextLabel, 
+QLabel#createResDescriptionLabel, 
+QLabel#editResDescriptionLabel,
+QLabel#settingsDescriptionLabel {
+    font-size: 16px;
+    font-weight: 400;
+}
+
 QLabel#loginErrorMessageLabel {
     color: red;
 }
+
 QLabel#displayFullNameLabel {
     font-size: 25px;
     font-weight: 300;
 }
+
 QLabel#displayUsernameLabel {
     font-size: 15px;
     font-weight: 300;
 }
-
 
 QTextEdit {
     font-family: 'Open Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif;
@@ -48,33 +59,37 @@ QTextEdit {
     color: #666;
 }
 
-
 QFrame {
     background-color: #FFFFFF;
 }
-QFrame#connectionButtons, QFrame#logoutFrame, QFrame#archesURLFrame, QFrame#archesUserFrame {
+
+QFrame#connectionButtons, 
+QFrame#logoutFrame, 
+QFrame#archesURLFrame, 
+QFrame#archesUserFrame {
     border: 0;
 }
-
-
 
 QTabBar {
     background-color: #2d3c4b;
 }
+
 QTabBar::tab {
     background-color: #2d3c4b;
     width: 50px;
-} 
+}
+
 QTabBar::tab:selected { 
     background-color: #2986b8;    
 }
+
 QTabBar::tab:hover {
     background-color: #394D61;
 }
+
 QTabBar::tab:selected:hover {
     background-color: #2986b8;
 }
-
 
 QPushButton {
     color: #FFFFFF;
@@ -86,35 +101,56 @@ QPushButton {
     font-weight: 600;
     border-radius: 0;
 }
+
 QPushButton#btnConnect {
     background-color: #579ddb;
     border-color: #5fa2dd;
 }
+
 QPushButton#btnConnect:hover {
     background-color: #337ab7;
     border-color: #2e6da4;
 }
-QPushButton#btnLogout, QPushButton#addNewRes, QPushButton#addEditRes, QPushButton#replaceEditRes, QPushButton#connectedLogoutBtn, QPushButton#confirmDialogConfirm {
+
+QPushButton#btnLogout, 
+QPushButton#createResButton, 
+QPushButton#editResAddGeom, 
+QPushButton#editResReplaceGeom, 
+QPushButton#connectedLogoutBtn, 
+QPushButton#confirmDialogConfirm {
     background-color: #3acaa1;
     border-color: #42cca5;
 }
-QPushButton#btnLogout:disabled, QPushButton#addNewRes:disabled, QPushButton#addEditRes:disabled, QPushButton#replaceEditRes:disabled, QPushButton#connectedLogoutBtn:disabled, QPushButton#confirmDialogConfirm:disabled {
+
+QPushButton#btnLogout:disabled, 
+QPushButton#createResButton:disabled, 
+QPushButton#editResAddGeom:disabled, 
+QPushButton#editResReplaceGeom:disabled, 
+QPushButton#connectedLogoutBtn:disabled, 
+QPushButton#confirmDialogConfirm:disabled {
     background-color: #89c4b4;
     border-color: #8bcbb9;
 }
-QPushButton#btnLogout:hover, QPushButton#addNewRes:hover, QPushButton#addEditRes:hover, QPushButton#replaceEditRes:hover, QPushButton#connectedLogoutBtn:hover, QPushButton#confirmDialogConfirm:hover {
+
+QPushButton#btnLogout:hover, 
+QPushButton#createResButton:hover, 
+QPushButton#editResAddGeom:hover, 
+QPushButton#editResReplaceGeom:hover, 
+QPushButton#connectedLogoutBtn:hover, 
+QPushButton#confirmDialogConfirm:hover {
     background-color: #22b78c;
     border-color: #1d9d78;
 }
+
 QPushButton#confirmDialogCancel {
     background-color: #f75d3f;
     border-color: #E53211;
 }
+
 QPushButton#confirmDialogCancel:hover {
     background-color: #f53610;
     border-color: #fc2f09;
 }
-
 
 QLineEdit {
     background-color: #FFF;
@@ -131,7 +167,6 @@ QGroupBox {
     background-color: white;
 }
 
-
 QComboBox {
     font-family: 'Open Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif;
     padding: 4px 20px 4px 5px;
@@ -144,20 +179,25 @@ QLineEdit#archesServerInput[missingCreds="True"] {
     border: 2px solid; 
     border-color: red;
 }
+
 QLabel#archesServerLabel[missingCreds="True"] {
     color: red;
 }
+
 QLineEdit#usernameInput[missingCreds="True"] {
     border: 2px solid; 
     border-color: red;
 }
+
 QLabel#usernameLabel[missingCreds="True"] {
     color: red;
 }
+
 QLineEdit#passwordInput[missingCreds="True"] {
     border: 2px solid; 
     border-color: red;
 }
+
 QLabel#passwordLabel[missingCreds="True"] {
     color: red;
 }

@@ -26,6 +26,8 @@ class ArchesQGISTestCase(unittest.TestCase):
         """
 
         QSettings().setValue("locale/userLocale", "en")
+        QSettings().setValue("urls", ["http://127.0.0.1:8000"])
+        QSettings().setValue("usernames", ["admin"])
 
         self.arches_project = ArchesProject(IFACE)
 
@@ -52,6 +54,8 @@ class ArchesQGISTestCase(unittest.TestCase):
         Runs after each test.
         """
         QSettings().setValue("locale/userLocale", None)
+        QSettings().setValue("urls", [])
+        QSettings().setValue("usernames", [])
 
         self.arches_project.unload()
         self.arches_project = None

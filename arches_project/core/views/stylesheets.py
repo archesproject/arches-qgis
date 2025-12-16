@@ -17,6 +17,7 @@ class PluginStylesheets:
         self.dlg.updateTextFrame.hide()
         self.dlg.loginErrorMessageFrame.hide()
         self.dlg.loadingWheelVerticalSpacerFrame.hide()
+        self.dlg.createResOutputBoxFrame.hide()
 
         if not self.dlg.useStylesheetCheckbox.isChecked():
             self.default_stylesheet()
@@ -33,9 +34,9 @@ class PluginStylesheets:
         # remove icons from buttons
         self.dlg.btnConnect.setIcon(QIcon(""))
         self.dlg.btnLogout.setIcon(QIcon(""))
-        self.dlg.addNewRes.setIcon(QIcon(""))
-        self.dlg.addEditRes.setIcon(QIcon(""))
-        self.dlg.replaceEditRes.setIcon(QIcon(""))
+        self.dlg.createResButton.setIcon(QIcon(""))
+        self.dlg.editResAddGeom.setIcon(QIcon(""))
+        self.dlg.editResReplaceGeom.setIcon(QIcon(""))
         self.dlg_resource_confirmation.confirmDialogCancel.setIcon(QIcon(""))
         self.dlg_resource_confirmation.confirmDialogConfirm.setIcon(QIcon(""))
         # nav bar
@@ -83,23 +84,23 @@ class PluginStylesheets:
             self.dlg.btnLogout.setIconSize(QSize(12, 12))
             self.dlg.btnLogout.setCursor(QCursor(Qt.PointingHandCursor))
 
-            self.dlg.addNewRes.setIcon(
+            self.dlg.createResButton.setIcon(
                 QIcon(os.path.join(self.plugin_dir, "icons", "mdi-pencil.svg"))
             )
-            self.dlg.addNewRes.setIconSize(QSize(12, 12))
-            self.dlg.addNewRes.setCursor(QCursor(Qt.PointingHandCursor))
+            self.dlg.createResButton.setIconSize(QSize(12, 12))
+            self.dlg.createResButton.setCursor(QCursor(Qt.PointingHandCursor))
 
-            self.dlg.addEditRes.setIcon(
+            self.dlg.editResAddGeom.setIcon(
                 QIcon(os.path.join(self.plugin_dir, "icons", "fa-plus.svg"))
             )
-            self.dlg.addEditRes.setIconSize(QSize(12, 12))
-            self.dlg.addEditRes.setCursor(QCursor(Qt.PointingHandCursor))
+            self.dlg.editResAddGeom.setIconSize(QSize(12, 12))
+            self.dlg.editResAddGeom.setCursor(QCursor(Qt.PointingHandCursor))
 
-            self.dlg.replaceEditRes.setIcon(
+            self.dlg.editResReplaceGeom.setIcon(
                 QIcon(os.path.join(self.plugin_dir, "icons", "mi-replace.svg"))
             )
-            self.dlg.replaceEditRes.setIconSize(QSize(12, 12))
-            self.dlg.replaceEditRes.setCursor(QCursor(Qt.PointingHandCursor))
+            self.dlg.editResReplaceGeom.setIconSize(QSize(12, 12))
+            self.dlg.editResReplaceGeom.setCursor(QCursor(Qt.PointingHandCursor))
 
             self.dlg_resource_confirmation.confirmDialogCancel.setIcon(
                 QIcon(os.path.join(self.plugin_dir, "icons", "fa-times.svg"))

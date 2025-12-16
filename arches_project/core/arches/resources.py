@@ -87,7 +87,8 @@ class ArchesResources:
                         geometry_format=None,
                         arches_operation="create",
                     )
-                    dlg.createResOutputBox.setText(
+                    dlg.createResOutputBoxFrame.show()
+                    dlg.createResOutputBoxLabel.setText(
                         """Successfully created a new resource with the selected geometry.
                                                         \nTo continue the creation of your new resource, navigate to...\n%s/resource/%s"""
                         % (
@@ -100,13 +101,15 @@ class ArchesResources:
                     )
                     dlg_resource_confirmation.close()
                 except:
+                    dlg.createResOutputBoxFrame.show()
                     dlg.createResOutputBox.setText("Resource creation FAILED.")
                     show_message(
                         iface, "Error", "Resource creation failed.", duration=-1
                     )
                     dlg_resource_confirmation.close()
             else:
-                dlg.createResOutputBox.setText(
+                dlg.createResOutputBoxFrame.show()
+                dlg.createResOutputBoxLabel.setText(
                     "This user does not have permission to create data for the geometry nodegroup in this resource model. An Arches resource has not been created."
                 )
                 show_message(
@@ -122,13 +125,13 @@ class ArchesResources:
             dlg_resource_confirmation.messageLabel.setText("Confirmation prompt")
 
         # Get info on current layer and selected graph
-        selectedLayerIndex = dlg.createResFeatureSelect.currentIndex()
+        selectedLayerIndex = dlg.createResGeomSelectCombo.currentIndex()
         selectedLayer = arches_api.layers[selectedLayerIndex]
-        selectedGraphIndex = dlg.createResModelSelect.currentIndex()
+        selectedGraphIndex = dlg.createResModelSelectCombo.currentIndex()
         selectedGraph = arches_api.arches_graphs_list[selectedGraphIndex]
 
         if selectedGraph["multiple_geometry_nodes"] == True:
-            selectedNodeIndex = dlg.geometryNodeSelect.currentIndex()
+            selectedNodeIndex = dlg.createResNodeSelectCombo.currentIndex()
             selectedNode = arches_api.geometry_nodes[selectedNodeIndex]
 
         elif selectedGraph["multiple_geometry_nodes"] == False:
@@ -188,6 +191,15 @@ class ArchesResources:
                         geometry_format=None,
                         arches_operation=operation_type,
                     )
+                    dlg.editResOutputBoxFrame.show()
+                    dlg.editResOutputBoxLabel.setText(
+                        """Successfully edited the selected resource with the selected geometry.
+                                                        \nTo continue editing the resource navigate to...\n%s/resource/%s"""
+                        % (
+                            arches_api.arches_token["formatted_url"],
+                            results["resourceinstance_id"],
+                        )
+                    )
                     show_message(
                         iface,
                         "Success",
@@ -195,7 +207,10 @@ class ArchesResources:
                     )
                     dialog.close()
                 except:
-                    print(f"Couldn't {operation_type} geometry in resource")
+                    dlg.editResOutputBoxFrame.show()
+                    dlg.editResOutputBoxLabel.setText(
+                        f"Couldn't {operation_type} geometry in resource"
+                    )
                     show_message(
                         iface,
                         "error",
@@ -204,14 +219,15 @@ class ArchesResources:
                     )
                     dialog.close()
             else:
+                dlg.editResOutputBoxFrame.show()
+                dlg.editResOutputBoxLabel.setText(
+                    "This user does not have permission to update data for the geometry nodegroup in this resource model."
+                )
                 show_message(
                     iface,
                     "error",
                     "This user does not have permission to update data for the geometry nodegroup in this resource model",
                     duration=-1,
-                )
-                print(
-                    "This user does not have permission to update data for the geometry nodegroup in this resource model."
                 )
                 dialog.close()
 
@@ -220,7 +236,7 @@ class ArchesResources:
             dlg_resource_confirmation.messageLabel.setText("Confirmation prompt")
 
         if arches_api.arches_selected_resource:
-            selectedLayerIndex = dlg.editResSelectFeatures.currentIndex()
+            selectedLayerIndex = dlg.editResGeomSelectCombo.currentIndex()
             selectedLayer = arches_api.layers[selectedLayerIndex]
 
             geom_convert = Geometries(selectedLayer)

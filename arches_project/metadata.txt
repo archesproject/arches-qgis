@@ -27,7 +27,7 @@ tags=python
 
 homepage=https://github.com/archesproject/arches-qgis
 category=Plugins
-icon=arches_project/icons/arches.png
+icon=icons/arches.png
 # experimental flag
 experimental=True
 
