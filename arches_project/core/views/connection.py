@@ -5,6 +5,7 @@ from arches_project.core.views.components.spinner import triggerSpinner
 from arches_project.core.arches.api import arches_api
 
 from qgis.core import QgsMessageLog, QgsApplication
+from PyQt5.QtCore import QTimer
 import datetime
 
 
@@ -137,3 +138,7 @@ class ArchesConnectionView:
         self.dlg.refreshConfirmLabel.setText(
             f"Connection refreshed at {formatted_datetime}"
         )
+        QTimer.singleShot(5000, self.hide_refresh_confirm_label)
+
+    def hide_refresh_confirm_label(self):
+        self.dlg.refreshConfirmLabel.hide()
