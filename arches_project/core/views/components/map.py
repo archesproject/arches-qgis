@@ -97,13 +97,13 @@ def map_selection(iface, dlg):
 
     elif len(features) == 0:
         print("No feature selected")
-        dlg.selectedResAttributeTable.setRowCount(0)
+        dlg.editResSelectedResAttributeTable.setRowCount(0)
         if arches_api.arches_token:
-            dlg.selectedResUUID.setText("Select a feature to proceed.")
-            dlg.addEditRes.setEnabled(False)
-            dlg.replaceEditRes.setEnabled(False)
+            dlg.editResSelectedResId.setText("Select a feature to proceed.")
+            dlg.editResAddGeom.setEnabled(False)
+            dlg.editResReplaceGeom.setEnabled(False)
         else:
-            dlg.selectedResUUID.setText(
+            dlg.editResSelectedResId.setText(
                 "Connect to your Arches instance to edit resources."
             )
         return
