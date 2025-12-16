@@ -683,6 +683,28 @@
                </widget>
               </item>
               <item>
+               <widget class="QFrame" name="refreshConfirmFrame">
+                <property name="frameShape">
+                 <enum>QFrame::NoFrame</enum>
+                </property>
+                <property name="frameShadow">
+                 <enum>QFrame::Raised</enum>
+                </property>
+                <layout class="QHBoxLayout" name="horizontalLayout_7">
+                 <item>
+                  <widget class="QLabel" name="refreshConfirmMsg">
+                   <property name="text">
+                    <string>refresh confirmation msg</string>
+                   </property>
+                   <property name="alignment">
+                    <set>Qt::AlignCenter</set>
+                   </property>
+                  </widget>
+                 </item>
+                </layout>
+               </widget>
+              </item>
+              <item>
                <widget class="QFrame" name="logoutFrame">
                 <property name="frameShape">
                  <enum>QFrame::NoFrame</enum>
