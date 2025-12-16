@@ -664,25 +664,6 @@
                </spacer>
               </item>
               <item>
-               <widget class="QFrame" name="logoutFrame">
-                <property name="frameShape">
-                 <enum>QFrame::NoFrame</enum>
-                </property>
-                <property name="frameShadow">
-                 <enum>QFrame::Raised</enum>
-                </property>
-                <layout class="QHBoxLayout" name="horizontalLayout_5">
-                 <item>
-                  <widget class="QPushButton" name="btnLogout">
-                   <property name="text">
-                    <string>Logout</string>
-                   </property>
-                  </widget>
-                 </item>
-                </layout>
-               </widget>
-              </item>
-              <item>
                <widget class="QFrame" name="refreshFrame">
                 <property name="frameShape">
                  <enum>QFrame::NoFrame</enum>
@@ -695,6 +676,25 @@
                   <widget class="QPushButton" name="btnRefresh">
                    <property name="text">
                     <string>Refresh connection</string>
+                   </property>
+                  </widget>
+                 </item>
+                </layout>
+               </widget>
+              </item>
+              <item>
+               <widget class="QFrame" name="logoutFrame">
+                <property name="frameShape">
+                 <enum>QFrame::NoFrame</enum>
+                </property>
+                <property name="frameShadow">
+                 <enum>QFrame::Raised</enum>
+                </property>
+                <layout class="QHBoxLayout" name="horizontalLayout_5">
+                 <item>
+                  <widget class="QPushButton" name="btnLogout">
+                   <property name="text">
+                    <string>Logout</string>
                    </property>
                   </widget>
                  </item>
