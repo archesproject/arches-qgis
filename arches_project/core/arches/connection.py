@@ -164,6 +164,7 @@ class ArchesConnection:
         self.url = arches_api.arches_token["formatted_url"]
         arches_api.arches_graphs_list = self.get_graphs(None, None)
         update_create_resources_tab(dlg=dlg) 
+        dlg.arches_connection.update_refresh_confirm_label()
         
     def store_auto_complete_credentials(self):
 

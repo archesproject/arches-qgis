@@ -5,6 +5,7 @@ from arches_project.core.views.components.spinner import triggerSpinner
 from arches_project.core.arches.api import arches_api
 
 from qgis.core import QgsMessageLog, QgsApplication
+import datetime
 
 
 class ArchesConnectionView:
@@ -128,4 +129,11 @@ class ArchesConnectionView:
         self.dlg.selectedResAttributeTable.setEnabled(True)
         self.dlg.selectedResUUID.setText(
             "Connected to Arches. Select an Arches resource to proceed."
+        )
+
+    def update_refresh_confirm_label(self):
+        current_datetime = datetime.datetime.now()
+        formatted_datetime = current_datetime.strftime("%Y-%m-%d %H:%M:%S")
+        self.dlg.refreshConfirmLabel.setText(
+            f"Connection refreshed at {formatted_datetime}"
         )
