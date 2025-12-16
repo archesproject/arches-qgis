@@ -28,7 +28,7 @@ class LoggedIn:
         self.dlg.displayConnectionInfoLabel.setText(f"You are connected to {self.url}.")
 
 
-class UpdateLogin:
+class UpdateLoginProgress:
     def __init__(self, dlg_label, step=0):
         self.updateTextLabel = dlg_label
         self.total_number_steps = 4
