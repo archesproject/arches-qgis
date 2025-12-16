@@ -191,10 +191,6 @@ class ArchesResources:
                     edited_resource_url = f"{arches_api.arches_token['formatted_url']}/resource/{results['resourceinstance_id']}"
                     dlg.editResOutputBoxLabel.setText(
                         f'Successfully edited the selected resource with the selected geometry.<br>To continue editing the resource navigate to...<br><a href="{edited_resource_url}">{edited_resource_url}</a>'
-                        % (
-                            arches_api.arches_token["formatted_url"],
-                            results["resourceinstance_id"],
-                        )
                     )
                     show_message(
                         iface,
