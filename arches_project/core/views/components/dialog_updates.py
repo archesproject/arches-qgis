@@ -11,7 +11,6 @@ def connection_reset(hard_reset, dlg, iface, manual_logout=False):
     """
     Reset Arches connection
     """
-    # TODO: This is all UI related, so should be moved into views/
     if hard_reset == True:
         # Reset connection inputs
         dlg.archesServerInput.setText("")
