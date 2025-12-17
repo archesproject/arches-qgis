@@ -145,15 +145,15 @@ class ArchesConnectionView:
             f"Connection refreshed at {formatted_datetime}"
         )
         # QTimer.singleShot(5000, lambda: self.dlg.refreshConfirmFrame.hide())
-        QTimer.singleShot(1000, self.start_fade_out)
+        QTimer.singleShot(1500, self.fade_out)
 
-    def start_fade_out(self):
-        self.fade_anim = QPropertyAnimation(self.opacity_effect, b"opacity")
-        self.fade_anim.setDuration(3000)
-        self.fade_anim.setStartValue(1)
-        self.fade_anim.setEndValue(0)
-        self.fade_anim.setEasingCurve(QEasingCurve.OutCubic)
+    def fade_out(self):
+        self.fade_animation = QPropertyAnimation(self.opacity_effect, b"opacity")
+        self.fade_animation.setDuration(1000)
+        self.fade_animation.setStartValue(1)
+        self.fade_animation.setEndValue(0)
+        self.fade_animation.setEasingCurve(QEasingCurve.OutCubic)
 
-        self.fade_anim.finished.connect(self.dlg.refreshConfirmFrame.hide)
+        self.fade_animation.finished.connect(self.dlg.refreshConfirmFrame.hide)
 
-        self.fade_anim.start()
+        self.fade_animation.start()
