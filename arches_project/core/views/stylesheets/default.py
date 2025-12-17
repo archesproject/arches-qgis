@@ -2,36 +2,22 @@ from qgis.PyQt.QtGui import QIcon
 
 
 class DefaultStylesheet:
-    def __init__(
-        self,
-        dlg,
-        dlg_resource_creation,
-        dlg_edit_resource_add,
-        dlg_edit_resource_replace,
-    ):
+    def __init__(self, dlg, dlg_resource_confirmation):
         self.dlg = dlg
-        self.dlg_resource_creation = dlg_resource_creation
-        self.dlg_edit_resource_add = dlg_edit_resource_add
-        self.dlg_edit_resource_replace = dlg_edit_resource_replace
+        self.dlg_resource_confirmation = dlg_resource_confirmation
 
     def default_stylesheet(self):
         # reset stylesheets
         self.dlg.setStyleSheet("")
-        self.dlg_resource_creation.setStyleSheet("")
-        self.dlg_edit_resource_add.setStyleSheet("")
-        self.dlg_edit_resource_replace.setStyleSheet("")
+        self.dlg_resource_confirmation.setStyleSheet("")
         # remove icons from buttons
         self.dlg.btnConnect.setIcon(QIcon(""))
         self.dlg.btnLogout.setIcon(QIcon(""))
-        self.dlg.addNewRes.setIcon(QIcon(""))
-        self.dlg.addEditRes.setIcon(QIcon(""))
-        self.dlg.replaceEditRes.setIcon(QIcon(""))
-        self.dlg_resource_creation.createDialogCancel.setIcon(QIcon(""))
-        self.dlg_resource_creation.createDialogCreate.setIcon(QIcon(""))
-        self.dlg_edit_resource_add.editDialogCancel.setIcon(QIcon(""))
-        self.dlg_edit_resource_add.editDialogCreate.setIcon(QIcon(""))
-        self.dlg_edit_resource_replace.editDialogCancel.setIcon(QIcon(""))
-        self.dlg_edit_resource_replace.editDialogCreate.setIcon(QIcon(""))
+        self.dlg.createResButton.setIcon(QIcon(""))
+        self.dlg.editResAddGeom.setIcon(QIcon(""))
+        self.dlg.editResReplaceGeom.setIcon(QIcon(""))
+        self.dlg_resource_confirmation.confirmDialogCancel.setIcon(QIcon(""))
+        self.dlg_resource_confirmation.confirmDialogConfirm.setIcon(QIcon(""))
         # nav bar
         # TODO: don't like the fact I have to add the exact strings (from qtcreator) back to the tab titles, seems like could be a better method...
         self.dlg.tabWidget.setStyleSheet(" QTabWidget {qproperty-tabPosition: North;} ")

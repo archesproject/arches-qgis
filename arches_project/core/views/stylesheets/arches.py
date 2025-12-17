@@ -6,14 +6,7 @@ import os
 
 
 class ArchesStylesheet:
-    def __init__(
-        self,
-        dlg,
-        dlg_resource_creation,
-        dlg_edit_resource_add,
-        dlg_edit_resource_replace,
-        plugin_dir,
-    ):
+    def __init__(self, dlg, dlg_resource_confirmation, plugin_dir):
         self.dlg = dlg
         self.dlg_resource_confirmation = dlg_resource_confirmation
         self.plugin_dir = plugin_dir

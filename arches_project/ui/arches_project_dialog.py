@@ -168,9 +168,7 @@ class ArchesProjectDialog(QtWidgets.QDialog, FORM_CLASS):
         # Stylesheets
         self.stylesheets = Stylesheets(
             dlg=self,
-            dlg_resource_creation=self.dlg_resource_creation,
-            dlg_edit_resource_add=self.dlg_edit_resource_add,
-            dlg_edit_resource_replace=self.dlg_edit_resource_replace,
+            dlg_resource_confirmation=self.dlg_resource_confirmation,
             plugin_dir=self.plugin_dir,
         )
 
