@@ -5,7 +5,8 @@ from arches_project.core.views.components.spinner import triggerSpinner
 from arches_project.core.arches.api import arches_api
 
 from qgis.core import QgsMessageLog, QgsApplication
-from PyQt5.QtCore import QTimer
+from PyQt5.QtCore import QTimer, QPropertyAnimation, QEasingCurve
+from PyQt5.QtWidgets import QGraphicsOpacityEffect
 import datetime
 
 
@@ -15,6 +16,9 @@ class ArchesConnectionView:
         self.dlg = dlg
         self.plugin_dir = plugin_dir
         self.iface = iface
+
+        self.opacity_effect = QGraphicsOpacityEffect(self.dlg.refreshConfirmLabel)
+        self.dlg.refreshConfirmLabel.setGraphicsEffect(self.opacity_effect)
 
     def arches_connection_save(self):
         """
@@ -133,10 +137,23 @@ class ArchesConnectionView:
         )
 
     def update_refresh_confirm_label(self):
+        self.opacity_effect.setOpacity(1.0)
         self.dlg.refreshConfirmFrame.show()
         current_datetime = datetime.datetime.now()
         formatted_datetime = current_datetime.strftime("%Y-%m-%d %H:%M:%S")
         self.dlg.refreshConfirmLabel.setText(
             f"Connection refreshed at {formatted_datetime}"
         )
-        QTimer.singleShot(5000, lambda: self.dlg.refreshConfirmFrame.hide())
+        # QTimer.singleShot(5000, lambda: self.dlg.refreshConfirmFrame.hide())
+        QTimer.singleShot(1000, self.start_fade_out)
+
+    def start_fade_out(self):
+        self.fade_anim = QPropertyAnimation(self.opacity_effect, b"opacity")
+        self.fade_anim.setDuration(3000)
+        self.fade_anim.setStartValue(1)
+        self.fade_anim.setEndValue(0)
+        self.fade_anim.setEasingCurve(QEasingCurve.OutCubic)
+
+        self.fade_anim.finished.connect(self.dlg.refreshConfirmFrame.hide)
+
+        self.fade_anim.start()
