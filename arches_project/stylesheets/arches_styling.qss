@@ -162,12 +162,37 @@ QPushButton#confirmDialogCancel:hover {
     border-color: #fc2f09;
 }
 
-QLineEdit {
+QPushButton#createResFeatureSelectButton {
     background-color: #FFF;
-    border: 1px solid; 
+    border: 1px solid;
     border-color: #aaa;
     padding: 4px 20px 4px 5px;
+    border-radius: 2px;
+    height: 25px;
 }
+
+QPushButton#createResFeatureSelectButton:hover {
+    background-color: #337ab7;
+    border-color: #2e6da4;
+}
+
+QTableWidget,
+QLineEdit {
+    background-color: #FFF;
+    border: 1px solid;
+    border-color: #aaa;
+    padding: 4px 20px 4px 5px;
+    border-radius: 2px;
+    height: 25px;
+}
+
+QTableWidget:disabled,
+QLineEdit:disabled {
+    background-color: #FDFDFD;
+    color: #A0A0A0;
+    border: 1px solid #D6D6D6;
+}
+
 
 QGroupBox {
     font-family: 'Open Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif;
@@ -182,6 +207,15 @@ QComboBox {
     padding: 4px 20px 4px 5px;
     selection-background-color: #54abd9;
     selection-color: #FFF;
+    border-color: #aaa;
+    height: 25px;
+    background-color: #FFF;
+}
+
+QComboBox:disabled {
+    background-color: #FDFDFD;
+    color: #A0A0A0;
+    border-color: #D6D6D6;
 }
 
 /* Dynamic login missing credentials */

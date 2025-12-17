@@ -21,6 +21,8 @@ class ArchesAPI:
             "nodeid": "",
             "tileid": "",
         }
+        # Store selected geometries to send to Arches
+        self.selected_geometries = []
 
         # Layers is a global state, but will be removed soon
         self.layers = []

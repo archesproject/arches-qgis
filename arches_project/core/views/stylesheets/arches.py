@@ -53,6 +53,14 @@ class ArchesStylesheet:
             self.dlg.createResButton.setIconSize(QSize(12, 12))
             self.dlg.createResButton.setCursor(QCursor(Qt.PointingHandCursor))
 
+            self.dlg.createResFeatureSelectButton.setIcon(
+                QIcon(os.path.join(self.plugin_dir, "icons", "fa-arrow-pointer.svg"))
+            )
+            self.dlg.createResFeatureSelectButton.setIconSize(QSize(12, 12))
+            self.dlg.createResFeatureSelectButton.setCursor(
+                QCursor(Qt.PointingHandCursor)
+            )
+
             self.dlg.editResAddGeom.setIcon(
                 QIcon(os.path.join(self.plugin_dir, "icons", "fa-plus.svg"))
             )

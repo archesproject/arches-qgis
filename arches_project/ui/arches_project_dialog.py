@@ -96,8 +96,13 @@ class ArchesProjectDialog(QtWidgets.QDialog, FORM_CLASS):
         self.createResModelSelectCombo.setEnabled(False)
         self.createResGeomSelectCombo.setEnabled(False)
         self.createResButton.setEnabled(False)
+        self.createResFeatureLineEdit.setEnabled(False)
+        self.createResFeatureLineEdit.setText(
+            "0 features selected. Select features from the map."
+        )
 
         ## Set "Edit Resource" to false to begin with
+        self.editResSelectedResId.setEnabled(False)
         self.editResSelectedResId.setText(
             "Connect to your Arches instance to edit resources."
         )
