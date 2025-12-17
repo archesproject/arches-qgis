@@ -68,6 +68,9 @@ class ArchesProjectDialog(QtWidgets.QDialog, FORM_CLASS):
 
         self.dlg_resource_confirmation = archesproject.dlg_resource_confirmation
 
+        # hide refresh confirmation msg
+        self.refreshConfirmFrame.hide()
+
         # Set tab index to 0 always
         self.tabWidget.setCurrentIndex(0)
         self.tabWidget.setTabVisible(1, False)

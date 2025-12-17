@@ -133,12 +133,10 @@ class ArchesConnectionView:
         )
 
     def update_refresh_confirm_label(self):
+        self.dlg.refreshConfirmFrame.show()
         current_datetime = datetime.datetime.now()
         formatted_datetime = current_datetime.strftime("%Y-%m-%d %H:%M:%S")
         self.dlg.refreshConfirmLabel.setText(
             f"Connection refreshed at {formatted_datetime}"
         )
-        QTimer.singleShot(5000, self.hide_refresh_confirm_label)
-
-    def hide_refresh_confirm_label(self):
-        self.dlg.refreshConfirmLabel.hide()
+        QTimer.singleShot(5000, lambda: self.dlg.refreshConfirmFrame.hide())
