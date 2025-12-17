@@ -35,6 +35,7 @@ from arches_project.core.views.components.psql_layers import show_hide_psql_laye
 from arches_project.core.views.components.multiple_graph_nodes import (
     multiple_geometry_node_check,
 )
+from arches_project.core.views.components.dialog_updates import connection_reset
 from arches_project.core.views.resources import ResourcesView
 from arches_project.core.views.connection import ArchesConnectionView
 
@@ -122,7 +123,7 @@ class ArchesProjectDialog(QtWidgets.QDialog, FORM_CLASS):
         self.btnConnect.clicked.connect(self.arches_connection.arches_connection_save)
         self.btnLogout.clicked.connect(
             partial(
-                ArchesConnection(None, None, None).connection_reset,
+                connection_reset,
                 hard_reset=True,
                 dlg=self,
                 iface=self.iface,

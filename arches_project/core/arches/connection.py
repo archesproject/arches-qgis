@@ -1,12 +1,16 @@
 import requests
 from datetime import datetime, timedelta
 
-from arches_project.core.views.login import LoggedIn
 from arches_project.core.views.components.qgis_messaging import show_message
 from arches_project.core.views.components.spinner import triggerSpinner
-from arches_project.core.views.components.login_autocomplete import (
-    load_saved_credentials,
+from arches_project.core.views.components.dialog_updates import connection_reset
+from arches_project.core.views.components.dialog_updates import (
+    update_create_resources_tab,
 )
+from arches_project.core.views.components.dialog_updates import (
+    update_edit_resources_tab,
+)
+from arches_project.core.views.components.dialog_updates import update_login_tab
 
 from arches_project.core.arches.api import arches_api
 
@@ -146,59 +150,6 @@ class ArchesConnection:
             pass
         return arches_graphs_list
 
-    def connection_reset(self, hard_reset, dlg, iface, manual_logout=False):
-        """
-        Reset Arches connection
-        """
-        # TODO: This is all UI related, so should be moved into views/
-        if hard_reset == True:
-            # Reset connection inputs
-            dlg.archesServerInput.setText("")
-            dlg.usernameInput.setText("")
-            dlg.passwordInput.setText("")
-            # Reset logged in values
-            dlg.displayFullNameLabel.setText("")
-            dlg.displayConnectionInfoLabel.setText("")
-            dlg.displayUsernameLabel.setText("")
-            # Replace login tab with logged in tab
-            dlg.tabWidget.setTabVisible(0, True)
-            dlg.tabWidget.setTabVisible(1, False)
-            dlg.tabWidget.setCurrentIndex(0)
-
-        # Reset stored data
-        arches_api.arches_user_info = {}
-        arches_api.arches_connection_cache = {}
-        arches_api.arches_token = {}
-        arches_api.arches_graphs_list = []
-        # Reset Create Resource tab as no longer useable
-        dlg.createResModelSelectCombo.setEnabled(False)
-        dlg.createResGeomSelectCombo.setEnabled(False)
-        dlg.createResButton.setEnabled(False)
-        dlg.createResOutputBoxLabel.setText("")
-        dlg.createResOutputBoxFrame.hide()
-        ## Set "Edit Resource" to false to begin with
-        dlg.editResAddGeom.setEnabled(False)
-        dlg.editResReplaceGeom.setEnabled(False)
-        dlg.editResGeomSelectCombo.setEnabled(False)
-        dlg.editResOutputBoxLabel.setText("")
-        dlg.editResOutputBoxFrame.hide()
-        dlg.editResSelectedResAttributeTable.setRowCount(0)
-        dlg.editResSelectedResAttributeTable.setEnabled(False)
-        dlg.editResSelectedResId.setText(
-            "Connect to your Arches instance to edit resources."
-        )
-        # Hide multiple nodegroup dropdown
-        dlg.createResNodeSelectCombo.setEnabled(False)
-        # Reload saved credentials for the autocompletes
-        load_saved_credentials(dlg)
-
-        if manual_logout:
-            show_message(
-                iface,
-                "information",
-                "Logged out of Arches instance. Please reconnect to use the plugin.",
-            )
-
     def store_auto_complete_credentials(self):
 
         saved_urls = QSettings().value("urls", [])
@@ -288,53 +239,6 @@ class ConnectionProcess(QgsTask):
 
     def finished(self, result):
 
-        def update_login_tab():
-            # Replace login tab with logged in tab
-            self.dlg.tabWidget.setTabVisible(0, False)
-            self.dlg.tabWidget.setTabVisible(1, True)
-            self.dlg.tabWidget.setCurrentIndex(1)
-
-            logged_in_tab = LoggedIn(
-                dlg=self.dlg,
-                username=self.username,
-                url=self.url,
-                arches_user_info=arches_api.arches_user_info,
-            )
-            logged_in_tab.update_logged_in_view()
-            # self.dlg.displayTextLabel.setText(f"Connected to {self.url} as {self.dlg.usernameInput.text()}.")
-            # self.dlg.displayUrlLabel.setOpenExternalLinks(True) #TODO
-
-        def update_create_resources_tab():
-            self.dlg.createResModelSelectCombo.clear()
-            self.dlg.createResGeomSelectCombo.setEnabled(True)
-            self.dlg.createResGeomSelectCombo.clear()
-            self.dlg.createResGeomSelectCombo.addItems(
-                [layer.name() for layer in arches_api.layers]
-            )
-
-            if arches_api.arches_graphs_list:
-                self.dlg.createResModelSelectCombo.setEnabled(True)
-                self.dlg.createResModelSelectCombo.addItems(
-                    [graph["name"] for graph in arches_api.arches_graphs_list]
-                )
-                self.dlg.createResButton.setEnabled(True)
-
-        def update_edit_resources_tab():
-            self.dlg.editResAddGeom.setEnabled(False)
-            self.dlg.editResReplaceGeom.setEnabled(False)
-            if arches_api.arches_selected_resource["resourceinstanceid"]:
-                self.dlg.editResAddGeom.setEnabled(True)
-                self.dlg.editResReplaceGeom.setEnabled(True)
-            self.dlg.editResGeomSelectCombo.setEnabled(True)
-            self.dlg.editResGeomSelectCombo.clear()
-            self.dlg.editResGeomSelectCombo.addItems(
-                [layer.name() for layer in arches_api.layers]
-            )
-            self.dlg.editResSelectedResAttributeTable.setEnabled(True)
-            self.dlg.editResSelectedResId.setText(
-                "Connected to Arches. Select an Arches resource to proceed."
-            )
-
         triggerSpinner(dlg=self.dlg, plugin_dir=self.plugin_dir).hide_spinner()
 
         if result:
@@ -351,13 +255,11 @@ class ConnectionProcess(QgsTask):
                 ]
 
                 self.arches_connection.store_auto_complete_credentials()
-                update_login_tab()
-                update_edit_resources_tab()
-                update_create_resources_tab()
+                update_login_tab(dlg=self.dlg, username=self.username, url=self.url)
+                update_edit_resources_tab(dlg=self.dlg)
+                update_create_resources_tab(dlg=self.dlg)
             else:
-                ArchesConnection(None, None, None).connection_reset(
-                    hard_reset=True, dlg=self.dlg, iface=self.iface
-                )
+                connection_reset(hard_reset=True, dlg=self.dlg, iface=self.iface)
                 show_message(
                     self.iface,
                     "Warning",
@@ -381,9 +283,7 @@ class ConnectionProcess(QgsTask):
             self.dlg.loginErrorMessageLabel.setText(
                 "Failed to connect to Arches instance."
             )
-            ArchesConnection(None, None, None).connection_reset(
-                hard_reset=True, dlg=self.dlg, iface=self.iface
-            )
+            connection_reset(hard_reset=True, dlg=self.dlg, iface=self.iface)
 
     def cancel(self):
         triggerSpinner(dlg=self.dlg, plugin_dir=self.plugin_dir).hide_spinner()
