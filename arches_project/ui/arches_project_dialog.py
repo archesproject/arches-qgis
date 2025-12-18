@@ -100,6 +100,7 @@ class ArchesProjectDialog(QtWidgets.QDialog, FORM_CLASS):
         self.createResFeatureLineEdit.setText(
             "0 features selected. Select features from the map."
         )
+        self.createResFeatureSelectButton.setEnabled(False)
 
         ## Set "Edit Resource" to false to begin with
         self.editResSelectedResId.setEnabled(False)
