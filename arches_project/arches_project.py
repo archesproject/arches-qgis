@@ -34,7 +34,6 @@ from arches_project.ui.arches_project_dialog import ArchesProjectDialog
 # Import the confirmation dialog
 from .ui.resource_confirmation_dialog import ResourceConfirmation
 
-from arches_project.core.views.stylesheets import PluginStylesheets
 from arches_project.core.views.components.map import update_map_layers, map_selection
 
 import os.path
@@ -211,24 +210,6 @@ class ArchesProject:
         # Only create GUI ONCE in callback, so that it will only load when the plugin is started
         if self.first_start == True:
             self.first_start = False
-
-            # Setup Arches Stylesheet
-            PluginStylesheets(
-                dlg=self.dlg,
-                dlg_resource_confirmation=self.dlg_resource_confirmation,
-                on_start=True,
-                plugin_dir=self.plugin_dir,
-            )
-            # if stylesheet is disabled
-            self.dlg.useStylesheetCheckbox.stateChanged.connect(
-                partial(
-                    PluginStylesheets,
-                    dlg=self.dlg,
-                    dlg_resource_confirmation=self.dlg_resource_confirmation,
-                    on_start=False,
-                    plugin_dir=self.plugin_dir,
-                )
-            )
 
         # show the dialog
         self.dlg.show()

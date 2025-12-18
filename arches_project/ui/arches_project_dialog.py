@@ -38,6 +38,7 @@ from arches_project.core.views.components.multiple_graph_nodes import (
 from arches_project.core.views.components.dialog_updates import connection_reset
 from arches_project.core.views.resources import ResourcesView
 from arches_project.core.views.connection import ArchesConnectionView
+from arches_project.core.views.stylesheets.stylesheets import Stylesheets
 
 from qgis.PyQt import uic
 from qgis.PyQt import QtWidgets
@@ -155,5 +156,24 @@ class ArchesProjectDialog(QtWidgets.QDialog, FORM_CLASS):
                 self.resources_object.edit_resource,
                 replace=True,
                 dlg_resource_confirmation=self.dlg_resource_confirmation,
+            )
+        )
+
+        # hide loading wheel adjustments
+        self.loadingWheel.hide()  # connection wheel label
+        self.updateTextFrame.hide()
+        self.loginErrorMessageFrame.hide()
+        self.loadingWheelVerticalSpacerFrame.hide()
+
+        # Stylesheets
+        self.stylesheets = Stylesheets(
+            dlg=self,
+            dlg_resource_confirmation=self.dlg_resource_confirmation,
+            plugin_dir=self.plugin_dir,
+        )
+
+        self.useStylesheetCheckbox.stateChanged.connect(
+            partial(
+                self.stylesheets.stylesheet_changed,
             )
         )
