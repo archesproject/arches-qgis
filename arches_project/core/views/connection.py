@@ -2,7 +2,6 @@ from arches_project.core.arches.connection import ConnectionProcess
 from arches_project.core.views.components.missing_credentials import missing_credentials
 from arches_project.core.views.login import UpdateLoginProgress
 from arches_project.core.views.components.spinner import triggerSpinner
-from arches_project.core.arches.api import arches_api
 
 from qgis.core import QgsMessageLog, QgsApplication
 
