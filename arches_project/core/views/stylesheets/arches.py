@@ -48,7 +48,7 @@ class ArchesStylesheet:
             self.dlg.btnRefresh.setCursor(QCursor(Qt.PointingHandCursor))
 
             self.dlg.createResButton.setIcon(
-                QIcon(os.path.join(self.plugin_dir, "icons", "mdi-pencil.svg"))
+                QIcon(os.path.join(self.plugin_dir, "icons", "fa-arrow-pointer.svg"))
             )
             self.dlg.createResButton.setIconSize(QSize(12, 12))
             self.dlg.createResButton.setCursor(QCursor(Qt.PointingHandCursor))
