@@ -11,6 +11,9 @@ from arches_project.core.views.components.dialog_updates import (
     update_edit_resources_tab,
 )
 from arches_project.core.views.components.dialog_updates import update_login_tab
+from arches_project.core.views.components.dialog_updates import (
+    update_refresh_confirm_label,
+)
 
 from arches_project.core.arches.api import arches_api
 
@@ -163,9 +166,9 @@ class ArchesConnection:
     def connection_refresh(self, dlg):
         self.url = arches_api.arches_token["formatted_url"]
         arches_api.arches_graphs_list = self.get_graphs(None, None)
-        update_create_resources_tab(dlg=dlg) 
-        dlg.arches_connection.update_refresh_confirm_label()
-        
+        update_create_resources_tab(dlg=dlg)
+        update_refresh_confirm_label(dlg=dlg)
+
     def store_auto_complete_credentials(self):
 
         saved_urls = QSettings().value("urls", [])
