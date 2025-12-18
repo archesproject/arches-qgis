@@ -25,7 +25,6 @@
 import os
 from functools import partial
 
-from arches_project.core.arches.connection import ArchesConnection
 from arches_project.core.views.logging import enable_logging
 from arches_project.core.views.components.login_autocomplete import (
     load_saved_credentials,
@@ -36,6 +35,7 @@ from arches_project.core.views.components.multiple_graph_nodes import (
     multiple_geometry_node_check,
 )
 from arches_project.core.views.components.dialog_updates import connection_reset
+from arches_project.core.utils.connection_refresh import connection_refresh
 from arches_project.core.views.resources import ResourcesView
 from arches_project.core.views.connection import ArchesConnectionView
 from arches_project.core.views.stylesheets.stylesheets import Stylesheets
@@ -135,9 +135,7 @@ class ArchesProjectDialog(QtWidgets.QDialog, FORM_CLASS):
             )
         )
 
-        self.btnRefresh.clicked.connect(
-            partial(ArchesConnection(None, None, None).connection_refresh, dlg=self)
-        )
+        self.btnRefresh.clicked.connect(partial(connection_refresh, dlg=self))
 
         # click add button - should bring up new dialog for confirmation
         self.resources_object = ResourcesView(
