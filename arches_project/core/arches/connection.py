@@ -102,7 +102,7 @@ class ArchesConnection:
             print(f"Failed to get OAuth token: {e}")
             return arches_token
 
-    def get_graphs(self, login_updates, percent_progress):
+    def get_graphs(self, login_updates=None, percent_progress=None):
         try:
             if login_updates:
                 login_updates.emit("Fetching graphs ...")
@@ -165,7 +165,7 @@ class ArchesConnection:
 
     def connection_refresh(self, dlg):
         self.url = arches_api.arches_token["formatted_url"]
-        arches_api.arches_graphs_list = self.get_graphs(None, None)
+        arches_api.arches_graphs_list = self.get_graphs()
         update_create_resources_tab(dlg=dlg)
         update_refresh_confirm_label(dlg=dlg)
 
