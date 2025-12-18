@@ -44,7 +44,7 @@ from qgis.PyQt import uic
 from qgis.PyQt import QtWidgets
 
 from PyQt5.QtCore import QEvent
-from PyQt5.QtWidgets import QLineEdit, QCompleter
+from PyQt5.QtWidgets import QLineEdit, QCompleter, QGraphicsOpacityEffect
 
 # This loads your .ui file so that PyQt can populate your plugin with the elements from Qt Designer
 FORM_CLASS, _ = uic.loadUiType(
@@ -184,3 +184,6 @@ class ArchesProjectDialog(QtWidgets.QDialog, FORM_CLASS):
                 self.stylesheets.stylesheet_changed,
             )
         )
+
+        self.opacity_effect = QGraphicsOpacityEffect(self.refreshConfirmLabel)
+        self.refreshConfirmLabel.setGraphicsEffect(self.opacity_effect)

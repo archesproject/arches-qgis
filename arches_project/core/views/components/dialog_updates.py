@@ -3,8 +3,11 @@ from arches_project.core.views.components.login_autocomplete import (
     load_saved_credentials,
 )
 from arches_project.core.views.login import LoggedIn
-
 from arches_project.core.arches.api import arches_api
+
+from PyQt5.QtCore import QTimer, QPropertyAnimation, QEasingCurve
+
+import datetime
 
 
 def connection_reset(hard_reset, dlg, iface, manual_logout=False):
@@ -102,3 +105,23 @@ def update_edit_resources_tab(dlg):
     dlg.editResSelectedResId.setText(
         "Connected to Arches. Select an Arches resource to proceed."
     )
+
+
+def update_refresh_confirm_label(dlg):
+    def fade_out():
+        dlg.fade_animation = QPropertyAnimation(dlg.opacity_effect, b"opacity")
+        dlg.fade_animation.setDuration(1000)
+        dlg.fade_animation.setStartValue(1)
+        dlg.fade_animation.setEndValue(0)
+        dlg.fade_animation.setEasingCurve(QEasingCurve.OutCubic)
+
+        dlg.fade_animation.finished.connect(dlg.refreshConfirmFrame.hide)
+
+        dlg.fade_animation.start()
+
+    dlg.opacity_effect.setOpacity(1.0)
+    dlg.refreshConfirmFrame.show()
+    current_datetime = datetime.datetime.now()
+    formatted_datetime = current_datetime.strftime("%Y-%m-%d %H:%M:%S")
+    dlg.refreshConfirmLabel.setText(f"Connection refreshed at {formatted_datetime}")
+    QTimer.singleShot(1500, fade_out)
