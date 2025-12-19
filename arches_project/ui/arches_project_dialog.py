@@ -150,6 +150,25 @@ class ArchesProjectDialog(QtWidgets.QDialog, FORM_CLASS):
             )
         )
 
+        # hide loading wheel adjustments
+        self.loadingWheel.hide()  # connection wheel label
+        self.updateTextFrame.hide()
+        self.loginErrorMessageFrame.hide()
+        self.loadingWheelVerticalSpacerFrame.hide()
+
+        # Stylesheets
+        self.stylesheets = Stylesheets(
+            dlg=self,
+            dlg_resource_confirmation=self.dlg_resource_confirmation,
+            plugin_dir=self.plugin_dir,
+        )
+
+        self.useStylesheetCheckbox.stateChanged.connect(
+            partial(
+                self.stylesheets.stylesheet_changed,
+            )
+        )
+
         # Change mouse to select from map
         self.createResFeatureSelectButton.clicked.connect(
             self.iface.actionSelect().trigger
