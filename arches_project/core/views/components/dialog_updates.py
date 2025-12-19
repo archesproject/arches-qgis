@@ -43,10 +43,11 @@ def connection_reset(hard_reset, dlg, iface, manual_logout=False):
 
     # Reset Create Resource tab as no longer useable
     dlg.createResModelSelectCombo.setEnabled(False)
-    dlg.createResGeomSelectCombo.setEnabled(False)
     dlg.createResButton.setEnabled(False)
     dlg.createResOutputBoxLabel.setText("")
     dlg.createResOutputBoxFrame.hide()
+    dlg.createResFeatureLineEdit.setEnabled(False)
+    dlg.createResFeatureSelectButton.setEnabled(False)
     ## Set "Edit Resource" to false to begin with
     dlg.editResAddGeom.setEnabled(False)
     dlg.editResReplaceGeom.setEnabled(False)
@@ -85,17 +86,17 @@ def update_login_tab(dlg, username, url):
 
 
 def update_create_resources_tab(dlg):
+    dlg.createResFeatureLineEdit.setEnabled(True)
+    dlg.createResFeatureSelectButton.setEnabled(True)
     dlg.createResModelSelectCombo.clear()
-    dlg.createResGeomSelectCombo.setEnabled(True)
-    dlg.createResGeomSelectCombo.clear()
-    dlg.createResGeomSelectCombo.addItems([layer.name() for layer in arches_api.layers])
 
     if arches_api.arches_graphs_list:
         dlg.createResModelSelectCombo.setEnabled(True)
         dlg.createResModelSelectCombo.addItems(
             [graph["name"] for graph in arches_api.arches_graphs_list]
         )
-        dlg.createResButton.setEnabled(True)
+        # Now controlled by map.py
+        # dlg.createResButton.setEnabled(True)
 
 
 def update_edit_resources_tab(dlg):
