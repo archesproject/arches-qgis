@@ -774,9 +774,9 @@
           <property name="geometry">
            <rect>
             <x>0</x>
-            <y>-53</y>
+            <y>0</y>
             <width>495</width>
-            <height>590</height>
+            <height>555</height>
            </rect>
           </property>
           <layout class="QVBoxLayout" name="verticalLayout_11">
@@ -922,9 +922,6 @@
                     <string>Select Feature(s) to Upload</string>
                    </property>
                   </widget>
-                 </item>
-                 <item>
-                  <widget class="QComboBox" name="createResGeomSelectCombo"/>
                  </item>
                  <item>
                   <widget class="QFrame" name="createResFeatureSelectFrame">
@@ -1073,8 +1070,8 @@
            <rect>
             <x>0</x>
             <y>0</y>
-            <width>513</width>
-            <height>535</height>
+            <width>495</width>
+            <height>680</height>
            </rect>
           </property>
           <layout class="QVBoxLayout" name="verticalLayout_13">

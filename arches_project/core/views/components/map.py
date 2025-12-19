@@ -30,9 +30,11 @@ def map_selection(iface, dlg):
             dlg.editResSelectedResId.setText("Select a feature to proceed.")
             dlg.editResAddGeom.setEnabled(False)
             dlg.editResReplaceGeom.setEnabled(False)
+            dlg.createResButton.setEnabled(False)
 
         else:
             dlg.createResFeatureLineEdit.setText(f"{len(features)} features selected")
+            dlg.createResButton.setEnabled(True)
 
             if len(features) > 1:
                 # If features are greater than one, selected features can store but
@@ -47,11 +49,13 @@ def map_selection(iface, dlg):
                 dlg.createResFeatureLineEdit.setText(
                     f"{len(features)} features selected"
                 )
+
+                arches_api.selected_features["features"].clear()  # reset list
                 for feature in features:
-                    save_selected_features(feature)
+                    save_selected_features(feature, active_layer)
 
             else:
-                # TODO does this fire for 0 as well?
+                arches_api.selected_features["features"].clear()  # reset list
 
                 for feature in features:
                     save_arches_res = save_selected_arches_resource(feature)
@@ -62,7 +66,7 @@ def map_selection(iface, dlg):
                             "The feature selected is not an Arches resource."
                         )
 
-                    save_selected_features(feature)
+                    save_selected_features(feature, active_layer)
 
 
 def populate_table(dlg, feature):
@@ -119,8 +123,9 @@ def save_selected_arches_resource(feature):
         return False
 
 
-def save_selected_features(feature):
-    arches_api.selected_geometries.append(feature.geometry())
+def save_selected_features(feature, active_layer):
+    arches_api.selected_features["features"].append(feature)
+    arches_api.selected_features["layer_crs"] = active_layer.crs()
 
 
 def update_map_layers(checkbox):

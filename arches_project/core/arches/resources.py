@@ -128,8 +128,6 @@ class ArchesResources:
             dlg_resource_confirmation.messageLabel.setText("Confirmation prompt")
 
         # Get info on current layer and selected graph
-        selectedLayerIndex = dlg.createResGeomSelectCombo.currentIndex()
-        selectedLayer = arches_api.layers[selectedLayerIndex]
         selectedGraphIndex = dlg.createResModelSelectCombo.currentIndex()
         selectedGraph = arches_api.arches_graphs_list[selectedGraphIndex]
 
@@ -146,7 +144,7 @@ class ArchesResources:
                 "name": selectedGraph["geometry_node_data"][node_id]["name"],
             }
 
-        geom_convert = Geometries(selectedLayer)
+        geom_convert = Geometries()
         geomcoll, geometry_type_dict = geom_convert.geometry_conversion()
 
         # Format text box
