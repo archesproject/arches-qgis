@@ -95,6 +95,12 @@ class ArchesResources:
                     show_message(
                         iface, "Success", "A new Arches resource has been created."
                     )
+
+                    dlg.logTextEdit.append("Resource Created ")
+                    dlg.logTextEdit.append(str(datetime.now()))
+                    dlg.logTextEdit.append(
+                        f"<a href='{created_resource_url}'>{results['resourceinstance_id']}</a><br>"
+                    )
                     dlg_resource_confirmation.close()
                 except:
                     dlg.createResOutputBoxFrame.show()

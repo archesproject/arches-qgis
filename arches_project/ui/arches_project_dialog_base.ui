@@ -161,7 +161,7 @@
       </font>
      </property>
      <property name="currentIndex">
-      <number>3</number>
+      <number>5</number>
      </property>
      <property name="usesScrollButtons">
       <bool>true</bool>
@@ -195,8 +195,8 @@
            <rect>
             <x>0</x>
             <y>0</y>
-            <width>495</width>
-            <height>534</height>
+            <width>501</width>
+            <height>428</height>
            </rect>
           </property>
           <layout class="QVBoxLayout" name="verticalLayout_3">
@@ -479,8 +479,8 @@
            <rect>
             <x>0</x>
             <y>0</y>
-            <width>512</width>
-            <height>460</height>
+            <width>518</width>
+            <height>385</height>
            </rect>
           </property>
           <layout class="QVBoxLayout" name="verticalLayout_28">
@@ -774,9 +774,9 @@
           <property name="geometry">
            <rect>
             <x>0</x>
-            <y>-82</y>
-            <width>495</width>
-            <height>554</height>
+            <y>0</y>
+            <width>501</width>
+            <height>448</height>
            </rect>
           </property>
           <layout class="QVBoxLayout" name="verticalLayout_11">
@@ -1034,9 +1034,9 @@
           <property name="geometry">
            <rect>
             <x>0</x>
-            <y>-220</y>
-            <width>495</width>
-            <height>680</height>
+            <y>0</y>
+            <width>501</width>
+            <height>587</height>
            </rect>
           </property>
           <layout class="QVBoxLayout" name="verticalLayout_13">
@@ -1291,8 +1291,8 @@
            <rect>
             <x>0</x>
             <y>0</y>
-            <width>512</width>
-            <height>460</height>
+            <width>518</width>
+            <height>385</height>
            </rect>
           </property>
           <layout class="QVBoxLayout" name="verticalLayout_34">
@@ -1464,8 +1464,8 @@
            <rect>
             <x>0</x>
             <y>0</y>
-            <width>510</width>
-            <height>458</height>
+            <width>516</width>
+            <height>383</height>
            </rect>
           </property>
           <layout class="QVBoxLayout" name="verticalLayout_35">
@@ -1476,7 +1476,7 @@
              </property>
              <layout class="QVBoxLayout" name="verticalLayout_36">
               <item>
-               <widget class="QTextEdit" name="textEdit">
+               <widget class="QTextEdit" name="logTextEdit">
                 <property name="readOnly">
                  <bool>true</bool>
                 </property>
