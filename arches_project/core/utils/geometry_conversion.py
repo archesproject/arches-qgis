@@ -1,3 +1,5 @@
+from arches_project.core.arches.api import arches_api
+
 from qgis.core import (
     QgsProject,
     QgsCoordinateReferenceSystem,
@@ -7,9 +9,9 @@ from qgis.core import (
 
 
 class Geometries:
-    def __init__(self, selectedLayer):
-        self.selectedLayer = selectedLayer
-        self.selected_layer_crs = selectedLayer.crs()
+    def __init__(self):
+        self.selected_features = arches_api.selected_features["features"]
+        self.selected_layer_crs = arches_api.selected_features["layer_crs"]
         self.arches_crs = QgsCoordinateReferenceSystem.fromEpsgId(4326)
 
     def coordinate_transform(self, geom):
@@ -31,7 +33,7 @@ class Geometries:
         geometry_type_dict = {}
         all_features = []
 
-        for feature in self.selectedLayer.getFeatures():
+        for feature in self.selected_features:
             geom = feature.geometry()
             geom = self.coordinate_transform(geom)
             all_features.append(geom.asWkt())

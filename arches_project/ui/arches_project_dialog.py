@@ -76,25 +76,9 @@ class ArchesProjectDialog(QtWidgets.QDialog, FORM_CLASS):
 
         # to run when layer is changed in create resource and edit resource tabs
         self.hidePostgresLayers.setChecked(True)
-        self.createResGeomSelectCombo.highlighted.connect(
-            partial(update_map_layers, checkbox=self.hidePostgresLayers)
-        )
-        self.editResGeomSelectCombo.highlighted.connect(
-            partial(update_map_layers, checkbox=self.hidePostgresLayers)
-        )
-
-        self.hidePostgresLayers.stateChanged.connect(
-            partial(
-                show_hide_psql_layers,
-                combobox1=self.createResGeomSelectCombo,
-                combobox2=self.editResGeomSelectCombo,
-                dlg=self,
-            )
-        )
 
         ## Set "Create resource" to false to begin with and only update once Arches connection made
         self.createResModelSelectCombo.setEnabled(False)
-        self.createResGeomSelectCombo.setEnabled(False)
         self.createResButton.setEnabled(False)
         self.createResFeatureLineEdit.setEnabled(False)
         self.createResFeatureLineEdit.setText(
