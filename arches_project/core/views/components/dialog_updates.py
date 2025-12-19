@@ -123,5 +123,5 @@ def update_refresh_confirm_label(dlg):
     dlg.refreshConfirmFrame.show()
     current_datetime = datetime.datetime.now()
     formatted_datetime = current_datetime.strftime("%Y-%m-%d %H:%M:%S")
-    dlg.refreshConfirmLabel.setText(f"Connection refreshed at {formatted_datetime}")
+    dlg.refreshConfirmLabel.setText(f"Refreshed at {formatted_datetime}")
     QTimer.singleShot(1500, fade_out)
