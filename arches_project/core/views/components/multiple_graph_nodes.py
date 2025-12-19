@@ -7,6 +7,7 @@ def multiple_geometry_node_check(dlg):
 
     dlg.createResNodeSelectCombo.setEnabled(False)
     dlg.createResNodeSelectFrame.hide()
+    arches_api.geometry_nodes = []
 
     if selectedGraph:
         if selectedGraph["multiple_geometry_nodes"] == True:
