@@ -678,7 +678,7 @@
                  <item>
                   <widget class="QPushButton" name="btnRefresh">
                    <property name="text">
-                    <string>Refresh connection</string>
+                    <string>Refresh models and nodes</string>
                    </property>
                   </widget>
                  </item>
