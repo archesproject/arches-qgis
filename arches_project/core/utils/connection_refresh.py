@@ -12,7 +12,7 @@ import requests
 
 def connection_refresh(dlg, iface):
 
-    url = arches_api.arches_token["formatted_url"]
+    url = arches_api.arches_connection_cache["url"]
     arches_connection = ArchesConnection(url, None, None)
 
     try:
