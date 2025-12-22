@@ -125,8 +125,10 @@ def update_refresh_confirm_label(dlg, connected):
     current_datetime = datetime.datetime.now()
     formatted_datetime = current_datetime.strftime("%Y-%m-%d %H:%M:%S")
     if connected:
+        dlg.refreshConfirmLabel.setStyleSheet("color: #666;")
         dlg.refreshConfirmLabel.setText(f"Refreshed at {formatted_datetime}")
     else:
+        dlg.refreshConfirmLabel.setStyleSheet("color: red;")
         dlg.refreshConfirmLabel.setText(
             f"Refresh failed at {formatted_datetime}. Check connection"
         )
