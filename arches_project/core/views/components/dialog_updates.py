@@ -22,6 +22,14 @@ def connection_reset(hard_reset, dlg, iface, manual_logout=False):
         # Replace login tab with logged in tab
         dlg.tabWidget.setTabVisible(0, True)
         dlg.tabWidget.setTabVisible(1, False)
+        # Reset stored data
+        arches_api.arches_user_info = {}
+        arches_api.arches_connection_cache = {}
+        arches_api.arches_token = {}
+        arches_api.arches_graphs_list = []
+        # Reload saved credentials for the autocompletes
+        load_saved_credentials(dlg)
+        # Return to login page
         dlg.tabWidget.setCurrentIndex(0)
         # Reset connection inputs
         if manual_logout == True:
@@ -29,11 +37,6 @@ def connection_reset(hard_reset, dlg, iface, manual_logout=False):
             dlg.usernameInput.setText("")
             dlg.passwordInput.setText("")
 
-    # Reset stored data
-    arches_api.arches_user_info = {}
-    arches_api.arches_connection_cache = {}
-    arches_api.arches_token = {}
-    arches_api.arches_graphs_list = []
     # Reset Create Resource tab as no longer useable
     dlg.createResModelSelectCombo.setEnabled(False)
     dlg.createResGeomSelectCombo.setEnabled(False)
@@ -53,8 +56,6 @@ def connection_reset(hard_reset, dlg, iface, manual_logout=False):
     )
     # Hide multiple nodegroup dropdown
     dlg.createResNodeSelectCombo.setEnabled(False)
-    # Reload saved credentials for the autocompletes
-    load_saved_credentials(dlg)
 
     if manual_logout == True:
         show_message(
@@ -107,7 +108,7 @@ def update_edit_resources_tab(dlg):
     )
 
 
-def update_refresh_confirm_label(dlg):
+def update_refresh_confirm_label(dlg, connected):
     def fade_out():
         dlg.fade_animation = QPropertyAnimation(dlg.opacity_effect, b"opacity")
         dlg.fade_animation.setDuration(1000)
@@ -123,5 +124,10 @@ def update_refresh_confirm_label(dlg):
     dlg.refreshConfirmFrame.show()
     current_datetime = datetime.datetime.now()
     formatted_datetime = current_datetime.strftime("%Y-%m-%d %H:%M:%S")
-    dlg.refreshConfirmLabel.setText(f"Refreshed at {formatted_datetime}")
+    if connected:
+        dlg.refreshConfirmLabel.setText(f"Refreshed at {formatted_datetime}")
+    else:
+        dlg.refreshConfirmLabel.setText(
+            f"Refresh failed at {formatted_datetime}. Check connection"
+        )
     QTimer.singleShot(1500, fade_out)

@@ -103,7 +103,9 @@ class ArchesConnection:
         try:
             if login_updates:
                 login_updates.emit("Fetching graphs ...")
+
             response = requests.get(f"{self.url}/graphs/")
+            response.raise_for_status()
 
             arches_graphs_list = []
 
@@ -122,6 +124,7 @@ class ArchesConnection:
                 geom_node_count = 0
 
                 req = requests.get(f"{self.url}/graphs/{graph}")
+                req.raise_for_status()
 
                 if req.json()["graph"]["publication_id"]:  # if graph is published
                     if login_updates:
@@ -156,8 +159,9 @@ class ArchesConnection:
                     if percent_progress:
                         percent_progress.emit(False, x + 1, len(graphids))
 
-        except Exception as e:
-            print("Exception", e)
+        except requests.exceptions.RequestException:
+            raise
+
         return arches_graphs_list
 
     def store_auto_complete_credentials(self):
