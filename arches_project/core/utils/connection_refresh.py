@@ -11,10 +11,7 @@ import requests
 
 
 def connection_refresh(dlg, iface):
-    """
-    Simple function to fix any possible user input errors.
-    Strips any leading/trailing whitespace and a trailing slash.
-    """
+
     url = arches_api.arches_token["formatted_url"]
     arches_connection = ArchesConnection(url, None, None)
 
