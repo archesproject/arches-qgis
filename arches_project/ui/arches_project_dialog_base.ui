@@ -1455,31 +1455,76 @@
       </attribute>
       <layout class="QVBoxLayout" name="verticalLayout_37">
        <item>
-        <widget class="QScrollArea" name="scrollArea_6">
+        <widget class="QScrollArea" name="scrollAreaLog">
+         <property name="frameShape">
+          <enum>QFrame::NoFrame</enum>
+         </property>
          <property name="widgetResizable">
           <bool>true</bool>
          </property>
-         <widget class="QWidget" name="scrollAreaWidgetContents_6">
+         <widget class="QWidget" name="scrollAreaWidgetContentsLog">
           <property name="geometry">
            <rect>
             <x>0</x>
             <y>0</y>
-            <width>516</width>
-            <height>383</height>
+            <width>518</width>
+            <height>385</height>
            </rect>
           </property>
           <layout class="QVBoxLayout" name="verticalLayout_35">
            <item>
-            <widget class="QGroupBox" name="groupBox_6">
-             <property name="title">
-              <string>Log</string>
+            <widget class="QFrame" name="logFrame">
+             <property name="frameShape">
+              <enum>QFrame::StyledPanel</enum>
              </property>
-             <layout class="QVBoxLayout" name="verticalLayout_36">
+             <property name="frameShadow">
+              <enum>QFrame::Raised</enum>
+             </property>
+             <layout class="QVBoxLayout" name="verticalLayout_50">
               <item>
-               <widget class="QTextEdit" name="logTextEdit">
-                <property name="readOnly">
-                 <bool>true</bool>
+               <widget class="QFrame" name="logTitleFrame">
+                <property name="frameShape">
+                 <enum>QFrame::NoFrame</enum>
                 </property>
+                <property name="frameShadow">
+                 <enum>QFrame::Raised</enum>
+                </property>
+                <layout class="QVBoxLayout" name="verticalLayout_36">
+                 <item>
+                  <widget class="QLabel" name="logTitleLabel">
+                   <property name="font">
+                    <font>
+                     <pointsize>13</pointsize>
+                     <bold>false</bold>
+                    </font>
+                   </property>
+                   <property name="frameShadow">
+                    <enum>QFrame::Plain</enum>
+                   </property>
+                   <property name="text">
+                    <string>Log</string>
+                   </property>
+                   <property name="alignment">
+                    <set>Qt::AlignCenter</set>
+                   </property>
+                  </widget>
+                 </item>
+                </layout>
+               </widget>
+              </item>
+              <item>
+               <widget class="QFrame" name="logTableFrame">
+                <property name="frameShape">
+                 <enum>QFrame::NoFrame</enum>
+                </property>
+                <property name="frameShadow">
+                 <enum>QFrame::Raised</enum>
+                </property>
+                <layout class="QVBoxLayout" name="verticalLayout_38">
+                 <item>
+                  <widget class="QTableWidget" name="logTable"/>
+                 </item>
+                </layout>
                </widget>
               </item>
              </layout>
