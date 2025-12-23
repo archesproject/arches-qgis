@@ -4,10 +4,9 @@ from functools import partial
 
 from arches_project.core.utils.geometry_conversion import Geometries
 from arches_project.core.views.components.qgis_messaging import show_message
+from arches_project.core.views.components.dialog_updates import update_activity_log
 from arches_project.core.utils.refresh_token import refresh_token
 from arches_project.core.arches.api import arches_api
-from qgis.PyQt.QtWidgets import QTableWidgetItem, QLabel
-from PyQt5.QtCore import Qt
 
 
 class ArchesResources:
@@ -94,36 +93,15 @@ class ArchesResources:
                     dlg.createResOutputBoxLabel.setText(
                         f'Successfully created a new resource with the selected geometry.<br>To continue the creation of your new resource, navigate to...<br><a href="{created_resource_url}">{created_resource_url}</a>'
                     )
+                    update_activity_log(
+                        dlg,
+                        "Created resource",
+                        created_resource_url,
+                        results["resourceinstance_id"],
+                    )
                     show_message(
                         iface, "Success", "A new Arches resource has been created."
                     )
-
-                    try:
-                        resource_link = f"<a href='{created_resource_url}'>{results['resourceinstance_id']}</a>"
-                        link_label = QLabel(resource_link)
-                        link_label.setOpenExternalLinks(True)
-
-                        row_count = dlg.logTable.rowCount()
-                        dlg.logTable.insertRow(row_count)
-
-                        action_task_widget = QTableWidgetItem("Created resource")
-                        action_task_widget.setTextAlignment(
-                            Qt.AlignCenter | Qt.AlignVCenter
-                        )
-
-                        action_datetime = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-                        action_datetime_widget = QTableWidgetItem(action_datetime)
-                        action_datetime_widget.setTextAlignment(
-                            Qt.AlignCenter | Qt.AlignVCenter
-                        )
-
-                        dlg.logTable.setItem(row_count, 0, action_task_widget)
-                        dlg.logTable.setItem(row_count, 1, action_datetime_widget)
-                        dlg.logTable.setCellWidget(row_count, 2, link_label)
-
-                    except Exception as e:
-                        print("Error", e)
-
                     dlg_resource_confirmation.close()
                 except:
                     dlg.createResOutputBoxFrame.show()
