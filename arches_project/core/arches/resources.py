@@ -204,6 +204,18 @@ class ArchesResources:
                         "Success",
                         f"Resource geometry {operation_type} was successful.",
                     )
+                    action = (
+                        "Append feature(s)"
+                        if operation_type == "append"
+                        else "Replace feature(s)"
+                    )
+
+                    update_activity_log(
+                        dlg,
+                        action,
+                        edited_resource_url,
+                        results["resourceinstance_id"],
+                    )
                     dialog.close()
                 except:
                     dlg.editResOutputBoxFrame.show()
