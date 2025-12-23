@@ -5,25 +5,26 @@ from arches_project.core.views.components.dialog_updates import (
     update_create_resources_tab,
     connection_reset,
     update_edit_resources_tab,
+    disable_refresh_btn,
 )
 from arches_project.core.views.components.qgis_messaging import show_message
 import requests
+
 from qgis.core import QgsTask
-from PyQt5.QtCore import QTimer, pyqtSignal
-from arches_project.core.views.components.spinner import triggerSpinner
+from PyQt5.QtCore import pyqtSignal
 
 
 class ConnectionRefreshTask(QgsTask):
-    login_updates = pyqtSignal(str)
-    percent_progress = pyqtSignal(bool, int, int)
-    complete = pyqtSignal()
+
+    refreshFinished = pyqtSignal()
 
     def __init__(self, dlg, iface):
         super().__init__()
         self.dlg = dlg
         self.iface = iface
         self.url = arches_api.arches_connection_cache["url"]
-        self.dlg.btnRefresh.setEnabled(False)
+        self.plugin_dir = dlg.plugin_dir
+        disable_refresh_btn(dlg)
 
     def run(self):
         arches_connection = ArchesConnection(self.url, None, None)
@@ -54,4 +55,4 @@ class ConnectionRefreshTask(QgsTask):
                 duration=-1,
             )
 
-        QTimer.singleShot(2500, lambda: self.dlg.btnRefresh.setEnabled(True))
+        self.refreshFinished.emit()
