@@ -215,3 +215,8 @@ QLabel#userProfileLabel {
     border-radius: 40px;
     background-color: #d4d4d4;
 }
+
+QTableWidget::item {
+    padding-left: 10px;
+    padding-right: 10px;
+}
