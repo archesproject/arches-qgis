@@ -6,7 +6,9 @@ from arches_project.core.views.login import LoggedIn
 from arches_project.core.arches.api import arches_api
 
 from PyQt5.QtCore import QTimer, QPropertyAnimation, QEasingCurve
+from qgis.PyQt.QtGui import QIcon
 
+import os
 import datetime
 
 
@@ -133,3 +135,19 @@ def update_refresh_confirm_label(dlg, connected):
             f"Refresh failed at {formatted_datetime}. Check connection"
         )
     QTimer.singleShot(1500, fade_out)
+
+
+def disable_refresh_btn(dlg):
+    dlg.btnRefresh.setEnabled(False)
+    dlg.btnRefresh.setText("Loading...")
+    dlg.btnRefresh.setIcon(QIcon(""))
+
+
+def reset_refresh_btn(dlg):
+    dlg.btnRefresh.setEnabled(True)
+    dlg.btnRefresh.setText("Refresh models and nodes")
+    dlg.btnRefresh.setIcon(
+        QIcon(
+            os.path.join(dlg.plugin_dir, "icons", "arrows-rotate-solid-full-white.svg")
+        )
+    )
