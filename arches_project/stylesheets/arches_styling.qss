@@ -24,7 +24,8 @@ QLabel#signInLabel,
 QLabel#loginSuccessLabel, 
 QLabel#createResTitleText, 
 QLabel#editResTitleLabel,
-QLabel#settingsTitleLabel {
+QLabel#settingsTitleLabel,
+QLabel#logTitleLabel {
     font-size: 30px;
     font-weight: 400;
 }
