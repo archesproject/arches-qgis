@@ -4,6 +4,9 @@ from arches_project.core.views.components.login_autocomplete import (
 )
 from arches_project.core.views.login import LoggedIn
 from arches_project.core.arches.api import arches_api
+from qgis.PyQt.QtWidgets import QTableWidgetItem, QLabel
+from PyQt5.QtCore import Qt
+from datetime import datetime
 
 from PyQt5.QtCore import QTimer, QPropertyAnimation, QEasingCurve
 from qgis.PyQt.QtGui import QIcon
@@ -152,3 +155,24 @@ def reset_refresh_btn(dlg):
             os.path.join(dlg.plugin_dir, "icons", "arrows-rotate-solid-full-white.svg")
         )
     )
+def update_activity_log(dlg, action, resource_url, resourceinstance_id):
+    try:
+        resource_link = f"<a href='{resource_url}'>{resourceinstance_id}</a>"
+        link_label = QLabel(resource_link)
+        link_label.setOpenExternalLinks(True)
+
+        row_count = dlg.logTable.rowCount()
+        dlg.logTable.insertRow(row_count)
+
+        action_task_widget = QTableWidgetItem(action)
+        action_task_widget.setTextAlignment(Qt.AlignCenter | Qt.AlignVCenter)
+
+        action_datetime = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+        action_datetime_widget = QTableWidgetItem(action_datetime)
+        action_datetime_widget.setTextAlignment(Qt.AlignCenter | Qt.AlignVCenter)
+
+        dlg.logTable.setItem(row_count, 0, action_task_widget)
+        dlg.logTable.setItem(row_count, 1, action_datetime_widget)
+        dlg.logTable.setCellWidget(row_count, 2, link_label)
+    except Exception as e:
+        print(e)
