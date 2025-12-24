@@ -51,7 +51,6 @@ def connection_reset(hard_reset, dlg, iface, manual_logout=False):
     ## Set "Edit Resource" to false to begin with
     dlg.editResAddGeom.setEnabled(False)
     dlg.editResReplaceGeom.setEnabled(False)
-    dlg.editResGeomSelectCombo.setEnabled(False)
     dlg.editResOutputBoxLabel.setText("")
     dlg.editResOutputBoxFrame.hide()
     dlg.editResSelectedResAttributeTable.setRowCount(0)
@@ -105,9 +104,6 @@ def update_edit_resources_tab(dlg):
     if arches_api.arches_selected_resource["resourceinstanceid"]:
         dlg.editResAddGeom.setEnabled(True)
         dlg.editResReplaceGeom.setEnabled(True)
-    dlg.editResGeomSelectCombo.setEnabled(True)
-    dlg.editResGeomSelectCombo.clear()
-    dlg.editResGeomSelectCombo.addItems([layer.name() for layer in arches_api.layers])
     dlg.editResSelectedResAttributeTable.setEnabled(True)
     dlg.editResSelectedResId.setText(
         "Connected to Arches. Select an Arches resource to proceed."

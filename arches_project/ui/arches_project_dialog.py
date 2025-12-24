@@ -93,7 +93,6 @@ class ArchesProjectDialog(QtWidgets.QDialog, FORM_CLASS):
         )
         self.editResAddGeom.setEnabled(False)
         self.editResReplaceGeom.setEnabled(False)
-        self.editResGeomSelectCombo.setEnabled(False)
         self.editResSelectedResAttributeTable.setEnabled(False)
 
         # Check if selected graph has multiple geometry nodes

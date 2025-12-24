@@ -247,10 +247,8 @@ class ArchesResources:
             dlg_resource_confirmation.messageLabel.setText("Confirmation prompt")
 
         if arches_api.arches_selected_resource:
-            selectedLayerIndex = dlg.editResGeomSelectCombo.currentIndex()
-            selectedLayer = arches_api.layers[selectedLayerIndex]
 
-            geom_convert = Geometries(selectedLayer)
+            geom_convert = Geometries()
             geomcoll, geometry_type_dict = geom_convert.geometry_conversion()
 
             # Get nodegroup from graph

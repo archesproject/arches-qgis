@@ -106,15 +106,22 @@ QPushButton {
 }
 
 QPushButton#btnConnect, 
-QPushButton#btnRefresh {
+QPushButton#btnRefresh,
+QPushButton#editResSelectResButton {
     background-color: #579ddb;
     border-color: #5fa2dd;
 }
 
 QPushButton#btnConnect:hover, 
-QPushButton#btnRefresh:hover {
+QPushButton#btnRefresh:hover,
+QPushButton#editResSelectResButton:hover {
     background-color: #337ab7;
     border-color: #2e6da4;
+}
+
+QPushButton#editResSelectResButton:disabled {
+    background-color: #9cc1e0;
+    border-color: #9cc1e0;
 }
 
 QPushButton#btnLogout, 
