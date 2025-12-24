@@ -27,10 +27,10 @@ class ConnectionRefreshTask(QgsTask):
         disable_refresh_btn(dlg)
 
     def run(self):
-        arches_connection = ArchesConnection(self.url, None, None)
+        self.arches_connection = ArchesConnection(self.url, None, None)
 
         try:
-            self.graphs = arches_connection.get_graphs()
+            self.graphs = self.arches_connection.get_graphs()
             return True
         except requests.exceptions.RequestException:
             return False
