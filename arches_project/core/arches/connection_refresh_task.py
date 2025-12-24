@@ -16,7 +16,7 @@ from PyQt5.QtCore import pyqtSignal
 
 class ConnectionRefreshTask(QgsTask):
 
-    refreshFinished = pyqtSignal()
+    refresh_finished = pyqtSignal()
 
     def __init__(self, dlg, iface):
         super().__init__()
@@ -55,4 +55,4 @@ class ConnectionRefreshTask(QgsTask):
                 duration=-1,
             )
 
-        self.refreshFinished.emit()
+        self.refresh_finished.emit()
