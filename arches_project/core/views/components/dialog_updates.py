@@ -21,7 +21,7 @@ def connection_reset(hard_reset, dlg, iface, manual_logout=False):
         dlg.tabWidget.setTabVisible(1, False)
         dlg.tabWidget.setCurrentIndex(0)
         # Reset connection inputs
-        if manual_logout:
+        if manual_logout == True:
             dlg.archesServerInput.setText("")
             dlg.usernameInput.setText("")
             dlg.passwordInput.setText("")
@@ -53,7 +53,7 @@ def connection_reset(hard_reset, dlg, iface, manual_logout=False):
     # Reload saved credentials for the autocompletes
     load_saved_credentials(dlg)
 
-    if manual_logout:
+    if manual_logout == True:
         show_message(
             iface,
             "information",
