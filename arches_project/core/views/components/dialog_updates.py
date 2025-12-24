@@ -12,10 +12,6 @@ def connection_reset(hard_reset, dlg, iface, manual_logout=False):
     Reset Arches connection
     """
     if hard_reset == True:
-        # Reset connection inputs
-        dlg.archesServerInput.setText("")
-        dlg.usernameInput.setText("")
-        dlg.passwordInput.setText("")
         # Reset logged in values
         dlg.displayFullNameLabel.setText("")
         dlg.displayConnectionInfoLabel.setText("")
@@ -24,6 +20,11 @@ def connection_reset(hard_reset, dlg, iface, manual_logout=False):
         dlg.tabWidget.setTabVisible(0, True)
         dlg.tabWidget.setTabVisible(1, False)
         dlg.tabWidget.setCurrentIndex(0)
+        # Reset connection inputs
+        if manual_logout:
+            dlg.archesServerInput.setText("")
+            dlg.usernameInput.setText("")
+            dlg.passwordInput.setText("")
 
     # Reset stored data
     arches_api.arches_user_info = {}
