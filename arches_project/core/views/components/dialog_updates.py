@@ -132,7 +132,7 @@ def update_refresh_confirm_label(dlg, connected):
     else:
         dlg.refreshConfirmLabel.setStyleSheet("color: red;")
         dlg.refreshConfirmLabel.setText(
-            f"Refresh failed at {formatted_datetime}. Check connection"
+            f"Refresh failed at {formatted_datetime}. Check connection."
         )
     QTimer.singleShot(1500, fade_out)
 
