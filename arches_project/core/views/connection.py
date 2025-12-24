@@ -1,7 +1,6 @@
 from arches_project.core.arches.connection import ConnectionProcess
 from arches_project.core.views.components.missing_credentials import missing_credentials
 from arches_project.core.views.login import UpdateLoginProgress
-from arches_project.core.utils.format_url import format_url
 from arches_project.core.views.components.spinner import triggerSpinner
 
 from qgis.core import QgsMessageLog, QgsApplication
@@ -63,7 +62,8 @@ class ArchesConnectionView:
             self.dlg.loginErrorMessageLabel.hide()
 
         if is_valid_input == True:
-            formatted_url = format_url(self.dlg.archesServerInput.text())
+            url_input = self.dlg.archesServerInput.text()
+            formatted_url = url_input.strip().rstrip("/")
 
             # Adding arches connection to task queue
             self.arches_connection = ConnectionProcess(
