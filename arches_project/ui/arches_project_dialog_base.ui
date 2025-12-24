@@ -161,7 +161,7 @@
       </font>
      </property>
      <property name="currentIndex">
-      <number>2</number>
+      <number>3</number>
      </property>
      <property name="usesScrollButtons">
       <bool>true</bool>
@@ -1069,9 +1069,9 @@
           <property name="geometry">
            <rect>
             <x>0</x>
-            <y>0</y>
+            <y>-208</y>
             <width>495</width>
-            <height>680</height>
+            <height>755</height>
            </rect>
           </property>
           <layout class="QVBoxLayout" name="verticalLayout_13">
@@ -1147,6 +1147,35 @@
                </widget>
               </item>
               <item>
+               <widget class="QFrame" name="editResSelectResFrame">
+                <property name="frameShape">
+                 <enum>QFrame::NoFrame</enum>
+                </property>
+                <property name="frameShadow">
+                 <enum>QFrame::Plain</enum>
+                </property>
+                <layout class="QVBoxLayout" name="verticalLayout_38">
+                 <property name="topMargin">
+                  <number>0</number>
+                 </property>
+                 <item>
+                  <widget class="QLabel" name="editResSelectResLabel">
+                   <property name="text">
+                    <string>Select an Arches Resource</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item>
+                  <widget class="QPushButton" name="editResSelectResButton">
+                   <property name="text">
+                    <string>Register resource</string>
+                   </property>
+                  </widget>
+                 </item>
+                </layout>
+               </widget>
+              </item>
+              <item>
                <widget class="QFrame" name="editResSelectedResFrame">
                 <property name="frameShape">
                  <enum>QFrame::NoFrame</enum>
@@ -1196,7 +1225,7 @@
                 <property name="frameShadow">
                  <enum>QFrame::Plain</enum>
                 </property>
-                <layout class="QVBoxLayout" name="verticalLayout_48">
+                <layout class="QVBoxLayout" name="verticalLayout_50">
                  <property name="topMargin">
                   <number>0</number>
                  </property>
@@ -1208,7 +1237,38 @@
                   </widget>
                  </item>
                  <item>
-                  <widget class="QComboBox" name="editResGeomSelectCombo"/>
+                  <widget class="QFrame" name="editResFeatureSelectFrame">
+                   <property name="frameShape">
+                    <enum>QFrame::NoFrame</enum>
+                   </property>
+                   <property name="frameShadow">
+                    <enum>QFrame::Plain</enum>
+                   </property>
+                   <layout class="QHBoxLayout" name="horizontalLayout_7">
+                    <property name="leftMargin">
+                     <number>0</number>
+                    </property>
+                    <property name="topMargin">
+                     <number>0</number>
+                    </property>
+                    <property name="rightMargin">
+                     <number>0</number>
+                    </property>
+                    <property name="bottomMargin">
+                     <number>0</number>
+                    </property>
+                    <item>
+                     <widget class="QLineEdit" name="editResFeatureLineEdit"/>
+                    </item>
+                    <item>
+                     <widget class="QPushButton" name="editResFeatureSelectButton">
+                      <property name="text">
+                       <string/>
+                      </property>
+                     </widget>
+                    </item>
+                   </layout>
+                  </widget>
                  </item>
                 </layout>
                </widget>

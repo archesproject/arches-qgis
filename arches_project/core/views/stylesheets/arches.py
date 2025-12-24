@@ -61,6 +61,12 @@ class ArchesStylesheet:
                 QCursor(Qt.PointingHandCursor)
             )
 
+            self.dlg.editResSelectResButton.setIcon(
+                QIcon(os.path.join(self.plugin_dir, "icons", "fa-pen-to-square.svg"))
+            )
+            self.dlg.editResSelectResButton.setIconSize(QSize(12, 12))
+            self.dlg.editResSelectResButton.setCursor(QCursor(Qt.PointingHandCursor))
+
             self.dlg.editResAddGeom.setIcon(
                 QIcon(os.path.join(self.plugin_dir, "icons", "fa-plus.svg"))
             )
