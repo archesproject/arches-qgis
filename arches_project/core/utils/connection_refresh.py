@@ -12,4 +12,4 @@ def connection_refresh(dlg):
     dlg.connection_refresh_task = ConnectionRefreshTask(dlg=dlg, iface=dlg.iface)
     QgsApplication.taskManager().addTask(dlg.connection_refresh_task)
 
-    dlg.connection_refresh_task.refreshFinished.connect(start_reset_timer)
+    dlg.connection_refresh_task.refresh_finished.connect(start_reset_timer)
