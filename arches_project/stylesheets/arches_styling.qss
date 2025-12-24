@@ -135,6 +135,11 @@ QPushButton#confirmDialogConfirm:disabled {
     border-color: #8bcbb9;
 }
 
+QPushButton#btnRefresh:disabled {
+    background-color: #9cc1e0;
+    border-color: #9cc1e0;
+}
+
 QPushButton#btnLogout:hover, 
 QPushButton#createResButton:hover, 
 QPushButton#editResAddGeom:hover, 
