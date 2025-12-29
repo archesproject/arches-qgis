@@ -249,3 +249,10 @@ class QgisInterface(QObject):
         menu (ie the user visible text on the menu item).
         """
         pass
+
+    def actionSelect(self):
+        """
+        Returns the native select action.
+        Call trigger() on it to set the default select map tool.
+        """
+        pass
