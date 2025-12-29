@@ -88,10 +88,6 @@ class ArchesProjectDialog(QtWidgets.QDialog, FORM_CLASS):
 
         ## Set "Edit Resource" to false to begin with
         self.editResOperationFrame.hide()
-        self.editResSelectedResId.setEnabled(False)
-        self.editResSelectedResId.setText(
-            "Connect to your Arches instance to edit resources."
-        )
         self.editResAddGeom.setEnabled(False)
         self.editResReplaceGeom.setEnabled(False)
         self.editResSelectedResAttributeTable.setEnabled(False)

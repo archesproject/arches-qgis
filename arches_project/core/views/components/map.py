@@ -27,7 +27,6 @@ def map_selection(iface, dlg):
             dlg.createResFeatureLineEdit.setText(default_text)
             dlg.editResFeatureLineEdit.setText(default_text)
             dlg.editResSelectedResAttributeTable.setRowCount(0)
-            dlg.editResSelectedResId.setText("Select a feature to proceed.")
             dlg.editResAddGeom.setEnabled(False)
             dlg.editResReplaceGeom.setEnabled(False)
             dlg.createResButton.setEnabled(False)
@@ -90,8 +89,6 @@ def populate_table(dlg, feature):
     dlg.editResSelectedResAttributeTable.resizeColumnsToContents()
 
     # enable the UI elements
-    resource_string = "Resource: %s" % (feature["resourceinstanceid"])
-    dlg.editResSelectedResId.setText(resource_string)
     dlg.editResAddGeom.setEnabled(True)
     dlg.editResReplaceGeom.setEnabled(True)
 

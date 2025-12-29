@@ -774,7 +774,7 @@
           <property name="geometry">
            <rect>
             <x>0</x>
-            <y>0</y>
+            <y>-95</y>
             <width>495</width>
             <height>555</height>
            </rect>
@@ -1071,7 +1071,7 @@
             <x>0</x>
             <y>0</y>
             <width>495</width>
-            <height>782</height>
+            <height>747</height>
            </rect>
           </property>
           <layout class="QVBoxLayout" name="verticalLayout_13">
@@ -1195,6 +1195,9 @@
                    <property name="text">
                     <string/>
                    </property>
+                   <property name="wordWrap">
+                    <bool>true</bool>
+                   </property>
                   </widget>
                  </item>
                 </layout>
@@ -1237,13 +1240,6 @@
                      <widget class="QLabel" name="editResSelectedResLabel">
                       <property name="text">
                        <string>Selected Resource</string>
-                      </property>
-                     </widget>
-                    </item>
-                    <item>
-                     <widget class="QLineEdit" name="editResSelectedResId">
-                      <property name="readOnly">
-                       <bool>true</bool>
                       </property>
                      </widget>
                     </item>

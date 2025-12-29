@@ -9,5 +9,6 @@ coverage
 env/
 env3.11/
 
+arches_qgis.egg-info/
 arches_project/ui/build/
 arches_project/ui/arches_project_ui.pro.user
