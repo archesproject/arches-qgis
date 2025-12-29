@@ -96,6 +96,8 @@ def update_create_resources_tab(dlg):
 
 
 def update_edit_resources_tab(dlg):
+    dlg.editResFeatureLineEdit.setEnabled(True)
+    dlg.editResFeatureSelectButton.setEnabled(True)
     dlg.editResSelectResButton.setEnabled(True)
     dlg.editResAddGeom.setEnabled(False)
     dlg.editResReplaceGeom.setEnabled(False)

@@ -91,6 +91,10 @@ class ArchesProjectDialog(QtWidgets.QDialog, FORM_CLASS):
         self.editResAddGeom.setEnabled(False)
         self.editResReplaceGeom.setEnabled(False)
         self.editResSelectedResAttributeTable.setEnabled(False)
+        self.editResFeatureLineEdit.setText(
+            "0 features selected. Select features from the map."
+        )
+        self.editResFeatureSelectButton.setEnabled(False)
 
         # Check if selected graph has multiple geometry nodes
         self.createResModelSelectCombo.currentIndexChanged.connect(
@@ -170,14 +174,17 @@ class ArchesProjectDialog(QtWidgets.QDialog, FORM_CLASS):
             )
         )
 
-        # Change mouse to select from map
-        self.createResFeatureSelectButton.clicked.connect(
-            self.iface.actionSelect().trigger
-        )
-
         self.opacity_effect = QGraphicsOpacityEffect(self.refreshConfirmLabel)
         self.refreshConfirmLabel.setGraphicsEffect(self.opacity_effect)
         # set initial log table widths
         self.activityLogTable.setColumnWidth(0, 100)
         self.activityLogTable.setColumnWidth(1, 100)
         self.activityLogTable.horizontalHeader().setStretchLastSection(True)
+
+        # Change mouse to select from map
+        self.createResFeatureSelectButton.clicked.connect(
+            self.iface.actionSelect().trigger
+        )
+        self.editResFeatureSelectButton.clicked.connect(
+            self.iface.actionSelect().trigger
+        )

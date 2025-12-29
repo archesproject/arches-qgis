@@ -169,7 +169,8 @@ QPushButton#confirmDialogCancel:hover {
     border-color: #fc2f09;
 }
 
-QPushButton#createResFeatureSelectButton {
+QPushButton#createResFeatureSelectButton,
+QPushButton#editResFeatureSelectButton {
     background-color: #FFF;
     border: 1px solid;
     border-color: #aaa;
@@ -178,12 +179,14 @@ QPushButton#createResFeatureSelectButton {
     height: 25px;
 }
 
-QPushButton#createResFeatureSelectButton:hover {
+QPushButton#createResFeatureSelectButton:hover,
+QPushButton#editResFeatureSelectButton:hover {
     background-color: #337ab7;
     border-color: #2e6da4;
 }
 
-QPushButton#createResFeatureSelectButton:disabled {
+QPushButton#createResFeatureSelectButton:disabled,
+QPushButton#editResFeatureSelectButton:disabled {
     background-color: #FDFDFD;
     color: #A0A0A0;
     border: 1px solid #D6D6D6;
