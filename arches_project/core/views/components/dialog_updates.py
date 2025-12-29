@@ -55,9 +55,6 @@ def connection_reset(hard_reset, dlg, iface, manual_logout=False):
     dlg.editResOutputBoxFrame.hide()
     dlg.editResSelectedResAttributeTable.setRowCount(0)
     dlg.editResSelectedResAttributeTable.setEnabled(False)
-    dlg.editResSelectedResId.setText(
-        "Connect to your Arches instance to edit resources."
-    )
     # Hide multiple nodegroup dropdown
     dlg.createResNodeSelectCombo.setEnabled(False)
 

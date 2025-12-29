@@ -53,12 +53,12 @@ class ResourcesView:
 
         if not arches_api.selected_features["features"]:
             self.dlg.editResRegisterResMessageLabel.setText(
-                "Select an Arches feature to proceed."
+                "No features are selected. Select an Arches feature to proceed."
             )
         else:
             if len(arches_api.selected_features["features"]) > 1:
                 self.dlg.editResRegisterResMessageLabel.setText(
-                    "Multiple features are selected, select only one."
+                    "Multiple features are selected. Select one Arches feature to proceed."
                 )
             else:
                 # One in the selected features list, need to check if is Arches resource
@@ -70,6 +70,6 @@ class ResourcesView:
                     self.dlg.editResRegisterResMessageLabel.hide()
                     self.dlg.editResOperationFrame.show()
                 else:
-                    self.dlg.editResSelectedResId.setText(
-                        "The feature selected is not an Arches resource."
+                    self.dlg.editResRegisterResMessageLabel.setText(
+                        "The selected feature is not an Arches resource. Select an Arches feature to proceed."
                     )
