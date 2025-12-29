@@ -192,7 +192,6 @@ QPushButton#editResFeatureSelectButton:disabled {
     border: 1px solid #D6D6D6;
 }
 
-QTableWidget,
 QLineEdit {
     background-color: #FFF;
     border: 1px solid;
@@ -202,7 +201,6 @@ QLineEdit {
     height: 25px;
 }
 
-QTableWidget:disabled,
 QLineEdit:disabled {
     background-color: #FDFDFD;
     color: #A0A0A0;
