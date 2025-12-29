@@ -49,6 +49,8 @@ def connection_reset(hard_reset, dlg, iface, manual_logout=False):
     dlg.createResFeatureLineEdit.setEnabled(False)
     dlg.createResFeatureSelectButton.setEnabled(False)
     ## Set "Edit Resource" to false to begin with
+    dlg.editResSelectResButton.setEnabled(False)
+    dlg.editResOperationFrame.hide()
     dlg.editResAddGeom.setEnabled(False)
     dlg.editResReplaceGeom.setEnabled(False)
     dlg.editResOutputBoxLabel.setText("")
