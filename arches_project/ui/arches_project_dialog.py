@@ -87,6 +87,7 @@ class ArchesProjectDialog(QtWidgets.QDialog, FORM_CLASS):
         self.createResFeatureSelectButton.setEnabled(False)
 
         ## Set "Edit Resource" to false to begin with
+        self.editResOperationFrame.hide()
         self.editResSelectedResId.setEnabled(False)
         self.editResSelectedResId.setText(
             "Connect to your Arches instance to edit resources."
@@ -132,6 +133,11 @@ class ArchesProjectDialog(QtWidgets.QDialog, FORM_CLASS):
                 self.resources_object.create_resource,
                 dlg_resource_confirmation=self.dlg_resource_confirmation,
             )
+        )
+
+        self.editResSelectResButton.setEnabled(False)
+        self.editResSelectResButton.clicked.connect(
+            partial(self.resources_object.register_resource)
         )
 
         self.editResAddGeom.clicked.connect(

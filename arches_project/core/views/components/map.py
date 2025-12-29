@@ -6,7 +6,7 @@ from arches_project.core.arches.api import arches_api
 
 def map_selection(iface, dlg):
     """
-    Get the Arches Resource from the map
+    Feature selection from the QGIS map.
     """
 
     active_layer = iface.activeLayer()
@@ -23,9 +23,9 @@ def map_selection(iface, dlg):
 
     if arches_api.arches_token:
         if not features:
-            dlg.createResFeatureLineEdit.setText(
-                "0 features selected. Select features from the map."
-            )
+            default_text = "0 features selected. Select features from the map."
+            dlg.createResFeatureLineEdit.setText(default_text)
+            dlg.editResFeatureLineEdit.setText(default_text)
             dlg.editResSelectedResAttributeTable.setRowCount(0)
             dlg.editResSelectedResId.setText("Select a feature to proceed.")
             dlg.editResAddGeom.setEnabled(False)
@@ -36,37 +36,26 @@ def map_selection(iface, dlg):
             dlg.createResFeatureLineEdit.setText(f"{len(features)} features selected")
             dlg.createResButton.setEnabled(True)
 
-            if len(features) > 1:
-                # If features are greater than one, selected features can store but
-                # selected Arches resource cannot
+            num_features_selected = f"{len(features)} features selected"
+            dlg.createResFeatureLineEdit.setText(num_features_selected)
+            dlg.editResFeatureLineEdit.setText(num_features_selected)
 
-                print("Select one feature")
-                dlg.editResSelectedResAttributeTable.setRowCount(0)
-                dlg.editResSelectedResId.setText(
-                    "Multiple features selected, select one feature to proceed."
-                )
+            arches_api.selected_features["features"].clear()  # reset list
+            for feature in features:
+                save_selected_features(feature, active_layer)
 
-                dlg.createResFeatureLineEdit.setText(
-                    f"{len(features)} features selected"
-                )
+            # if len(features) > 1:
+            #     # If features are greater than one, selected features can store but
+            #     # selected Arches resource cannot
 
-                arches_api.selected_features["features"].clear()  # reset list
-                for feature in features:
-                    save_selected_features(feature, active_layer)
+            #     dlg.editResSelectedResAttributeTable.setRowCount(0)
 
-            else:
-                arches_api.selected_features["features"].clear()  # reset list
+            # else:
+            #     arches_api.selected_features["features"].clear()  # reset list
 
-                for feature in features:
-                    save_arches_res = save_selected_arches_resource(feature)
-                    if save_arches_res:
-                        populate_table(dlg, feature)
-                    else:
-                        dlg.editResSelectedResId.setText(
-                            "The feature selected is not an Arches resource."
-                        )
+            #     for feature in features:
 
-                    save_selected_features(feature, active_layer)
+            #         save_selected_features(feature, active_layer)
 
 
 def populate_table(dlg, feature):
@@ -110,6 +99,7 @@ def populate_table(dlg, feature):
 def save_selected_arches_resource(feature):
     # TODO check if nodeid and tileid are in the feature too, the three markers for checking it's an Arches resource
     if "resourceinstanceid" in feature.attributeMap():
+        # TODO remove loop and get values from attributes
         for k, v in feature.attributeMap().items():
             # Store current resource info
             if k == "resourceinstanceid":
