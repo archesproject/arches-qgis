@@ -52,14 +52,18 @@ class ResourcesView:
         """
 
         if not arches_api.selected_features["features"]:
+            self.dlg.editResRegisterResMessageLabel.show()
             self.dlg.editResRegisterResMessageLabel.setText(
                 "No features are selected. Select an Arches feature to proceed."
             )
+            self.dlg.editResOperationFrame.hide()
         else:
             if len(arches_api.selected_features["features"]) > 1:
+                self.dlg.editResRegisterResMessageLabel.show()
                 self.dlg.editResRegisterResMessageLabel.setText(
                     "Multiple features are selected. Select one Arches feature to proceed."
                 )
+                self.dlg.editResOperationFrame.hide()
             else:
                 # One in the selected features list, need to check if is Arches resource
                 feat = arches_api.selected_features["features"][0]
@@ -73,6 +77,8 @@ class ResourcesView:
                     # automatically deselect the selected Arches resource
                     self.iface.activeLayer().removeSelection()
                 else:
+                    self.dlg.editResRegisterResMessageLabel.show()
                     self.dlg.editResRegisterResMessageLabel.setText(
                         "The selected feature is not an Arches resource. Select an Arches feature to proceed."
                     )
+                    self.dlg.editResOperationFrame.hide()
