@@ -26,35 +26,21 @@ def map_selection(iface, dlg):
             default_text = "0 features selected. Select features from the map."
             dlg.createResFeatureLineEdit.setText(default_text)
             dlg.editResFeatureLineEdit.setText(default_text)
-            dlg.editResSelectedResAttributeTable.setRowCount(0)
             dlg.editResAddGeom.setEnabled(False)
             dlg.editResReplaceGeom.setEnabled(False)
             dlg.createResButton.setEnabled(False)
 
         else:
-            dlg.createResFeatureLineEdit.setText(f"{len(features)} features selected")
-            dlg.createResButton.setEnabled(True)
-
             num_features_selected = f"{len(features)} features selected"
             dlg.createResFeatureLineEdit.setText(num_features_selected)
             dlg.editResFeatureLineEdit.setText(num_features_selected)
+            dlg.createResButton.setEnabled(True)
+            dlg.editResAddGeom.setEnabled(True)
+            dlg.editResReplaceGeom.setEnabled(True)
 
             arches_api.selected_features["features"].clear()  # reset list
             for feature in features:
                 save_selected_features(feature, active_layer)
-
-            # if len(features) > 1:
-            #     # If features are greater than one, selected features can store but
-            #     # selected Arches resource cannot
-
-            #     dlg.editResSelectedResAttributeTable.setRowCount(0)
-
-            # else:
-            #     arches_api.selected_features["features"].clear()  # reset list
-
-            #     for feature in features:
-
-            #         save_selected_features(feature, active_layer)
 
 
 def populate_table(dlg, feature):
