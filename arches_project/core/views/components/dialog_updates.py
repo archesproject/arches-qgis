@@ -99,6 +99,7 @@ def update_create_resources_tab(dlg):
 
 
 def update_edit_resources_tab(dlg):
+    dlg.editResSelectResButton.setEnabled(True)
     dlg.editResAddGeom.setEnabled(False)
     dlg.editResReplaceGeom.setEnabled(False)
     if arches_api.arches_selected_resource["resourceinstanceid"]:
