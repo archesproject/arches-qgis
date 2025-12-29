@@ -61,13 +61,6 @@ def populate_table(dlg, feature):
         dlg.editResSelectedResAttributeTable.setItem(i, 0, feat)
         dlg.editResSelectedResAttributeTable.setItem(i, 1, val)
         dlg.editResSelectedResAttributeTable.setRowHeight(i, 5)
-        # Store current resource info
-        if k == "resourceinstanceid":
-            arches_api.arches_selected_resource["resourceinstanceid"] = v
-        elif k == "nodeid":
-            arches_api.arches_selected_resource["nodeid"] = v
-        elif k == "tileid":
-            arches_api.arches_selected_resource["tileid"] = v
 
     dlg.editResSelectedResAttributeTable.setHorizontalHeaderLabels(
         ["Feature", "Values"]
@@ -80,17 +73,15 @@ def populate_table(dlg, feature):
 
 
 def save_selected_arches_resource(feature):
-    # TODO check if nodeid and tileid are in the feature too, the three markers for checking it's an Arches resource
-    if "resourceinstanceid" in feature.attributeMap():
-        # TODO remove loop and get values from attributes
-        for k, v in feature.attributeMap().items():
-            # Store current resource info
-            if k == "resourceinstanceid":
-                arches_api.arches_selected_resource["resourceinstanceid"] = v
-            elif k == "nodeid":
-                arches_api.arches_selected_resource["nodeid"] = v
-            elif k == "tileid":
-                arches_api.arches_selected_resource["tileid"] = v
+    required_fields = ["resourceinstanceid", "nodeid", "tileid"]
+
+    if set(required_fields).issubset(set(feature.attributeMap().keys())):
+        # Store current resource info
+        arches_api.arches_selected_resource["resourceinstanceid"] = (
+            feature.attributeMap()["resourceinstanceid"]
+        )
+        arches_api.arches_selected_resource["nodeid"] = feature.attributeMap()["nodeid"]
+        arches_api.arches_selected_resource["tileid"] = feature.attributeMap()["tileid"]
         return True
     else:
         return False

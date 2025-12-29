@@ -69,6 +69,9 @@ class ResourcesView:
                     self.dlg.editResRegisterResMessageLabel.setText("")
                     self.dlg.editResRegisterResMessageLabel.hide()
                     self.dlg.editResOperationFrame.show()
+
+                    # automatically deselect the selected Arches resource
+                    self.iface.activeLayer().removeSelection()
                 else:
                     self.dlg.editResRegisterResMessageLabel.setText(
                         "The selected feature is not an Arches resource. Select an Arches feature to proceed."
