@@ -18,9 +18,6 @@ def map_selection(iface, dlg):
     except AttributeError:
         features = None
 
-    print("\nmap selection has been fired because selection changed")
-    print("layer:", active_layer, "features:", features)
-
     if arches_api.arches_token:
         if not features:
             default_text = "0 features selected. Select features from the map."
