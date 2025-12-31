@@ -134,7 +134,7 @@ def update_refresh_confirm_label(dlg, connected):
         dlg.refreshConfirmLabel.setText(
             f"Refresh failed at {formatted_datetime}. Check connection."
         )
-    QTimer.singleShot(1500, fade_out)
+    QTimer.singleShot(6000, fade_out)
 
 
 def disable_refresh_btn(dlg):
