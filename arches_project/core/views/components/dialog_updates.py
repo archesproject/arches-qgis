@@ -60,6 +60,7 @@ def connection_reset(hard_reset, dlg, iface, manual_logout=False):
     dlg.createResNodeSelectCombo.setEnabled(False)
 
     if manual_logout == True:
+        dlg.refreshConfirmFrame.hide()
         show_message(
             iface,
             "information",
@@ -129,12 +130,12 @@ def update_refresh_confirm_label(dlg, connected):
     if connected:
         dlg.refreshConfirmLabel.setStyleSheet("color: #666;")
         dlg.refreshConfirmLabel.setText(f"Refreshed at {formatted_datetime}")
+        QTimer.singleShot(6000, fade_out)
     else:
         dlg.refreshConfirmLabel.setStyleSheet("color: red;")
         dlg.refreshConfirmLabel.setText(
             f"Refresh failed at {formatted_datetime}. Check connection."
         )
-    QTimer.singleShot(6000, fade_out)
 
 
 def disable_refresh_btn(dlg):
