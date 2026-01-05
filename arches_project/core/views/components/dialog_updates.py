@@ -161,7 +161,7 @@ def update_activity_log(dlg, action, resource_url, resourceinstance_id):
         link_label = QLabel(resource_link)
         link_label.setOpenExternalLinks(True)
 
-        dlg.logTable.insertRow(0)
+        dlg.activityLogTable.insertRow(0)
 
         action_task_widget = QTableWidgetItem(action)
         action_task_widget.setTextAlignment(Qt.AlignCenter | Qt.AlignVCenter)
@@ -170,10 +170,10 @@ def update_activity_log(dlg, action, resource_url, resourceinstance_id):
         action_datetime_widget = QTableWidgetItem(action_datetime)
         action_datetime_widget.setTextAlignment(Qt.AlignCenter | Qt.AlignVCenter)
 
-        dlg.logTable.setItem(0, 0, action_task_widget)
-        dlg.logTable.setItem(0, 1, action_datetime_widget)
-        dlg.logTable.setCellWidget(0, 2, link_label)
+        dlg.activityLogTable.setItem(0, 0, action_task_widget)
+        dlg.activityLogTable.setItem(0, 1, action_datetime_widget)
+        dlg.activityLogTable.setCellWidget(0, 2, link_label)
 
-        dlg.logTable.scrollToTop()
+        dlg.activityLogTable.scrollToTop()
     except Exception as e:
         print(e)
