@@ -1494,6 +1494,28 @@
                </widget>
               </item>
               <item>
+               <widget class="QFrame" name="activityLogDescriptionFrame">
+                <property name="frameShape">
+                 <enum>QFrame::NoFrame</enum>
+                </property>
+                <property name="frameShadow">
+                 <enum>QFrame::Raised</enum>
+                </property>
+                <layout class="QVBoxLayout" name="verticalLayout_49">
+                 <item>
+                  <widget class="QLabel" name="activityLogDescriptionLabel">
+                   <property name="text">
+                    <string>Keeps a history of all operations in the current QGIS session.</string>
+                   </property>
+                   <property name="alignment">
+                    <set>Qt::AlignCenter</set>
+                   </property>
+                  </widget>
+                 </item>
+                </layout>
+               </widget>
+              </item>
+              <item>
                <widget class="QFrame" name="activityLogTableFrame">
                 <property name="frameShape">
                  <enum>QFrame::NoFrame</enum>
