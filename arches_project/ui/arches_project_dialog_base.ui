@@ -1541,7 +1541,7 @@
                    </column>
                    <column>
                     <property name="text">
-                     <string>Link to Arches resource</string>
+                     <string>Arches resource</string>
                     </property>
                    </column>
                   </widget>
