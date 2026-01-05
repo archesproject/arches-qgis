@@ -51,11 +51,15 @@ class ResourcesView:
         UI be revealed, and the Arches resource stored until re-registered.
         """
 
+        self.dlg.editResSelectResButton.setText("Register resource")
+
         if not arches_api.selected_features["features"]:
+            # show confirmation message
             self.dlg.editResRegisterResMessageLabel.show()
             self.dlg.editResRegisterResMessageLabel.setText(
                 "No features are selected. Select an Arches feature to proceed."
             )
+            # hide operation frame
             self.dlg.editResOperationFrame.hide()
         else:
             if len(arches_api.selected_features["features"]) > 1:
@@ -73,6 +77,12 @@ class ResourcesView:
                     self.dlg.editResRegisterResMessageLabel.setText("")
                     self.dlg.editResRegisterResMessageLabel.hide()
                     self.dlg.editResOperationFrame.show()
+
+                    # rename register label and button text
+                    self.dlg.editResSelectedResLabel.setText(
+                        f"Selected resource: {arches_api.arches_selected_resource['resourceinstanceid']}"
+                    )
+                    self.dlg.editResSelectResButton.setText("Register new resource")
 
                     # automatically deselect the selected Arches resource
                     self.iface.activeLayer().removeSelection()
