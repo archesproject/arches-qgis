@@ -161,7 +161,7 @@
       </font>
      </property>
      <property name="currentIndex">
-      <number>4</number>
+      <number>5</number>
      </property>
      <property name="usesScrollButtons">
       <bool>true</bool>
@@ -1430,20 +1430,20 @@
        </item>
       </layout>
      </widget>
-     <widget class="QWidget" name="log">
+     <widget class="QWidget" name="activityLog">
       <attribute name="title">
-       <string>Log</string>
+       <string>Activity Log</string>
       </attribute>
       <layout class="QVBoxLayout" name="verticalLayout_37">
        <item>
-        <widget class="QScrollArea" name="scrollAreaLog">
+        <widget class="QScrollArea" name="scrollAreaActivityLog">
          <property name="frameShape">
           <enum>QFrame::NoFrame</enum>
          </property>
          <property name="widgetResizable">
           <bool>true</bool>
          </property>
-         <widget class="QWidget" name="scrollAreaWidgetContentsLog">
+         <widget class="QWidget" name="scrollAreaWidgetContentsActivityLog">
           <property name="geometry">
            <rect>
             <x>0</x>
@@ -1454,7 +1454,7 @@
           </property>
           <layout class="QVBoxLayout" name="verticalLayout_35">
            <item>
-            <widget class="QFrame" name="logFrame">
+            <widget class="QFrame" name="activityLogFrame">
              <property name="frameShape">
               <enum>QFrame::StyledPanel</enum>
              </property>
@@ -1463,7 +1463,7 @@
              </property>
              <layout class="QVBoxLayout" name="verticalLayout_50">
               <item>
-               <widget class="QFrame" name="logTitleFrame">
+               <widget class="QFrame" name="activityLogTitleFrame">
                 <property name="frameShape">
                  <enum>QFrame::NoFrame</enum>
                 </property>
@@ -1472,7 +1472,7 @@
                 </property>
                 <layout class="QVBoxLayout" name="verticalLayout_36">
                  <item>
-                  <widget class="QLabel" name="logTitleLabel">
+                  <widget class="QLabel" name="activityLogTitleLabel">
                    <property name="font">
                     <font>
                      <pointsize>13</pointsize>
@@ -1483,7 +1483,7 @@
                     <enum>QFrame::Plain</enum>
                    </property>
                    <property name="text">
-                    <string>Log</string>
+                    <string>Activity Log</string>
                    </property>
                    <property name="alignment">
                     <set>Qt::AlignCenter</set>
@@ -1494,7 +1494,7 @@
                </widget>
               </item>
               <item>
-               <widget class="QFrame" name="logTableFrame">
+               <widget class="QFrame" name="activityLogTableFrame">
                 <property name="frameShape">
                  <enum>QFrame::NoFrame</enum>
                 </property>
@@ -1503,7 +1503,7 @@
                 </property>
                 <layout class="QVBoxLayout" name="verticalLayout_38">
                  <item>
-                  <widget class="QTableWidget" name="logTable">
+                  <widget class="QTableWidget" name="activityLogTable">
                    <property name="columnCount">
                     <number>3</number>
                    </property>
