@@ -122,10 +122,6 @@ class ArchesResources:
                 )
                 dlg_resource_confirmation.close()
 
-        def close_dialog():
-            dlg_resource_confirmation.close()
-            dlg_resource_confirmation.messageLabel.setText("Confirmation prompt")
-
         # Get info on current layer and selected graph
         selectedLayerIndex = dlg.createResGeomSelectCombo.currentIndex()
         selectedLayer = arches_api.layers[selectedLayerIndex]
@@ -148,29 +144,20 @@ class ArchesResources:
         geom_convert = Geometries(selectedLayer)
         geomcoll, geometry_type_dict = geom_convert.geometry_conversion()
 
-        # Format text box
-        dlg_resource_confirmation.infoText.viewport().setAutoFillBackground(
-            False
-        )  # Sets the text box to be invisible
-        dlg_resource_confirmation.infoText.setText("")
-        dlg_resource_confirmation.infoText.append(
-            "An Arches resource will be created with the following geometries:\n"
-        )
-        for k, v in geometry_type_dict.items():
-            dlg_resource_confirmation.infoText.append(f"{k}: {v}")
+        basemap = QgsProject.instance().mapLayersByName("OpenStreetMap")[0]
+        snapshot_image = geom_convert.geometry_snapshot(basemap)
 
-        # open dialog
-        dlg_resource_confirmation.confirmDialogConfirm.setText("Create")
-        dlg_resource_confirmation.messageLabel.setText(
-            "Are you sure you want to CREATE an Arches resource?"
+        update_confirmation_dialog(
+            dlg_resource_confirmation,
+            geometry_type_dict,
+            snapshot_image,
+            "create",
         )
-        dlg_resource_confirmation.show()
 
         # Push button responses
         dlg_resource_confirmation.confirmDialogConfirm.clicked.connect(
             send_new_resource_to_arches
         )
-        dlg_resource_confirmation.confirmDialogCancel.clicked.connect(close_dialog)
 
     def edit_resource(
         self,
