@@ -185,4 +185,4 @@ class ArchesProjectDialog(QtWidgets.QDialog, FORM_CLASS):
         # set initial log table widths
         self.activityLogTable.setColumnWidth(0, 110)
         self.activityLogTable.setColumnWidth(1, 125)
-        self.activityLogTable.setColumnWidth(2, 300)
+        self.activityLogTable.horizontalHeader().setStretchLastSection(True)
