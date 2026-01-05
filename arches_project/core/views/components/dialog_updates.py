@@ -12,7 +12,6 @@ from PyQt5.QtCore import QTimer, QPropertyAnimation, QEasingCurve
 from qgis.PyQt.QtGui import QIcon
 
 import os
-import datetime
 
 
 def connection_reset(hard_reset, dlg, iface, manual_logout=False):
@@ -155,6 +154,8 @@ def reset_refresh_btn(dlg):
             os.path.join(dlg.plugin_dir, "icons", "arrows-rotate-solid-full-white.svg")
         )
     )
+
+
 def update_activity_log(dlg, action, resource_url, resourceinstance_id):
     resource_link = f"<a href='{resource_url}'>{resourceinstance_id}</a>"
     link_label = QLabel(resource_link)
