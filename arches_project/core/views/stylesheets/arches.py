@@ -132,7 +132,7 @@ class ArchesStylesheet:
             self.dlg.tabWidget.setTabText(3, "")
 
             self.dlg.tabWidget.setTabIcon(
-                4,
+                5,
                 QIcon(
                     QPixmap(
                         os.path.join(self.plugin_dir, "icons", "fa-cog.svg")
@@ -140,10 +140,10 @@ class ArchesStylesheet:
                 ),
             )
             self.dlg.tabWidget.setIconSize(QSize(16, 16))
-            self.dlg.tabWidget.setTabText(4, "")
+            self.dlg.tabWidget.setTabText(5, "")
 
             self.dlg.tabWidget.setTabIcon(
-                5,
+                4,
                 QIcon(
                     QPixmap(
                         os.path.join(self.plugin_dir, "icons", "ti-ticket.svg")
@@ -151,7 +151,7 @@ class ArchesStylesheet:
                 ),
             )
             self.dlg.tabWidget.setIconSize(QSize(16, 16))
-            self.dlg.tabWidget.setTabText(5, "")
+            self.dlg.tabWidget.setTabText(4, "")
 
             self.dlg.userProfileLabel.setFixedSize(80, 80)
             self.dlg.userProfileLabel.setPixmap(

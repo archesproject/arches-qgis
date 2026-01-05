@@ -1273,6 +1273,134 @@
        </item>
       </layout>
      </widget>
+     <widget class="QWidget" name="activityLog">
+      <attribute name="title">
+       <string>Activity Log</string>
+      </attribute>
+      <layout class="QVBoxLayout" name="verticalLayout_37">
+       <item>
+        <widget class="QScrollArea" name="scrollAreaActivityLog">
+         <property name="frameShape">
+          <enum>QFrame::NoFrame</enum>
+         </property>
+         <property name="widgetResizable">
+          <bool>true</bool>
+         </property>
+         <widget class="QWidget" name="scrollAreaWidgetContentsActivityLog">
+          <property name="geometry">
+           <rect>
+            <x>0</x>
+            <y>0</y>
+            <width>518</width>
+            <height>385</height>
+           </rect>
+          </property>
+          <layout class="QVBoxLayout" name="verticalLayout_35">
+           <item>
+            <widget class="QFrame" name="activityLogFrame">
+             <property name="frameShape">
+              <enum>QFrame::StyledPanel</enum>
+             </property>
+             <property name="frameShadow">
+              <enum>QFrame::Raised</enum>
+             </property>
+             <layout class="QVBoxLayout" name="verticalLayout_50">
+              <item>
+               <widget class="QFrame" name="activityLogTitleFrame">
+                <property name="frameShape">
+                 <enum>QFrame::NoFrame</enum>
+                </property>
+                <property name="frameShadow">
+                 <enum>QFrame::Raised</enum>
+                </property>
+                <layout class="QVBoxLayout" name="verticalLayout_36">
+                 <item>
+                  <widget class="QLabel" name="activityLogTitleLabel">
+                   <property name="font">
+                    <font>
+                     <pointsize>13</pointsize>
+                     <bold>false</bold>
+                    </font>
+                   </property>
+                   <property name="frameShadow">
+                    <enum>QFrame::Plain</enum>
+                   </property>
+                   <property name="text">
+                    <string>Activity Log</string>
+                   </property>
+                   <property name="alignment">
+                    <set>Qt::AlignCenter</set>
+                   </property>
+                  </widget>
+                 </item>
+                </layout>
+               </widget>
+              </item>
+              <item>
+               <widget class="QFrame" name="activityLogDescriptionFrame">
+                <property name="frameShape">
+                 <enum>QFrame::NoFrame</enum>
+                </property>
+                <property name="frameShadow">
+                 <enum>QFrame::Raised</enum>
+                </property>
+                <layout class="QVBoxLayout" name="verticalLayout_49">
+                 <item>
+                  <widget class="QLabel" name="activityLogDescriptionLabel">
+                   <property name="text">
+                    <string>Keeps a history of all operations in the current QGIS session.</string>
+                   </property>
+                   <property name="alignment">
+                    <set>Qt::AlignCenter</set>
+                   </property>
+                  </widget>
+                 </item>
+                </layout>
+               </widget>
+              </item>
+              <item>
+               <widget class="QFrame" name="activityLogTableFrame">
+                <property name="frameShape">
+                 <enum>QFrame::NoFrame</enum>
+                </property>
+                <property name="frameShadow">
+                 <enum>QFrame::Raised</enum>
+                </property>
+                <layout class="QVBoxLayout" name="verticalLayout_38">
+                 <item>
+                  <widget class="QTableWidget" name="activityLogTable">
+                   <property name="columnCount">
+                    <number>3</number>
+                   </property>
+                   <column>
+                    <property name="text">
+                     <string>Activity</string>
+                    </property>
+                   </column>
+                   <column>
+                    <property name="text">
+                     <string>Timestamp</string>
+                    </property>
+                   </column>
+                   <column>
+                    <property name="text">
+                     <string>Arches resource</string>
+                    </property>
+                   </column>
+                  </widget>
+                 </item>
+                </layout>
+               </widget>
+              </item>
+             </layout>
+            </widget>
+           </item>
+          </layout>
+         </widget>
+        </widget>
+       </item>
+      </layout>
+     </widget>
      <widget class="QWidget" name="settings">
       <attribute name="title">
        <string>Settings</string>
@@ -1423,134 +1551,6 @@
               </size>
              </property>
             </spacer>
-           </item>
-          </layout>
-         </widget>
-        </widget>
-       </item>
-      </layout>
-     </widget>
-     <widget class="QWidget" name="activityLog">
-      <attribute name="title">
-       <string>Activity Log</string>
-      </attribute>
-      <layout class="QVBoxLayout" name="verticalLayout_37">
-       <item>
-        <widget class="QScrollArea" name="scrollAreaActivityLog">
-         <property name="frameShape">
-          <enum>QFrame::NoFrame</enum>
-         </property>
-         <property name="widgetResizable">
-          <bool>true</bool>
-         </property>
-         <widget class="QWidget" name="scrollAreaWidgetContentsActivityLog">
-          <property name="geometry">
-           <rect>
-            <x>0</x>
-            <y>0</y>
-            <width>518</width>
-            <height>385</height>
-           </rect>
-          </property>
-          <layout class="QVBoxLayout" name="verticalLayout_35">
-           <item>
-            <widget class="QFrame" name="activityLogFrame">
-             <property name="frameShape">
-              <enum>QFrame::StyledPanel</enum>
-             </property>
-             <property name="frameShadow">
-              <enum>QFrame::Raised</enum>
-             </property>
-             <layout class="QVBoxLayout" name="verticalLayout_50">
-              <item>
-               <widget class="QFrame" name="activityLogTitleFrame">
-                <property name="frameShape">
-                 <enum>QFrame::NoFrame</enum>
-                </property>
-                <property name="frameShadow">
-                 <enum>QFrame::Raised</enum>
-                </property>
-                <layout class="QVBoxLayout" name="verticalLayout_36">
-                 <item>
-                  <widget class="QLabel" name="activityLogTitleLabel">
-                   <property name="font">
-                    <font>
-                     <pointsize>13</pointsize>
-                     <bold>false</bold>
-                    </font>
-                   </property>
-                   <property name="frameShadow">
-                    <enum>QFrame::Plain</enum>
-                   </property>
-                   <property name="text">
-                    <string>Activity Log</string>
-                   </property>
-                   <property name="alignment">
-                    <set>Qt::AlignCenter</set>
-                   </property>
-                  </widget>
-                 </item>
-                </layout>
-               </widget>
-              </item>
-              <item>
-               <widget class="QFrame" name="activityLogDescriptionFrame">
-                <property name="frameShape">
-                 <enum>QFrame::NoFrame</enum>
-                </property>
-                <property name="frameShadow">
-                 <enum>QFrame::Raised</enum>
-                </property>
-                <layout class="QVBoxLayout" name="verticalLayout_49">
-                 <item>
-                  <widget class="QLabel" name="activityLogDescriptionLabel">
-                   <property name="text">
-                    <string>Keeps a history of all operations in the current QGIS session.</string>
-                   </property>
-                   <property name="alignment">
-                    <set>Qt::AlignCenter</set>
-                   </property>
-                  </widget>
-                 </item>
-                </layout>
-               </widget>
-              </item>
-              <item>
-               <widget class="QFrame" name="activityLogTableFrame">
-                <property name="frameShape">
-                 <enum>QFrame::NoFrame</enum>
-                </property>
-                <property name="frameShadow">
-                 <enum>QFrame::Raised</enum>
-                </property>
-                <layout class="QVBoxLayout" name="verticalLayout_38">
-                 <item>
-                  <widget class="QTableWidget" name="activityLogTable">
-                   <property name="columnCount">
-                    <number>3</number>
-                   </property>
-                   <column>
-                    <property name="text">
-                     <string>Activity</string>
-                    </property>
-                   </column>
-                   <column>
-                    <property name="text">
-                     <string>Timestamp</string>
-                    </property>
-                   </column>
-                   <column>
-                    <property name="text">
-                     <string>Arches resource</string>
-                    </property>
-                   </column>
-                  </widget>
-                 </item>
-                </layout>
-               </widget>
-              </item>
-             </layout>
-            </widget>
            </item>
           </layout>
          </widget>
