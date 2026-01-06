@@ -18,26 +18,25 @@ def map_selection(iface, dlg):
     except AttributeError:
         features = None
 
-    if arches_api.arches_token:
-        if not features:
-            default_text = "0 features selected. Select features from the map."
-            dlg.createResFeatureLineEdit.setText(default_text)
-            dlg.editResFeatureLineEdit.setText(default_text)
-            dlg.editResAddGeom.setEnabled(False)
-            dlg.editResReplaceGeom.setEnabled(False)
-            dlg.createResButton.setEnabled(False)
+    if not features:
+        default_text = "0 features selected. Select features from the map."
+        dlg.createResFeatureLineEdit.setText(default_text)
+        dlg.editResFeatureLineEdit.setText(default_text)
+        dlg.editResAddGeom.setEnabled(False)
+        dlg.editResReplaceGeom.setEnabled(False)
+        dlg.createResButton.setEnabled(False)
 
-        else:
-            num_features_selected = f"{len(features)} features selected"
-            dlg.createResFeatureLineEdit.setText(num_features_selected)
-            dlg.editResFeatureLineEdit.setText(num_features_selected)
-            dlg.createResButton.setEnabled(True)
-            dlg.editResAddGeom.setEnabled(True)
-            dlg.editResReplaceGeom.setEnabled(True)
+    else:
+        num_features_selected = f"{len(features)} features selected"
+        dlg.createResFeatureLineEdit.setText(num_features_selected)
+        dlg.editResFeatureLineEdit.setText(num_features_selected)
+        dlg.createResButton.setEnabled(True)
+        dlg.editResAddGeom.setEnabled(True)
+        dlg.editResReplaceGeom.setEnabled(True)
 
-            arches_api.selected_features["features"].clear()  # reset list
-            for feature in features:
-                save_selected_features(feature, active_layer)
+        arches_api.selected_features["features"].clear()  # reset list
+        for feature in features:
+            save_selected_features(feature, active_layer)
 
 
 def populate_table(dlg, feature):
@@ -87,6 +86,7 @@ def save_selected_arches_resource(feature):
 def save_selected_features(feature, active_layer):
     arches_api.selected_features["features"].append(feature)
     arches_api.selected_features["layer_crs"] = active_layer.crs()
+    print("saved", arches_api.selected_features)
 
 
 def update_map_layers(checkbox):
