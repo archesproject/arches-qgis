@@ -34,6 +34,6 @@ class DefaultStylesheet:
         self.dlg.tabWidget.setTabIcon(3, QIcon(""))
         self.dlg.tabWidget.setTabText(3, "Edit Resource")
         self.dlg.tabWidget.setTabIcon(4, QIcon(""))
-        self.dlg.tabWidget.setTabText(4, "Settings")
+        self.dlg.tabWidget.setTabText(4, "Log")
         self.dlg.tabWidget.setTabIcon(5, QIcon(""))
-        self.dlg.tabWidget.setTabText(5, "Log")
+        self.dlg.tabWidget.setTabText(5, "Settings")
