@@ -152,11 +152,7 @@ class ArchesResources:
             geometry_type_dict,
             snapshot_image,
             "create",
-        )
-
-        # Push button responses
-        dlg_resource_confirmation.confirmDialogConfirm.clicked.connect(
-            send_new_resource_to_arches
+            send_new_resource_to_arches,
         )
 
     def edit_resource(
@@ -240,16 +236,7 @@ class ArchesResources:
                     geometry_type_dict,
                     snapshot_image,
                     "replace",
-                )
-
-                # connect Confirmation button
-                dlg_resource_confirmation.confirmDialogConfirm.disconnect()
-                dlg_resource_confirmation.confirmDialogConfirm.clicked.connect(
-                    partial(
-                        send_edited_data_to_arches,
-                        operation_type="create",
-                        dialog=dlg_resource_confirmation,
-                    )
+                    send_edited_data_to_arches,
                 )
 
             # Add geometry to the resource
@@ -260,14 +247,5 @@ class ArchesResources:
                     geometry_type_dict,
                     snapshot_image,
                     "append",
-                )
-
-                # connect Confirmation button
-                dlg_resource_confirmation.confirmDialogConfirm.disconnect()
-                dlg_resource_confirmation.confirmDialogConfirm.clicked.connect(
-                    partial(
-                        send_edited_data_to_arches,
-                        operation_type="append",
-                        dialog=dlg_resource_confirmation,
-                    )
+                    send_edited_data_to_arches,
                 )

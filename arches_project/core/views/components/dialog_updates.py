@@ -155,7 +155,11 @@ def reset_refresh_btn(dlg):
         )
     )
 def update_confirmation_dialog(
-    dlg_resource_confirmation, geometry_type_dict, snapshot_image, operation_type
+    dlg_resource_confirmation,
+    geometry_type_dict,
+    snapshot_image,
+    operation_type,
+    on_confirm_fuction,
 ):
 
     def close_dialog():
@@ -188,3 +192,17 @@ def update_confirmation_dialog(
     # connect Cancel button
     dlg_resource_confirmation.confirmDialogCancel.disconnect()
     dlg_resource_confirmation.confirmDialogCancel.clicked.connect(close_dialog)
+
+    if operation_type == "create":
+        dlg_resource_confirmation.confirmDialogConfirm.clicked.connect(
+            on_confirm_fuction
+        )
+    else:
+        dlg_resource_confirmation.confirmDialogConfirm.disconnect()
+        dlg_resource_confirmation.confirmDialogConfirm.clicked.connect(
+            partial(
+                on_confirm_fuction,
+                operation_type=operation_type,
+                dialog=dlg_resource_confirmation,
+            )
+        )
