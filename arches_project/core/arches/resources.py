@@ -230,22 +230,12 @@ class ArchesResources:
                         break
 
             # Replace geometry
-            if replace == True:
-                update_confirmation_dialog(
-                    dlg_resource_confirmation,
-                    geometry_type_dict,
-                    snapshot_image,
-                    "replace",
-                    send_edited_data_to_arches,
-                )
+            operation_type = "replace" if replace else "append"
 
-            # Add geometry to the resource
-            else:
-
-                update_confirmation_dialog(
-                    dlg_resource_confirmation,
-                    geometry_type_dict,
-                    snapshot_image,
-                    "append",
-                    send_edited_data_to_arches,
-                )
+            update_confirmation_dialog(
+                dlg_resource_confirmation,
+                geometry_type_dict,
+                snapshot_image,
+                operation_type,
+                send_edited_data_to_arches,
+            )
