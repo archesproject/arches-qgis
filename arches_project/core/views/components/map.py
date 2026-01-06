@@ -19,6 +19,7 @@ def map_selection(iface, dlg):
         features = None
 
     if not features:
+        reset_saved_selected_features()
         default_text = "0 features selected. Select features from the map."
         dlg.createResFeatureLineEdit.setText(default_text)
         dlg.editResFeatureLineEdit.setText(default_text)
@@ -87,6 +88,11 @@ def save_selected_features(feature, active_layer):
     arches_api.selected_features["features"].append(feature)
     arches_api.selected_features["layer_crs"] = active_layer.crs()
     print("saved", arches_api.selected_features)
+
+
+def reset_saved_selected_features():
+    arches_api.selected_features["features"].clear()
+    arches_api.selected_features["layer_crs"] = None
 
 
 def update_map_layers(checkbox):
