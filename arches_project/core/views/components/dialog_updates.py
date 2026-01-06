@@ -160,6 +160,7 @@ def update_activity_log(dlg, action_description, resource_url, resourceinstance_
     resource_link = f"<a href='{resource_url}'>{resourceinstance_id}</a>"
     link_label = QLabel(resource_link)
     link_label.setOpenExternalLinks(True)
+    link_label.setAlignment(Qt.AlignCenter)
 
     dlg.activityLogTable.insertRow(0)
 
