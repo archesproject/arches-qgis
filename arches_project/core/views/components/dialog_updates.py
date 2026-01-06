@@ -6,7 +6,7 @@ from arches_project.core.views.login import LoggedIn
 from arches_project.core.arches.api import arches_api
 from qgis.PyQt.QtWidgets import QTableWidgetItem, QLabel
 from PyQt5.QtCore import Qt
-from datetime import datetime
+import datetime
 
 from PyQt5.QtCore import QTimer, QPropertyAnimation, QEasingCurve
 from qgis.PyQt.QtGui import QIcon
@@ -168,7 +168,7 @@ def update_activity_log(dlg, action_description, resource_url, resourceinstance_
     action_task_widget = QTableWidgetItem(action_description)
     action_task_widget.setTextAlignment(Qt.AlignCenter | Qt.AlignVCenter)
 
-    action_datetime = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+    action_datetime = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
     action_datetime_widget = QTableWidgetItem(action_datetime)
     action_datetime_widget.setTextAlignment(Qt.AlignCenter | Qt.AlignVCenter)
 
