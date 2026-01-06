@@ -34,6 +34,7 @@ QLabel#signInDescriptionLabel,
 QLabel#displayTextLabel, 
 QLabel#createResDescriptionLabel, 
 QLabel#editResDescriptionLabel,
+QLabel#activityLogDescriptionLabel,
 QLabel#settingsDescriptionLabel {
     font-size: 16px;
     font-weight: 400;
