@@ -207,9 +207,9 @@ class ArchesResources:
                         f"Resource geometry {operation_type} was successful.",
                     )
                     action = (
-                        "Append feature(s)"
+                        "Appended feature(s)"
                         if operation_type == "append"
-                        else "Replace feature(s)"
+                        else "Replaced feature(s)"
                     )
 
                     update_activity_log(
