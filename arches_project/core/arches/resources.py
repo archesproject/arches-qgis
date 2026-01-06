@@ -161,9 +161,11 @@ class ArchesResources:
         dlg_resource_confirmation.show()
 
         # Push button responses
+        dlg_resource_confirmation.confirmDialogConfirm.disconnect()
         dlg_resource_confirmation.confirmDialogConfirm.clicked.connect(
             send_new_resource_to_arches
         )
+        dlg_resource_confirmation.confirmDialogCancel.disconnect()
         dlg_resource_confirmation.confirmDialogCancel.clicked.connect(close_dialog)
 
     def edit_resource(
