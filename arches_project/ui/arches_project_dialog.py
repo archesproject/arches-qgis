@@ -73,7 +73,6 @@ class ArchesProjectDialog(QtWidgets.QDialog, FORM_CLASS):
         # Set tab index to 0 always
         self.tabWidget.setCurrentIndex(0)
         self.tabWidget.setTabVisible(1, False)
-        self.tabWidget.setTabVisible(4, False)
 
         # to run when layer is changed in create resource and edit resource tabs
         self.hidePostgresLayers.setChecked(True)

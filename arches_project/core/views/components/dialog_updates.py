@@ -35,11 +35,13 @@ def connection_reset(hard_reset, dlg, iface, manual_logout=False):
         load_saved_credentials(dlg)
         # Return to login page
         dlg.tabWidget.setCurrentIndex(0)
-        # Reset connection inputs
+        # Reset connection inputs and activity
         if manual_logout == True:
             dlg.archesServerInput.setText("")
             dlg.usernameInput.setText("")
             dlg.passwordInput.setText("")
+
+            dlg.activityLogTable.setRowCount(0)
 
     # Reset Create Resource tab as no longer useable
     dlg.createResModelSelectCombo.setEnabled(False)

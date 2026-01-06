@@ -36,7 +36,6 @@ class LoggedIn:
         """
         self.dlg.tabWidget.setTabVisible(0, False)
         self.dlg.tabWidget.setTabVisible(1, True)
-        self.dlg.tabWidget.setTabVisible(4, True)
         self.dlg.tabWidget.setCurrentIndex(1)
 
 
