@@ -183,6 +183,6 @@ class ArchesProjectDialog(QtWidgets.QDialog, FORM_CLASS):
         self.opacity_effect = QGraphicsOpacityEffect(self.refreshConfirmLabel)
         self.refreshConfirmLabel.setGraphicsEffect(self.opacity_effect)
         # set initial log table widths
-        self.activityLogTable.setColumnWidth(0, 110)
-        self.activityLogTable.setColumnWidth(1, 125)
+        self.activityLogTable.setColumnWidth(0, 100)
+        self.activityLogTable.setColumnWidth(1, 100)
         self.activityLogTable.horizontalHeader().setStretchLastSection(True)
