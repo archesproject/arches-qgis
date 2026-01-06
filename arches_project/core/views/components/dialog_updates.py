@@ -162,31 +162,27 @@ def update_confirmation_dialog(
         dlg_resource_confirmation.close()
         dlg_resource_confirmation.messageLabel.setText("Confirmation prompt")
 
-    # Format text box
     dlg_resource_confirmation.infoText.viewport().setAutoFillBackground(False)
-
-    # Set the text box to be invisible
     dlg_resource_confirmation.infoText.setText("")
 
-    # Include the relevant confirmation text
     confirmation_question = {
         "create": "Are you sure you want to CREATE an Arches resource with these features?",
         "append": "Are you sure you want to ADD these features to your Arches resource?",
         "replace": "Are you sure you want to REPLACE your Arches resource's geometries with these features?",
     }
 
+    dlg_resource_confirmation.messageLabel.setText(
+        confirmation_question[operation_type]
+    )
+
     for k, v in geometry_type_dict.items():
         dlg_resource_confirmation.infoText.append(f"{k}s: {v}")
+    dlg_resource_confirmation.confirmDialogConfirm.setText(operation_type.capitalize())
 
     dlg_resource_confirmation.snapshotLabel.setPixmap(snapshot_image)
     dlg_resource_confirmation.snapshotLabel.setScaledContents(False)
     dlg_resource_confirmation.snapshotLabel.setAlignment(Qt.AlignRight)
 
-    # Show confirmation dialog
-    dlg_resource_confirmation.confirmDialogConfirm.setText(operation_type.capitalize())
-    dlg_resource_confirmation.messageLabel.setText(
-        confirmation_question[operation_type]
-    )
     dlg_resource_confirmation.show()
 
     # connect Cancel button
