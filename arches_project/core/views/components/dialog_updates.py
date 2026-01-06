@@ -175,16 +175,8 @@ def update_confirmation_dialog(
         "replace": "Are you sure you want to REPLACE your Arches resource's geometries with these features?",
     }
 
-    confirmation_text = {
-        "create": "An Arches resource will be created with the following features:\n",
-        "append": "The following features will be added to the existing Arches resource's geometries:\n",
-        "replace": "The following geometries will replace the existing Arches resource's geometries:\n",
-    }
-
-    dlg_resource_confirmation.infoText.append(confirmation_text[operation_type])
-
     for k, v in geometry_type_dict.items():
-        dlg_resource_confirmation.infoText.append(f"{k}: {v}")
+        dlg_resource_confirmation.infoText.append(f"{k}s: {v}")
 
     dlg_resource_confirmation.snapshotLabel.setPixmap(snapshot_image)
     dlg_resource_confirmation.snapshotLabel.setScaledContents(False)
