@@ -41,8 +41,6 @@ def connection_reset(hard_reset, dlg, iface, manual_logout=False):
             dlg.usernameInput.setText("")
             dlg.passwordInput.setText("")
 
-            dlg.activityLogTable.setRowCount(0)
-
     # Reset Create Resource tab as no longer useable
     dlg.createResModelSelectCombo.setEnabled(False)
     dlg.createResGeomSelectCombo.setEnabled(False)
