@@ -3,7 +3,12 @@ from qgis.core import (
     QgsCoordinateReferenceSystem,
     QgsCoordinateTransform,
     QgsWkbTypes,
+    QgsMapSettings,
+    QgsMapRendererParallelJob,
 )
+
+from PyQt5.QtGui import QPixmap
+from PyQt5.QtCore import QSize
 
 
 class Geometries:
@@ -11,6 +16,27 @@ class Geometries:
         self.selectedLayer = selectedLayer
         self.selected_layer_crs = selectedLayer.crs()
         self.arches_crs = QgsCoordinateReferenceSystem.fromEpsgId(4326)
+
+    def geometry_snapshot(self, basemap):
+        layers_to_render = [self.selectedLayer, basemap]
+
+        old_extent = self.selectedLayer.extent()
+        transformer = QgsCoordinateTransform(
+            self.selectedLayer.crs(), basemap.crs(), QgsProject.instance()
+        )
+        new_extent = transformer.transformBoundingBox(old_extent)
+        settings = QgsMapSettings()
+        settings.setLayers(layers_to_render)
+        settings.setDestinationCrs(basemap.crs()) 
+        settings.setExtent(new_extent)
+        settings.setOutputSize(QSize(250, 250))
+
+        render = QgsMapRendererParallelJob(settings)
+        render.start()
+        render.waitForFinished()
+
+        pixmap = QPixmap.fromImage(render.renderedImage())
+        return pixmap
 
     def coordinate_transform(self, geom):
         if self.selected_layer_crs != self.arches_crs:

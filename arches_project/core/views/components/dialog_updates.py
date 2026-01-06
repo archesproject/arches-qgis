@@ -4,6 +4,8 @@ from arches_project.core.views.components.login_autocomplete import (
 )
 from arches_project.core.views.login import LoggedIn
 from arches_project.core.arches.api import arches_api
+from PyQt5.QtCore import Qt
+from functools import partial
 
 from PyQt5.QtCore import QTimer, QPropertyAnimation, QEasingCurve
 from qgis.PyQt.QtGui import QIcon
@@ -152,3 +154,55 @@ def reset_refresh_btn(dlg):
             os.path.join(dlg.plugin_dir, "icons", "arrows-rotate-solid-full-white.svg")
         )
     )
+def update_confirmation_dialog(
+    dlg_resource_confirmation,
+    geometry_type_dict,
+    snapshot_image,
+    operation_type,
+    on_confirm_fuction,
+):
+
+    def close_dialog():
+        dlg_resource_confirmation.close()
+        dlg_resource_confirmation.messageLabel.setText("Confirmation prompt")
+
+    dlg_resource_confirmation.infoText.viewport().setAutoFillBackground(False)
+    dlg_resource_confirmation.infoText.setText("")
+
+    confirmation_question = {
+        "create": "Are you sure you want to CREATE an Arches resource with these features?",
+        "append": "Are you sure you want to ADD these features to your Arches resource?",
+        "replace": "Are you sure you want to REPLACE your Arches resource's geometries with these features?",
+    }
+
+    dlg_resource_confirmation.messageLabel.setText(
+        confirmation_question[operation_type]
+    )
+
+    for k, v in geometry_type_dict.items():
+        dlg_resource_confirmation.infoText.append(f"{k}s: {v}")
+    dlg_resource_confirmation.confirmDialogConfirm.setText(operation_type.capitalize())
+
+    dlg_resource_confirmation.snapshotLabel.setPixmap(snapshot_image)
+    dlg_resource_confirmation.snapshotLabel.setScaledContents(False)
+    dlg_resource_confirmation.snapshotLabel.setAlignment(Qt.AlignRight)
+
+    dlg_resource_confirmation.show()
+
+    # connect Cancel button
+    dlg_resource_confirmation.confirmDialogCancel.disconnect()
+    dlg_resource_confirmation.confirmDialogCancel.clicked.connect(close_dialog)
+
+    if operation_type == "create":
+        dlg_resource_confirmation.confirmDialogConfirm.clicked.connect(
+            on_confirm_fuction
+        )
+    else:
+        dlg_resource_confirmation.confirmDialogConfirm.disconnect()
+        dlg_resource_confirmation.confirmDialogConfirm.clicked.connect(
+            partial(
+                on_confirm_fuction,
+                operation_type=operation_type,
+                dialog=dlg_resource_confirmation,
+            )
+        )

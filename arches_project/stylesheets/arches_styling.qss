@@ -52,6 +52,10 @@ QLabel#displayUsernameLabel {
     font-weight: 300;
 }
 
+QFrame#snapshotFrame {
+    border: none;
+}
+
 QTextEdit {
     font-family: 'Open Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif;
     font-size: 13px;
