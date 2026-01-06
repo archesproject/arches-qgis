@@ -156,14 +156,14 @@ def reset_refresh_btn(dlg):
     )
 
 
-def update_activity_log(dlg, action, resource_url, resourceinstance_id):
+def update_activity_log(dlg, action_description, resource_url, resourceinstance_id):
     resource_link = f"<a href='{resource_url}'>{resourceinstance_id}</a>"
     link_label = QLabel(resource_link)
     link_label.setOpenExternalLinks(True)
 
     dlg.activityLogTable.insertRow(0)
 
-    action_task_widget = QTableWidgetItem(action)
+    action_task_widget = QTableWidgetItem(action_description)
     action_task_widget.setTextAlignment(Qt.AlignCenter | Qt.AlignVCenter)
 
     action_datetime = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
