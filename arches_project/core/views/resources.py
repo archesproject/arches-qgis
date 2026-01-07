@@ -51,7 +51,7 @@ class ResourcesView:
         UI be revealed, and the Arches resource stored until re-registered.
         """
 
-        self.dlg.editResSelectResButton.setText("Register resource")
+        self.dlg.editResSelectResButton.setText("Register resource for editing")
 
         if not arches_api.selected_features["features"]:
             # show confirmation message
