@@ -266,7 +266,7 @@ class ArchesResources:
                 )  # Sets the text box to be invisible
                 dlg_resource_confirmation.infoText.setText("")
                 dlg_resource_confirmation.infoText.append(
-                    "The following selected geometries will replace the geometry of the registered resource:\n"
+                    "The following selected geometries will replace the feature collection of the registered resource's tile:\n"
                 )
                 for k, v in geometry_type_dict.items():
                     dlg_resource_confirmation.infoText.append(f"{k}: {v}")
@@ -298,7 +298,7 @@ class ArchesResources:
                 )  # Sets the text box to be invisible
                 dlg_resource_confirmation.infoText.setText("")
                 dlg_resource_confirmation.infoText.append(
-                    "The following selected geometries will be added to the geometry of the registered resource:\n"
+                    "The following selected geometries will be added to the feature collection of the registered resource's tile:\n"
                 )
                 for k, v in geometry_type_dict.items():
                     dlg_resource_confirmation.infoText.append(f"{k}: {v}")
