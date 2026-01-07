@@ -107,9 +107,6 @@ def update_edit_resources_tab(dlg):
         dlg.editResAddGeom.setEnabled(True)
         dlg.editResReplaceGeom.setEnabled(True)
     dlg.editResSelectedResAttributeTable.setEnabled(True)
-    dlg.editResSelectedResId.setText(
-        "Connected to Arches. Select an Arches resource to proceed."
-    )
 
 
 def update_refresh_confirm_label(dlg, connected):
