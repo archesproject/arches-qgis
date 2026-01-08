@@ -9,4 +9,5 @@ class AutoCompleteLineEdit(QLineEdit):
     def focusInEvent(self, event):
         super().focusInEvent(event)
         completer = self.completer()
-        completer.complete()
+        if completer:
+            completer.complete()
