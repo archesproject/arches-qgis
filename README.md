@@ -80,6 +80,16 @@ This .pro file will load all plugin `.ui` files into the project tree found in t
 
 ### Tabs
 
+![](/media/plugin-tabs.gif)
+
+The Arches QGIS Plugin is composed of 5 tabs:
+- Sign In
+- Create Resource
+- Edit Resource
+- Activity Log
+- Settings
+
+All tabs, aside from Settings, become enabled upon successful user authentication.
 
 ### Authentication
 
@@ -95,11 +105,47 @@ An unsuccessful log in will return an error message and could be due to a number
 
 ### Create a resource
 
+![](/media/plugin-create-resource.gif)
+
+To create an Arches resource with the plugin, select feature(s) from the QGIS map - the text box will inform you of the number of selected features. To advance, select the "Create Resource" button. This will display a confirmation pop-up where you can cancel or confirm to send the data to Arches.
+
+A successful resource creation will display a message with a hyperlink to your new Arches resource. A record of this action will be recorded in the [Activity Log](#activity-log).
+
+An unsuccessful resource creation will result in an error message displayed.
+
 ### Edit a resource
+
+![](/media/plugin-edit-resource.gif)
+
+To edit an Arches resource with the plugin, select an Arches resource from the QGIS map and register the resource with the plugin by clicking the "Register resource for editing" button. An Arches resource is identified by the fields `resourceinstanceid`, `nodeid` and `tileid`. 
+
+If the selected feature does not include the fields, a message will be displayed and the resource will not be successfullly registered with the plugin.
+
+Once a resource is successfully registered, the resource instance UUID and a table with all attribute data will be displayed.
+
+The Arches resource can be edited by appending (add) or replacing (replace) the selected geometries to the feature collection of the registered Arches resource tile.
+
+A successful resource edit will display a message with a hyperlink to your Arches resource. A record of this action will be recorded in the [Activity Log](#activity-log).
+
+An unsuccessful resource edit will result in an error message displayed.
+
 
 ### Activity log
 
+![](/media/plugin-activity-log.png)
+
+The Activity Log stores a history of all operations by the Arches QGIS Plugin in the current QGIS session.
+
+A QGIS session is defined as the instance of the QGIS application running and the period it is open for. It is not specific to the authentication of the plugin, and the Activity Log will persist after plugin log outs. 
+
+The Activity Log will be cleared if the QGIS application is closed and re-opened.
+
 ### Settings
+
+![](/media/plugin-settings.png)
+
+The Settings tab currently has one entry, a checkbox option for disabling and enabling the Arches stylings.
+
 
 ## Testing
 The Arches QGIS plugin includes tests found in `arches_project/tests/`.    
