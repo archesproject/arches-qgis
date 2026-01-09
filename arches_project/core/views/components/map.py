@@ -92,27 +92,3 @@ def save_selected_features(feature, active_layer):
 def reset_saved_selected_features():
     arches_api.selected_features["features"].clear()
     arches_api.selected_features["layer_crs"] = None
-
-
-def update_map_layers(checkbox):
-    """
-    Function to update new vector layers dynamically
-    """
-
-    if checkbox.isChecked():
-        all_current_layers = [
-            l
-            for l in QgsProject.instance().mapLayers().values()
-            if l.type() == QgsVectorLayer.VectorLayer
-            if str(l.dataProvider().name()) != "postgres"
-        ]
-
-    elif not checkbox.isChecked():
-        all_current_layers = [
-            l
-            for l in QgsProject.instance().mapLayers().values()
-            if l.type() == QgsVectorLayer.VectorLayer
-        ]
-
-    if arches_api.layers != all_current_layers:
-        arches_api.layers = all_current_layers

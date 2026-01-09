@@ -258,14 +258,6 @@ class ConnectionProcess(QgsTask):
                 # THIS IS THE RESOURCE EDITOR PERMISSION
                 # This must be in result, in order to display that login failed due to permissions rather than other
 
-                # get all vector layers
-                arches_api.layers = [
-                    l
-                    for l in QgsProject.instance().mapLayers().values()
-                    if l.type() == QgsVectorLayer.VectorLayer
-                    if str(l.dataProvider().name()) != "postgres"
-                ]
-
                 self.arches_connection.store_auto_complete_credentials()
                 update_login_tab(dlg=self.dlg, username=self.username, url=self.url)
                 update_edit_resources_tab(dlg=self.dlg)
