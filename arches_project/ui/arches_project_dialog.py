@@ -28,8 +28,6 @@ from functools import partial
 from arches_project.core.views.components.login_autocomplete import (
     load_saved_credentials,
 )
-from arches_project.core.views.components.map import update_map_layers
-from arches_project.core.views.components.psql_layers import show_hide_psql_layers
 from arches_project.core.views.components.multiple_graph_nodes import (
     multiple_geometry_node_check,
 )
@@ -73,9 +71,6 @@ class ArchesProjectDialog(QtWidgets.QDialog, FORM_CLASS):
         # Set tab index to 0 always
         self.tabWidget.setCurrentIndex(0)
         self.tabWidget.setTabVisible(1, False)
-
-        # to run when layer is changed in create resource and edit resource tabs
-        self.hidePostgresLayers.setChecked(True)
 
         ## Set "Create resource" to false to begin with and only update once Arches connection made
         self.createResModelSelectCombo.setEnabled(False)
