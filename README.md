@@ -1,32 +1,37 @@
 # Arches QGIS Plugin
 
-The Arches QGIS plugin allows you to connect to your Arches project and create new resources or edit existing Arches resource geometries using QGIS layers.
+The Arches QGIS plugin is a plugin for the open-source [QGIS](https://qgis.org/) software, built to integrate with you Arches implementation and streamline the process of using a GIS with Arches data.
 
-The plugin is still in development and thus marked as "experimental". 
-Be aware that since the plugin is currently experimental, there may be some unknown issues/bugs and the creators of the plugin can not be held accountable for any problems that may occur.
+The plugin allows users to authenticate using their Arches project URL, username and password, granting the ability to create new resources or edit existing Arches resource geometries using features from the QGIS map interface.
 
-If you encounter any issues, don't hesitate to create a new GitHub issue or contact the plugin creators.
+Issue reports are encouraged!
+- [Report a Bug](https://github.com/archesproject/arches-qgis/issues/new)
+- File a Feature Ticket
 
-## Pre-requirements
-1. A running Arches instance, accessible via a public domain or IP.
-2. An Arches user login with permissions to enter data or create resources.
-3. A registered oauth application and client ID entered into settings.py (or settings_local.py) - see the [following documentation link](https://arches.readthedocs.io/en/stable/developing/reference/api/#register-an-oauth-application) for more information on registering oauth2 applications.  
+## Installation 
+
+### Pre-requirements
+1. A running Arches instance, accessible via a public domain or IP address.
+2. A registered oauth application and client ID entered into settings.py (or settings_local.py) - see the [following documentation link](https://arches.readthedocs.io/en/stable/developing/reference/api/#register-an-oauth-application) for more information on registering oauth2 applications.
+3. An Arches user login with permissions to enter data or create resources.
 4. If you wish to edit existing Arches resources, a database connection with [spatial views](https://arches.readthedocs.io/en/stable/administering/spatial-views/#spatial-views-preview) added as QGIS layers is required.
 
-## Installation via the QGIS Plugins Repository
+### Installation via the QGIS Plugins Repository
 Since the plugin is experimental, to install the plugin through the QGIS plugins repository you will need to ensure that experimental plugins are enabled.
-### Installation from within QGIS
+
+#### Installation from within QGIS
 1. Navigate to the Plugins tab, then "Manage and Install Plugins".
 2. Navigate to "Settings".
 3. Tick "Show also Experimental Plugins".
 Once enabled, head back to all plugins, search for "Arches Project" and hit "Install Experimental Plugin".
-### Installation from the QGIS plugins website
+
+#### Installation from the QGIS plugins website
 All QGIS plugins can be viewed and downloaded from the [QGIS website](https://plugins.qgis.org/plugins/)
 1. Search for the "Arches Project" plugin on the website, or go directly here https://plugins.qgis.org/plugins/arches_project/.
 2. Download the plugin zip.
 3. Extract the folder, and move it to your local QGIS installation path (see below).
 
-## Installation via GitHub (for developers)
+### Installation via GitHub
 Note that the entire arches-qgis git repository is not the QGIS plugin, only the `arches_project/` directory should be added to the QGIS plugins path. If the entire directory is added to the QGIS plugin path it will not be recognised and produce errors.
 1. Find your local path for the QGIS installation:
     If on Windows, this should look similar to `C:\Users\USERNAME\AppData\Roaming\QGIS\QGIS3\profiles\default\python\plugins\`   
@@ -50,9 +55,9 @@ Note that the entire arches-qgis git repository is not the QGIS plugin, only the
 4. Search for and select "Arches Project" from the list of all plugins.
 
 ## Information for developers
-If you wish to develop with the QGIS Arches plugin, below are some helpful tips that will help and make life easier.
-- Installation via GitHub is the easiest method to develop.  This can be done by git cloning in the plugins path (shown above) and (optionally) creating a symbolic link to somewhere much easier to find e.g. your home directory.
-- The QGIS plugin "Plugin Reloader" is incredibly useful for reloading plugins to reflect code changes.  This can be found on the QGIS plugins repository, and configured to reload specific plugins with Ctrl+F5.
+If you wish to develop with the QGIS Arches plugin, below are some helpful tips that will make life easier.
+- Installation via GitHub is the easiest method to develop.  This can be done by following the [instructions above](#installation-via-github).
+- The QGIS plugin "[Plugin Reloader](https://plugins.qgis.org/plugins/plugin_reloader/)" is incredibly useful for reloading plugins to reflect code changes.  This can be found on the QGIS plugins repository, and configured to reload specific plugins using Ctrl+F5.
 
 ### Developing the user interface
 QGIS uses PyQt as the framework for UI, specifically Qt 5.15.   
@@ -70,6 +75,31 @@ Once installed, add the new version of Qt as a kit in the QtCreator preferences,
 
 Open a new project in QtCreator by selecting the .pro file found in `arches_project/ui/arches_project_ui.pro`, and Qt 5.15.   
 This .pro file will load all plugin `.ui` files into the project tree found in the Edit tab (on the left side of QtCreator) where they can be easily opened and switched between. 
+
+## User Guide
+
+### Tabs
+
+
+### Authentication
+
+![](/media/plugin-login.gif)
+
+To authenticate with the QGIS plugin, you must supply the URL to your Arches instance (ensuring the language code is included in the URL if your Arches implementation is internationalised), your username and password.
+
+A successful log in will replace the login tab with a User Profile tab. Here you have options to:
+- Refresh the fetched Arches resource models and nodes - this is useful if your Arches data models have changed in any way since the last authentication with the Arches QGIS plugin.
+- Log out of the plugin, and return to the log in tab.
+
+An unsuccessful log in will return an error message and could be due to a number of factors. Checking the logs in your Arches implementation will provide more information.
+
+### Create a resource
+
+### Edit a resource
+
+### Activity log
+
+### Settings
 
 ## Testing
 The Arches QGIS plugin includes tests found in `arches_project/tests/`.    
