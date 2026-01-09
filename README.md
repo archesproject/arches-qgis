@@ -4,9 +4,7 @@ The Arches QGIS plugin is a plugin for the open-source [QGIS](https://qgis.org/)
 
 The plugin allows users to authenticate using their Arches project URL, username and password, granting the ability to create new resources or edit existing Arches resource geometries using features from the QGIS map interface.
 
-Issue reports are encouraged!
-- [Report a Bug](https://github.com/archesproject/arches-qgis/issues/new)
-- File a Feature Ticket
+Bug reports and feature proposals are encouraged! File a GitHub ticket [here](https://github.com/archesproject/arches-qgis/issues/new).
 
 ## Installation 
 
@@ -146,6 +144,11 @@ The Activity Log will be cleared if the QGIS application is closed and re-opened
 
 The Settings tab currently has one entry, a checkbox option for disabling and enabling the Arches stylings.
 
+Read more about the plugin's stylesheets [here](#stylesheets). 
+
+## Stylesheets
+
+The plugin comes with a custom stylesheet to mimic the user interface design of the Arches software. These stylings can be disabled in the settings tab. Disabling the Arches stylings enables the "default" stylesheet which matches the default QGIS appearance.
 
 ## Testing
 The Arches QGIS plugin includes tests found in `arches_project/tests/`.    
