@@ -6,6 +6,13 @@ The plugin allows users to authenticate using their Arches project URL, username
 
 Bug reports and feature proposals are encouraged! File a GitHub ticket [here](https://github.com/archesproject/arches-qgis/issues/new).
 
+##### Table of Contents  
+[Installation](#installation)  
+[User Guide](#user-guide)  
+[Stylesheets](#stylesheets)  
+[Information for Developer](#information-for-developers)  
+[Testing](#testing)
+
 ## Installation 
 
 ### Pre-requirements
@@ -51,28 +58,6 @@ Note that the entire arches-qgis git repository is not the QGIS plugin, only the
     ``` 
 3. Head to the QGIS Plugins tab and select "Manage and Install Plugins".
 4. Search for and select "Arches Project" from the list of all plugins.
-
-## Information for developers
-If you wish to develop with the QGIS Arches plugin, below are some helpful tips that will make life easier.
-- Installation via GitHub is the easiest method to develop.  This can be done by following the [instructions above](#installation-via-github).
-- The QGIS plugin "[Plugin Reloader](https://plugins.qgis.org/plugins/plugin_reloader/)" is incredibly useful for reloading plugins to reflect code changes.  This can be found on the QGIS plugins repository, and configured to reload specific plugins using Ctrl+F5.
-
-### Developing the user interface
-QGIS uses PyQt as the framework for UI, specifically Qt 5.15.   
-**Note:** Qt 5.15 binaries do not appear to be available for ARM Macs. The following instructions should work for Windows and Linux users.
-
-If you wish to develop UI elements for the arches-qgis plugin you'll need to install [Qt Creator](https://doc.qt.io/qtcreator/), an IDE for Qt applications.   
-It's recommended to install Qt and QtCreator using the online installer found here: https://www.qt.io/download-qt-installer-oss. Bundled is a Maintenance Tool that makes updating, and installing/uninstalling additional components very easy.  
-Offline, version-specific packages for Qt and QtCreator can be downloaded here: https://www.qt.io/offline-installers.
-
-QtCreator uses Qt6 out the box, so you'll need to use the Qt Mainentance Tool to install the archived version of Qt 5.15.   
-- In the top right "Show" dropdown ensure that "Archive" is selected in order to see all historical versions of Qt. 
-- Locate and expand Qt 5.15.2, and ensure only the "MinGW 8.1.0" compiler is checked.    
-
-Once installed, add the new version of Qt as a kit in the QtCreator preferences, see the documentation for more information: https://doc.qt.io/qtcreator/creator-targets.html.
-
-Open a new project in QtCreator by selecting the .pro file found in `arches_project/ui/arches_project_ui.pro`, and Qt 5.15.   
-This .pro file will load all plugin `.ui` files into the project tree found in the Edit tab (on the left side of QtCreator) where they can be easily opened and switched between. 
 
 ## User Guide
 
@@ -149,6 +134,28 @@ Read more about the plugin's stylesheets [here](#stylesheets).
 ## Stylesheets
 
 The plugin comes with a custom stylesheet to mimic the user interface design of the Arches software. These stylings can be disabled in the settings tab. Disabling the Arches stylings enables the "default" stylesheet which matches the default QGIS appearance.
+
+## Information for developers
+If you wish to develop with the QGIS Arches plugin, below are some helpful tips that will make life easier.
+- Installation via GitHub is the easiest method to develop.  This can be done by following the [instructions above](#installation-via-github).
+- The QGIS plugin "[Plugin Reloader](https://plugins.qgis.org/plugins/plugin_reloader/)" is incredibly useful for reloading plugins to reflect code changes.  This can be found on the QGIS plugins repository, and configured to reload specific plugins using Ctrl+F5.
+
+### Developing the user interface
+QGIS uses PyQt as the framework for UI, specifically Qt 5.15.   
+**Note:** Qt 5.15 binaries do not appear to be available for ARM Macs. The following instructions should work for Windows and Linux users.
+
+If you wish to develop UI elements for the arches-qgis plugin you'll need to install [Qt Creator](https://doc.qt.io/qtcreator/), an IDE for Qt applications.   
+It's recommended to install Qt and QtCreator using the online installer found here: https://www.qt.io/download-qt-installer-oss. Bundled is a Maintenance Tool that makes updating, and installing/uninstalling additional components very easy.  
+Offline, version-specific packages for Qt and QtCreator can be downloaded here: https://www.qt.io/offline-installers.
+
+QtCreator uses Qt6 out the box, so you'll need to use the Qt Mainentance Tool to install the archived version of Qt 5.15.   
+- In the top right "Show" dropdown ensure that "Archive" is selected in order to see all historical versions of Qt. 
+- Locate and expand Qt 5.15.2, and ensure only the "MinGW 8.1.0" compiler is checked.    
+
+Once installed, add the new version of Qt as a kit in the QtCreator preferences, see the documentation for more information: https://doc.qt.io/qtcreator/creator-targets.html.
+
+Open a new project in QtCreator by selecting the .pro file found in `arches_project/ui/arches_project_ui.pro`, and Qt 5.15.   
+This .pro file will load all plugin `.ui` files into the project tree found in the Edit tab (on the left side of QtCreator) where they can be easily opened and switched between. 
 
 ## Testing
 The Arches QGIS plugin includes tests found in `arches_project/tests/`.    
