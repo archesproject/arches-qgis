@@ -113,6 +113,8 @@ class ArchesConnection:
                 x["graphid"]
                 for x in response.json()
                 if x["graphid"] != "ff623370-fa12-11e6-b98b-6c4008b05c4c"
+                and x.get("is_active", True)
+                and x["publication_id"]
                 and x["isresource"]
             ]
             if percent_progress:
@@ -126,38 +128,35 @@ class ArchesConnection:
                 req = requests.get(f"{self.url}/graphs/{graph}")
                 req.raise_for_status()
 
-                if req.json()["graph"]["publication_id"]:  # if graph is published
-                    if login_updates:
-                        login_updates.emit(
-                            f"Fetching graphs ... ({x+1}/{len(graphids)})"
-                        )
-                    for nodes in req.json()["graph"]["nodes"]:
-                        if nodes["datatype"] == "geojson-feature-collection":
-                            contains_geom = True
-                            geom_node_count += 1
-                            nodegroupid = nodes["nodegroup_id"]
-                            nodeid = nodes["nodeid"]
-                            node_name = nodes["name"]
-                            geometry_node_data[nodeid] = {
-                                "nodegroup_id": nodegroupid,
-                                "name": node_name,
-                            }
-                    if contains_geom == True:
-                        if geom_node_count > 1:
-                            multiple = True
-                        else:
-                            multiple = False
+                if login_updates:
+                    login_updates.emit(f"Fetching graphs ... ({x+1}/{len(graphids)})")
+                for nodes in req.json()["graph"]["nodes"]:
+                    if nodes["datatype"] == "geojson-feature-collection":
+                        contains_geom = True
+                        geom_node_count += 1
+                        nodegroupid = nodes["nodegroup_id"]
+                        nodeid = nodes["nodeid"]
+                        node_name = nodes["name"]
+                        geometry_node_data[nodeid] = {
+                            "nodegroup_id": nodegroupid,
+                            "name": node_name,
+                        }
+                if contains_geom == True:
+                    if geom_node_count > 1:
+                        multiple = True
+                    else:
+                        multiple = False
 
-                        arches_graphs_list.append(
-                            {
-                                "graph_id": graph,
-                                "name": req.json()["graph"]["name"],
-                                "geometry_node_data": geometry_node_data,
-                                "multiple_geometry_nodes": multiple,
-                            }
-                        )
-                    if percent_progress:
-                        percent_progress.emit(False, x + 1, len(graphids))
+                    arches_graphs_list.append(
+                        {
+                            "graph_id": graph,
+                            "name": req.json()["graph"]["name"],
+                            "geometry_node_data": geometry_node_data,
+                            "multiple_geometry_nodes": multiple,
+                        }
+                    )
+                if percent_progress:
+                    percent_progress.emit(False, x + 1, len(graphids))
 
         except requests.exceptions.RequestException:
             raise
