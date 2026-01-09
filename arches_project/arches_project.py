@@ -34,7 +34,7 @@ from arches_project.ui.arches_project_dialog import ArchesProjectDialog
 # Import the confirmation dialog
 from .ui.resource_confirmation_dialog import ResourceConfirmation
 
-from arches_project.core.views.components.map import update_map_layers, map_selection
+from arches_project.core.views.components.map import map_selection
 
 import os.path
 from functools import partial
@@ -77,9 +77,6 @@ class ArchesProject:
         # Confirmation dialogs
         self.dlg_resource_confirmation = ResourceConfirmation()
         self.dlg = ArchesProjectDialog(archesproject=self)
-
-        # initialise self.layers
-        update_map_layers(self.dlg.hidePostgresLayers)
 
     # noinspection PyMethodMayBeStatic
     def tr(self, message):

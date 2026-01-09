@@ -161,7 +161,7 @@
       </font>
      </property>
      <property name="currentIndex">
-      <number>3</number>
+      <number>5</number>
      </property>
      <property name="usesScrollButtons">
       <bool>true</bool>
@@ -195,8 +195,8 @@
            <rect>
             <x>0</x>
             <y>0</y>
-            <width>495</width>
-            <height>534</height>
+            <width>171</width>
+            <height>614</height>
            </rect>
           </property>
           <layout class="QVBoxLayout" name="verticalLayout_3">
@@ -479,7 +479,7 @@
            <rect>
             <x>0</x>
             <y>0</y>
-            <width>495</width>
+            <width>346</width>
             <height>498</height>
            </rect>
           </property>
@@ -775,8 +775,8 @@
            <rect>
             <x>0</x>
             <y>0</y>
-            <width>495</width>
-            <height>555</height>
+            <width>281</width>
+            <height>575</height>
            </rect>
           </property>
           <layout class="QVBoxLayout" name="verticalLayout_11">
@@ -1663,25 +1663,6 @@
                    </property>
                    <property name="text">
                     <string>Use Arches theme</string>
-                   </property>
-                  </widget>
-                 </item>
-                </layout>
-               </widget>
-              </item>
-              <item>
-               <widget class="QFrame" name="hidePsqlLayersFrame">
-                <property name="frameShape">
-                 <enum>QFrame::NoFrame</enum>
-                </property>
-                <property name="frameShadow">
-                 <enum>QFrame::Plain</enum>
-                </property>
-                <layout class="QVBoxLayout" name="verticalLayout_21">
-                 <item>
-                  <widget class="QCheckBox" name="hidePostgresLayers">
-                   <property name="text">
-                    <string>Hide PostgreSQL layers</string>
                    </property>
                   </widget>
                  </item>
