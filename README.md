@@ -105,6 +105,8 @@ A successful log in will replace the login tab with a User Profile tab. Here you
 
 An unsuccessful log in will return an error message and could be due to a number of factors. Checking the logs in your Arches implementation will provide more information.
 
+**Note**: The permissions of your Arches user are reflected in the plugin. If a user is limited to provisional edits with Arches permissions, the same result will occur via the plugin. If a user does not have any resource editing permissions authentication to the plugin interface will be denied. To learn more about Arches user permissions see the relevant [documentation](https://arches.readthedocs.io/en/stable/administering/managing-permissions/#administering-permissions).
+
 ### Create a resource
 
 ![](/media/plugin-create-resource.gif)
@@ -114,6 +116,8 @@ To create an Arches resource with the plugin, select feature(s) from the QGIS ma
 A successful resource creation will display a message with a hyperlink to your new Arches resource. A record of this action will be recorded in the [Activity Log](#activity-log).
 
 An unsuccessful resource creation will result in an error message displayed.
+
+**Note**: User permissions are reflected in creation, therefore a user without permission to create a resource (possibly to a specific resource model) will be denied.
 
 ### Edit a resource
 
@@ -131,6 +135,7 @@ A successful resource edit will display a message with a hyperlink to your Arche
 
 An unsuccessful resource edit will result in an error message displayed.
 
+**Note**: User permissions are reflected in edits, therefore a user without permission to edit a resource (or the geojson node) will be denied.
 
 ### Activity log
 
