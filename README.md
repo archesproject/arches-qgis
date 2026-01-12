@@ -1,6 +1,6 @@
 # Arches QGIS Plugin
 
-The Arches QGIS plugin is a plugin for the open-source [QGIS](https://qgis.org/) software, built to integrate with you Arches implementation and streamline the process of using a GIS with Arches data.
+The Arches QGIS plugin is a plugin for the open-source [QGIS](https://qgis.org/) software, built to integrate with your Arches implementation and streamline the process of using a GIS with Arches data.
 
 The plugin allows users to authenticate using their Arches project URL, username and password, granting the ability to create new resources or edit existing Arches resource geometries using features from the QGIS map interface.
 
@@ -117,7 +117,7 @@ An unsuccessful resource edit will result in an error message displayed.
 
 ![](/media/plugin-activity-log.png)
 
-The Activity Log stores a history of all operations by the Arches QGIS Plugin in the current QGIS session.
+The Activity Log stores a sortable history of all operations by the Arches QGIS Plugin in the current QGIS session. 
 
 A QGIS session is defined as the instance of the QGIS application running and the period it is open for. It is not specific to the authentication of the plugin, and the Activity Log will persist after plugin log outs. 
 
