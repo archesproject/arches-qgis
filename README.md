@@ -19,16 +19,19 @@ Bug reports and feature proposals are encouraged! File a GitHub ticket [here](ht
 1. A running Arches instance, accessible via a public domain or IP address.
 2. A registered oauth application and client ID entered into settings.py (or settings_local.py) - see the [following documentation link](https://arches.readthedocs.io/en/stable/developing/reference/api/#register-an-oauth-application) for more information on registering oauth2 applications.
 3. An Arches user login with permissions to enter data or create resources.
-4. If you wish to edit existing Arches resources see the section on [Using Arches map layers to edit resources](#using-arches-map-layers-to-edit-resources).
+4. (optional) If you wish to edit existing Arches resources see the section on [Using Arches map layers to edit resources](#using-arches-map-layers-to-edit-resources).
 
 ### Installation via the QGIS Plugins Repository
-Since the plugin is experimental, to install the plugin through the QGIS plugins repository you will need to ensure that experimental plugins are enabled.
+The Arches QGIS plugin is uploaded to the official QGIS plugins repository and thus can be installed from either the website or within the QGIS application. by navigating to the plugins tab and searching for this plugin. 
+
+If you require an experimental version of the plugin you will need to ensure that experimental plugins are enabled in the QGIS plugins settings. Be aware that, as the name suggests, experimental plugins are in-development, and potentially unstable versions of a plugin that may have known bugs or issues. Installing experimental plugins should be done at your own risk.
 
 #### Installation from within QGIS
 1. Navigate to the Plugins tab, then "Manage and Install Plugins".
-2. Navigate to "Settings".
-3. Tick "Show also Experimental Plugins".
-Once enabled, head back to all plugins, search for "Arches Project" and hit "Install Experimental Plugin".
+2. Search for "Arches Project".
+3. Install the Arches QGIS Plugin.
+
+For more information on installing plugins from within QGIS, see the following [documentation](https://docs.qgis.org/3.40/en/docs/training_manual/qgis_plugins/fetching_plugins.html).
 
 #### Installation from the QGIS plugins website
 All QGIS plugins can be viewed and downloaded from the [QGIS website](https://plugins.qgis.org/plugins/)
@@ -97,7 +100,7 @@ All tabs, aside from Settings, become enabled upon successful user authenticatio
 
 ![](/media/plugin-login.gif)
 
-To authenticate with the QGIS plugin, you must supply the URL to your Arches instance (ensuring the language code is included in the URL if your Arches implementation is internationalised), your username and password.
+To authenticate with the QGIS plugin, you must supply the URL to your Arches instance (ensuring the language code is included in the URL if your Arches implementation is internationalised e.g. `/en`), your username and password.
 
 A successful log in will replace the login tab with a User Profile tab. Here you have options to:
 - Refresh the fetched Arches resource models and nodes - this is useful if your Arches data models have changed in any way since the last authentication with the Arches QGIS plugin.
@@ -111,7 +114,7 @@ An unsuccessful log in will return an error message and could be due to a number
 
 ![](/media/plugin-create-resource.gif)
 
-To create an Arches resource with the plugin, select feature(s) from the QGIS map - the text box will inform you of the number of selected features. To advance, select the "Create Resource" button. This will display a confirmation pop-up where you can cancel or confirm to send the data to Arches.
+To create an Arches resource with the plugin, select feature(s) from the QGIS map (the text box will inform you of the number of selected features). To advance, select the "Create Resource" button. This will display a confirmation pop-up where you can cancel or confirm to send the data to Arches.
 
 A successful resource creation will display a message with a hyperlink to your new Arches resource. A record of this action will be recorded in the [Activity Log](#activity-log).
 
@@ -127,7 +130,7 @@ To edit an Arches resource with the plugin, select an Arches resource from the Q
 
 If the selected feature is not recognised as an Arches resource, a message will be displayed and the resource will not be successfullly registered with the plugin.
 
-Once a resource is successfully registered, the resource instance UUID and a table with all attribute data will be displayed and the selected Arches geometry will become deselected to prevent potential duplication of data. Map selection of geometries is required to proceed with editing.
+Once a resource is successfully registered, the resource instance UUID and a table with all attribute data will be displayed and the selected Arches geometry will become deselected to prevent potential duplication of data. Map selection of geometries is then required to proceed with editing.
 
 The Arches resource can be edited by appending (add) or replacing (replace) selected QGIS geometries to the feature collection of the registered Arches resource tile. Any valid QGIS geometry can be selected to send to Arches; there is no requirement.
 
@@ -158,11 +161,12 @@ Read more about the plugin's stylesheets [here](#stylesheets).
 
 ## Information for developers
 If you wish to develop with the QGIS Arches plugin, below are some helpful tips that will make life easier.
-- Installation via GitHub is the easiest method to develop.  This can be done by following the [instructions above](#installation-via-github).
+- Installation via GitHub is the easiest method to develop.  This can be done by following the [GitHub installation instructions](#installation-via-github).
 - The QGIS plugin "[Plugin Reloader](https://plugins.qgis.org/plugins/plugin_reloader/)" is incredibly useful for reloading plugins to reflect code changes.  This can be found on the QGIS plugins repository, and configured to reload specific plugins using Ctrl+F5.
 
 ### Developing the user interface
 QGIS uses PyQt as the framework for UI, specifically Qt 5.15.   
+
 **Note:** Qt 5.15 binaries do not appear to be available for ARM Macs. The following instructions should work for Windows and Linux users.
 
 If you wish to develop UI elements for the arches-qgis plugin you'll need to install [Qt Creator](https://doc.qt.io/qtcreator/), an IDE for Qt applications.   
