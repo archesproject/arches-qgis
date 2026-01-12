@@ -22,7 +22,7 @@ Bug reports and feature proposals are encouraged! File a GitHub ticket [here](ht
 4. (optional) If you wish to edit existing Arches resources see the section on [Using Arches map layers to edit resources](#using-arches-map-layers-to-edit-resources).
 
 ### Installation via the QGIS Plugins Repository
-The Arches QGIS plugin is uploaded to the official QGIS plugins repository and thus can be installed from either the website or within the QGIS application. by navigating to the plugins tab and searching for this plugin. 
+The Arches QGIS plugin is uploaded to the official QGIS plugins repository and thus can be installed from either the website or within the QGIS application by navigating to the plugins tab and searching for this plugin.
 
 If you require an experimental version of the plugin you will need to ensure that experimental plugins are enabled in the QGIS plugins settings. Be aware that, as the name suggests, experimental plugins are in-development, and potentially unstable versions of a plugin that may have known bugs or issues. Installing experimental plugins should be done at your own risk.
 
@@ -69,7 +69,7 @@ Note that the entire arches-qgis git repository is not the QGIS plugin, only the
 In order to edit Arches resources using the Arches QGIS plugin and successfully interact with the Arches API, a layer must contain the following Arches attributes: 
 - `resourceinstanceid`
 - `nodeid`
-- `tileid`. 
+- `tileid`
 
 Arches resource layers can be set up using PostgreSQL, a web service, or using the core Arches [spatial views](https://arches.readthedocs.io/en/stable/administering/spatial-views/#spatial-views-preview) functionality.
 
@@ -88,13 +88,13 @@ The plugin comes with a custom stylesheet to mimic the user interface design of 
 ![](/media/plugin-tabs.gif)
 
 The Arches QGIS Plugin is composed of 5 tabs:
-- Sign In
+- Sign In / User Profile
 - Create Resource
 - Edit Resource
 - Activity Log
 - Settings
 
-All tabs, aside from Settings, become enabled upon successful user authentication.
+The Create Resource and Edit Resource tabs are enabled upon successful user authentication. A logout of the plugin will disable these widgets once again.
 
 ### Authentication
 
@@ -102,7 +102,7 @@ All tabs, aside from Settings, become enabled upon successful user authenticatio
 
 To authenticate with the QGIS plugin, you must supply the URL to your Arches instance (ensuring the language code is included in the URL if your Arches implementation is internationalised e.g. `/en`), your username and password.
 
-A successful log in will replace the login tab with a User Profile tab. Here you have options to:
+A successful log in will replace the Sign In tab with a User Profile tab. Here you have options to:
 - Refresh the fetched Arches resource models and nodes - this is useful if your Arches data models have changed in any way since the last authentication with the Arches QGIS plugin.
 - Log out of the plugin, and return to the log in tab.
 
