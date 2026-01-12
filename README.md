@@ -123,13 +123,13 @@ An unsuccessful resource creation will result in an error message displayed.
 
 ![](/media/plugin-edit-resource.gif)
 
-To edit an Arches resource with the plugin, select an Arches resource from the QGIS map and register the resource with the plugin by clicking the "Register resource for editing" button. An Arches resource is successfully identified fields outlined in the [Using Arches map layers to edit resources](#using-arches-map-layers-to-edit-resources) section. 
+To edit an Arches resource with the plugin, select an Arches resource from the QGIS map and register the resource with the plugin by clicking the "Register resource for editing" button. The [Using Arches map layers to edit resources](#using-arches-map-layers-to-edit-resources) section outlines requirements for using Arches data with the plugin.
 
 If the selected feature is not recognised as an Arches resource, a message will be displayed and the resource will not be successfullly registered with the plugin.
 
-Once a resource is successfully registered, the resource instance UUID and a table with all attribute data will be displayed.
+Once a resource is successfully registered, the resource instance UUID and a table with all attribute data will be displayed and the selected Arches geometry will become deselected to prevent potential duplication of data. Map selection of geometries is required to proceed with editing.
 
-The Arches resource can be edited by appending (add) or replacing (replace) the selected geometries to the feature collection of the registered Arches resource tile.
+The Arches resource can be edited by appending (add) or replacing (replace) selected QGIS geometries to the feature collection of the registered Arches resource tile. Any valid QGIS geometry can be selected to send to Arches; there is no requirement.
 
 A successful resource edit will display a message with a hyperlink to your Arches resource. A record of this action will be recorded in the [Activity Log](#activity-log).
 
