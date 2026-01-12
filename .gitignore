@@ -4,6 +4,8 @@ __pycache__/
 .coverage
 coverage
 .vscode
+arches_qgis.egg*
+.eggs
 *.DS_Store
 
 env/

@@ -182,6 +182,18 @@ Once installed, add the new version of Qt as a kit in the QtCreator preferences,
 Open a new project in QtCreator by selecting the .pro file found in `arches_project/ui/arches_project_ui.pro`, and Qt 5.15.   
 This .pro file will load all plugin `.ui` files into the project tree found in the Edit tab (on the left side of QtCreator) where they can be easily opened and switched between. 
 
+### pre-commit hooks
+While python files can be formatted using the make black command described below, pre-commit hooks streamline the process by automatically formatting.
+1. Install the arches-qgis development dependencies
+   ```
+   pip install -e . --group dev
+   ```
+2. Set up pre-commit
+   ```
+   pre-commit install
+   ```
+Now files will be formatted when commits are run.   
+
 ## Testing
 The Arches QGIS plugin includes tests found in `arches_project/tests/`.    
 The root `test/` directory contains scripts for setting up the Arches testing environment.   
