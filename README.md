@@ -136,7 +136,7 @@ An unsuccessful resource edit will result in an error message displayed.
 
 ![](/media/plugin-activity-log.png)
 
-The Activity Log stores a sortable history of all operations by the Arches QGIS Plugin in the current QGIS session. 
+The Activity Log stores a history of all operations by the Arches QGIS Plugin in the current QGIS session. 
 
 A QGIS session is defined as the instance of the QGIS application running and the period it is open for. It is not specific to the authentication of the plugin, and the Activity Log will persist after plugin log outs. 
 
