@@ -8,8 +8,8 @@ Bug reports and feature proposals are encouraged! File a GitHub ticket [here](ht
 
 ##### Table of Contents  
 [Installation](#installation)  
+[Configuration](#configuration)  
 [User Guide](#user-guide)  
-[Stylesheets](#stylesheets)  
 [Information for Developer](#information-for-developers)  
 [Testing](#testing)
 
@@ -19,7 +19,7 @@ Bug reports and feature proposals are encouraged! File a GitHub ticket [here](ht
 1. A running Arches instance, accessible via a public domain or IP address.
 2. A registered oauth application and client ID entered into settings.py (or settings_local.py) - see the [following documentation link](https://arches.readthedocs.io/en/stable/developing/reference/api/#register-an-oauth-application) for more information on registering oauth2 applications.
 3. An Arches user login with permissions to enter data or create resources.
-4. If you wish to edit existing Arches resources, a database connection with [spatial views](https://arches.readthedocs.io/en/stable/administering/spatial-views/#spatial-views-preview) added as QGIS layers is required.
+4. If you wish to edit existing Arches resources see the section on [Using Arches map layers to edit resources](#using-arches-map-layers-to-edit-resources).
 
 ### Installation via the QGIS Plugins Repository
 Since the plugin is experimental, to install the plugin through the QGIS plugins repository you will need to ensure that experimental plugins are enabled.
@@ -58,6 +58,25 @@ Note that the entire arches-qgis git repository is not the QGIS plugin, only the
     ``` 
 3. Head to the QGIS Plugins tab and select "Manage and Install Plugins".
 4. Search for and select "Arches Project" from the list of all plugins.
+
+## Configuration
+
+### Using Arches map layers to edit resources
+
+In order to edit Arches resources using the Arches QGIS plugin and successfully interact with the Arches API, a layer must contain the following Arches attributes: 
+- `resourceinstanceid`
+- `nodeid`
+- `tileid`. 
+
+Arches resource layers can be set up using PostgreSQL, a web service, or using the core Arches [spatial views](https://arches.readthedocs.io/en/stable/administering/spatial-views/#spatial-views-preview) functionality.
+
+The method of serving the layer is not strict, including methods such as a direct database connection or via a service (e.g. [pg_featureserv](https://github.com/CrunchyData/pg_featureserv)).
+
+**Note**:  the plugin does not act to modify the resource instance loaded in QGIS but rather the source Arches resource using the Arches API, therefore if your Arches QGIS layer is static and does not update when changes are made to the source Arches data then you risk managing outdated geometry data. Live sources such as services or Arches spatial views are recommended to ensure you are always using the latest data, since they update based on changes to Arches.
+
+### Stylesheets
+
+The plugin comes with a custom stylesheet to mimic the user interface design of the Arches software. These stylings can be disabled in the settings tab. Disabling the Arches stylings enables the "default" stylesheet which matches the default QGIS appearance.
 
 ## User Guide
 
@@ -100,9 +119,9 @@ An unsuccessful resource creation will result in an error message displayed.
 
 ![](/media/plugin-edit-resource.gif)
 
-To edit an Arches resource with the plugin, select an Arches resource from the QGIS map and register the resource with the plugin by clicking the "Register resource for editing" button. An Arches resource is identified by the fields `resourceinstanceid`, `nodeid` and `tileid`. 
+To edit an Arches resource with the plugin, select an Arches resource from the QGIS map and register the resource with the plugin by clicking the "Register resource for editing" button. An Arches resource is successfully identified fields outlined in the [Using Arches map layers to edit resources](#using-arches-map-layers-to-edit-resources) section. 
 
-If the selected feature does not include the fields, a message will be displayed and the resource will not be successfullly registered with the plugin.
+If the selected feature is not recognised as an Arches resource, a message will be displayed and the resource will not be successfullly registered with the plugin.
 
 Once a resource is successfully registered, the resource instance UUID and a table with all attribute data will be displayed.
 
@@ -131,9 +150,6 @@ The Settings tab currently has one entry, a checkbox option for disabling and en
 
 Read more about the plugin's stylesheets [here](#stylesheets). 
 
-## Stylesheets
-
-The plugin comes with a custom stylesheet to mimic the user interface design of the Arches software. These stylings can be disabled in the settings tab. Disabling the Arches stylings enables the "default" stylesheet which matches the default QGIS appearance.
 
 ## Information for developers
 If you wish to develop with the QGIS Arches plugin, below are some helpful tips that will make life easier.
