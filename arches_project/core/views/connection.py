@@ -1,9 +1,8 @@
-from qgis.core import QgsMessageLog, Qgis
-
 from arches_project.core.arches.connection import ConnectionProcess
-from arches_project.core.views.login import UpdateLogin
-from arches_project.core.views.login import UpdateLogin
+from arches_project.core.views.login import UpdateLoginProgress
 from arches_project.core.views.components.spinner import triggerSpinner
+
+from qgis.core import QgsMessageLog, Qgis
 
 
 class ArchesConnectionView:
@@ -34,8 +33,8 @@ class ArchesConnectionView:
             plugin_dir=self.plugin_dir,
         )
 
-        self.login_text_updater = UpdateLogin(self.dlg.updateText)
-        self.login_percent_updater = UpdateLogin(self.dlg.percentProgressText)
+        self.login_text_updater = UpdateLoginProgress(self.dlg.updateText)
+        self.login_percent_updater = UpdateLoginProgress(self.dlg.percentProgressText)
         self.dlg.updateText.setText("")
         self.dlg.percentProgressText.setText("0%")
         self.arches_connection.login_updates.connect(

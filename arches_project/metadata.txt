@@ -6,7 +6,7 @@
 name=Arches Project
 qgisMinimumVersion=3.0
 description=A plugin that links QGIS to an Arches project.
-version=1.0.0a2
+version=1.0.0
 author=Knowledge Integration
 email=samuel.scandrett@k-int.co.uk
 
@@ -27,9 +27,9 @@ tags=python
 
 homepage=https://github.com/archesproject/arches-qgis
 category=Plugins
-icon=arches_project/icons/arches.png
+icon=icons/arches.png
 # experimental flag
-experimental=True
+experimental=False
 
 # deprecated flag (applies to the whole plugin, not just a single version)
 deprecated=False

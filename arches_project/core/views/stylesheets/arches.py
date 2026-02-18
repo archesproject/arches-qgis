@@ -5,57 +5,11 @@ from PyQt5.QtCore import Qt
 import os
 
 
-class PluginStylesheets:
-    def __init__(self, dlg, dlg_resource_confirmation, plugin_dir, on_start):
+class ArchesStylesheet:
+    def __init__(self, dlg, dlg_resource_confirmation, plugin_dir):
         self.dlg = dlg
         self.dlg_resource_confirmation = dlg_resource_confirmation
         self.plugin_dir = plugin_dir
-        self.on_start = on_start
-
-        # hide loading wheel adjustments
-        self.dlg.loadingWheel.hide()  # connection wheel label
-        self.dlg.updateTextFrame.hide()
-        self.dlg.loginErrorMessageFrame.hide()
-        self.dlg.loadingWheelVerticalSpacerFrame.hide()
-
-        if not self.dlg.useStylesheetCheckbox.isChecked():
-            self.default_stylesheet()
-        elif self.dlg.useStylesheetCheckbox.isChecked():
-            self.arches_stylesheet()
-
-        if self.on_start == True:
-            self.arches_stylesheet()
-
-    def default_stylesheet(self):
-        # reset stylesheets
-        self.dlg.setStyleSheet("")
-        self.dlg_resource_confirmation.setStyleSheet("")
-        # remove icons from buttons
-        self.dlg.btnConnect.setIcon(QIcon(""))
-        self.dlg.btnLogout.setIcon(QIcon(""))
-        self.dlg.addNewRes.setIcon(QIcon(""))
-        self.dlg.addEditRes.setIcon(QIcon(""))
-        self.dlg.replaceEditRes.setIcon(QIcon(""))
-        self.dlg_resource_confirmation.confirmDialogCancel.setIcon(QIcon(""))
-        self.dlg_resource_confirmation.confirmDialogConfirm.setIcon(QIcon(""))
-        # nav bar
-        # TODO: don't like the fact I have to add the exact strings (from qtcreator) back to the tab titles, seems like could be a better method...
-        self.dlg.tabWidget.setStyleSheet(" QTabWidget {qproperty-tabPosition: North;} ")
-        self.dlg.tabWidget.setStyleSheet("")
-
-        self.dlg.tabWidget.setAutoFillBackground(False)
-        self.dlg.tabWidget.setTabIcon(0, QIcon(""))
-        self.dlg.tabWidget.setTabText(0, "Arches Connection")
-        self.dlg.tabWidget.setTabIcon(1, QIcon(""))
-        self.dlg.tabWidget.setTabText(1, "Arches Connection")
-        self.dlg.tabWidget.setTabIcon(2, QIcon(""))
-        self.dlg.tabWidget.setTabText(2, "Create Resource")
-        self.dlg.tabWidget.setTabIcon(3, QIcon(""))
-        self.dlg.tabWidget.setTabText(3, "Edit Resource")
-        self.dlg.tabWidget.setTabIcon(4, QIcon(""))
-        self.dlg.tabWidget.setTabText(4, "Settings")
-        self.dlg.tabWidget.setTabIcon(5, QIcon(""))
-        self.dlg.tabWidget.setTabText(5, "Log")
 
     def arches_stylesheet(self):
         try:
@@ -83,23 +37,55 @@ class PluginStylesheets:
             self.dlg.btnLogout.setIconSize(QSize(12, 12))
             self.dlg.btnLogout.setCursor(QCursor(Qt.PointingHandCursor))
 
-            self.dlg.addNewRes.setIcon(
+            self.dlg.btnRefresh.setIcon(
+                QIcon(
+                    os.path.join(
+                        self.plugin_dir, "icons", "arrows-rotate-solid-full-white.svg"
+                    )
+                )
+            )
+            self.dlg.btnRefresh.setIconSize(QSize(12, 12))
+            self.dlg.btnRefresh.setCursor(QCursor(Qt.PointingHandCursor))
+
+            self.dlg.createResButton.setIcon(
                 QIcon(os.path.join(self.plugin_dir, "icons", "mdi-pencil.svg"))
             )
-            self.dlg.addNewRes.setIconSize(QSize(12, 12))
-            self.dlg.addNewRes.setCursor(QCursor(Qt.PointingHandCursor))
+            self.dlg.createResButton.setIconSize(QSize(12, 12))
+            self.dlg.createResButton.setCursor(QCursor(Qt.PointingHandCursor))
 
-            self.dlg.addEditRes.setIcon(
+            self.dlg.createResFeatureSelectButton.setIcon(
+                QIcon(os.path.join(self.plugin_dir, "icons", "fa-arrow-pointer.svg"))
+            )
+            self.dlg.createResFeatureSelectButton.setIconSize(QSize(12, 12))
+            self.dlg.createResFeatureSelectButton.setCursor(
+                QCursor(Qt.PointingHandCursor)
+            )
+
+            self.dlg.editResFeatureSelectButton.setIcon(
+                QIcon(os.path.join(self.plugin_dir, "icons", "fa-arrow-pointer.svg"))
+            )
+            self.dlg.editResFeatureSelectButton.setIconSize(QSize(12, 12))
+            self.dlg.editResFeatureSelectButton.setCursor(
+                QCursor(Qt.PointingHandCursor)
+            )
+
+            self.dlg.editResSelectResButton.setIcon(
+                QIcon(os.path.join(self.plugin_dir, "icons", "fa-pen-to-square.svg"))
+            )
+            self.dlg.editResSelectResButton.setIconSize(QSize(12, 12))
+            self.dlg.editResSelectResButton.setCursor(QCursor(Qt.PointingHandCursor))
+
+            self.dlg.editResAddGeom.setIcon(
                 QIcon(os.path.join(self.plugin_dir, "icons", "fa-plus.svg"))
             )
-            self.dlg.addEditRes.setIconSize(QSize(12, 12))
-            self.dlg.addEditRes.setCursor(QCursor(Qt.PointingHandCursor))
+            self.dlg.editResAddGeom.setIconSize(QSize(12, 12))
+            self.dlg.editResAddGeom.setCursor(QCursor(Qt.PointingHandCursor))
 
-            self.dlg.replaceEditRes.setIcon(
+            self.dlg.editResReplaceGeom.setIcon(
                 QIcon(os.path.join(self.plugin_dir, "icons", "mi-replace.svg"))
             )
-            self.dlg.replaceEditRes.setIconSize(QSize(12, 12))
-            self.dlg.replaceEditRes.setCursor(QCursor(Qt.PointingHandCursor))
+            self.dlg.editResReplaceGeom.setIconSize(QSize(12, 12))
+            self.dlg.editResReplaceGeom.setCursor(QCursor(Qt.PointingHandCursor))
 
             self.dlg_resource_confirmation.confirmDialogCancel.setIcon(
                 QIcon(os.path.join(self.plugin_dir, "icons", "fa-times.svg"))
@@ -168,7 +154,7 @@ class PluginStylesheets:
             self.dlg.tabWidget.setTabText(3, "")
 
             self.dlg.tabWidget.setTabIcon(
-                4,
+                5,
                 QIcon(
                     QPixmap(
                         os.path.join(self.plugin_dir, "icons", "fa-cog.svg")
@@ -176,10 +162,10 @@ class PluginStylesheets:
                 ),
             )
             self.dlg.tabWidget.setIconSize(QSize(16, 16))
-            self.dlg.tabWidget.setTabText(4, "")
+            self.dlg.tabWidget.setTabText(5, "")
 
             self.dlg.tabWidget.setTabIcon(
-                5,
+                4,
                 QIcon(
                     QPixmap(
                         os.path.join(self.plugin_dir, "icons", "ti-ticket.svg")
@@ -187,7 +173,7 @@ class PluginStylesheets:
                 ),
             )
             self.dlg.tabWidget.setIconSize(QSize(16, 16))
-            self.dlg.tabWidget.setTabText(5, "")
+            self.dlg.tabWidget.setTabText(4, "")
 
             self.dlg.userProfileLabel.setFixedSize(80, 80)
             self.dlg.userProfileLabel.setPixmap(

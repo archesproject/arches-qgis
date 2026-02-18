@@ -27,10 +27,7 @@ from functools import partial
 
 from qgis.core import QgsApplication, QgsMessageLog, Qgis
 from qgis.PyQt import uic, QtWidgets
-
 from PyQt5 import QtGui
-
-
 from arches_project.core.arches.connection import ArchesConnection
 from arches_project.core.views.logging import enable_logging
 from arches_project.core.views.components.map import update_map_layers
@@ -38,10 +35,14 @@ from arches_project.core.views.components.psql_layers import show_hide_psql_laye
 from arches_project.core.views.components.multiple_graph_nodes import (
     multiple_geometry_node_check,
 )
+from arches_project.core.views.components.dialog_updates import connection_reset
+from arches_project.core.utils.connection_refresh import connection_refresh
 from arches_project.core.views.resources import ResourcesView
 from arches_project.core.views.connection import ArchesConnectionView
+from arches_project.core.views.stylesheets.stylesheets import Stylesheets
 
-
+from PyQt5.QtCore import QEvent
+from PyQt5.QtWidgets import QLineEdit, QCompleter, QGraphicsOpacityEffect
 # This loads your .ui file so that PyQt can populate your plugin with the elements from Qt Designer
 FORM_CLASS, _ = uic.loadUiType(
     os.path.join(os.path.dirname(__file__), "arches_project_dialog_base.ui")
@@ -85,51 +86,41 @@ class ArchesProjectDialog(QtWidgets.QDialog, FORM_CLASS):
                 self.handle_auth_config_changed
             )
         self.selected_config_id = self.auth_combobox.itemData(0)
+        # hide refresh confirmation msg
+        self.refreshConfirmFrame.hide()
+
         # Set tab index to 0 always
         self.tabWidget.setCurrentIndex(0)
         self.tabWidget.setTabVisible(1, False)
-        self.tabWidget.setTabVisible(5, False)
-
-        self.enableLoggingCheckbox.stateChanged.connect(enable_logging)
-
-        # to run when layer is changed in create resource and edit resource tabs
-        self.hidePostgresLayers.setChecked(True)
-        self.createResFeatureSelect.highlighted.connect(
-            partial(update_map_layers, checkbox=self.hidePostgresLayers)
-        )
-        self.editResSelectFeatures.highlighted.connect(
-            partial(update_map_layers, checkbox=self.hidePostgresLayers)
-        )
-
-        self.hidePostgresLayers.stateChanged.connect(
-            partial(
-                show_hide_psql_layers,
-                combobox1=self.createResFeatureSelect,
-                combobox2=self.editResSelectFeatures,
-                dlg=self,
-            )
-        )
 
         ## Set "Create resource" to false to begin with and only update once Arches connection made
-        self.createResModelSelect.setEnabled(False)
-        self.createResFeatureSelect.setEnabled(False)
-        self.addNewRes.setEnabled(False)
+        self.createResModelSelectCombo.setEnabled(False)
+        self.createResButton.setEnabled(False)
+        self.createResFeatureLineEdit.setEnabled(False)
+        self.createResFeatureLineEdit.setText(
+            "0 features selected. Select features from the map."
+        )
+        self.createResFeatureSelectButton.setEnabled(False)
 
         ## Set "Edit Resource" to false to begin with
-        self.selectedResUUID.setText(
-            "Connect to your Arches instance to edit resources."
+        self.editResOperationFrame.hide()
+        self.editResAddGeom.setEnabled(False)
+        self.editResReplaceGeom.setEnabled(False)
+        self.editResSelectedResAttributeTable.setEnabled(False)
+        self.editResFeatureLineEdit.setText(
+            "0 features selected. Select features from the map."
         )
-        self.addEditRes.setEnabled(False)
-        self.replaceEditRes.setEnabled(False)
-        self.editResSelectFeatures.setEnabled(False)
-        self.selectedResAttributeTable.setEnabled(False)
+        self.editResFeatureSelectButton.setEnabled(False)
 
         # Check if selected graph has multiple geometry nodes
-        self.createResModelSelect.currentIndexChanged.connect(
+        self.createResModelSelectCombo.currentIndexChanged.connect(
             partial(multiple_geometry_node_check, dlg=self)
         )
         # Hide multiple geometry node selection by default
-        self.geometryNodeSelectFrame.hide()
+        self.createResNodeSelectFrame.hide()
+
+        # load saved credentials to auto completer
+        load_saved_credentials(self)
 
         # Connection to Arches instance
         self.arches_connection = ArchesConnectionView(
@@ -138,7 +129,7 @@ class ArchesProjectDialog(QtWidgets.QDialog, FORM_CLASS):
         self.btnConnect.clicked.connect(self.arches_connection.arches_connection_save)
         self.btnLogout.clicked.connect(
             partial(
-                ArchesConnection(None).connection_reset,
+                connection_reset,
                 hard_reset=True,
                 dlg=self,
                 iface=self.iface,
@@ -146,31 +137,72 @@ class ArchesProjectDialog(QtWidgets.QDialog, FORM_CLASS):
             )
         )
 
+        self.btnRefresh.clicked.connect(partial(connection_refresh, dlg=self))
+
         # click add button - should bring up new dialog for confirmation
         self.resources_object = ResourcesView(
             dlg=self,
             iface=self.iface,
         )
-        self.addNewRes.clicked.connect(
+        self.createResButton.clicked.connect(
             partial(
                 self.resources_object.create_resource,
                 dlg_resource_confirmation=self.dlg_resource_confirmation,
             )
         )
 
-        self.addEditRes.clicked.connect(
+        self.editResSelectResButton.setEnabled(False)
+        self.editResSelectResButton.clicked.connect(
+            partial(self.resources_object.register_resource)
+        )
+
+        self.editResAddGeom.clicked.connect(
             partial(
                 self.resources_object.edit_resource,
                 replace=False,
                 dlg_resource_confirmation=self.dlg_resource_confirmation,
             )
         )
-        self.replaceEditRes.clicked.connect(
+        self.editResReplaceGeom.clicked.connect(
             partial(
                 self.resources_object.edit_resource,
                 replace=True,
                 dlg_resource_confirmation=self.dlg_resource_confirmation,
             )
+        )
+
+        # hide loading wheel adjustments
+        self.loadingWheel.hide()  # connection wheel label
+        self.updateTextFrame.hide()
+        self.loginErrorMessageFrame.hide()
+        self.loadingWheelVerticalSpacerFrame.hide()
+
+        # Stylesheets
+        self.stylesheets = Stylesheets(
+            dlg=self,
+            dlg_resource_confirmation=self.dlg_resource_confirmation,
+            plugin_dir=self.plugin_dir,
+        )
+
+        self.useStylesheetCheckbox.stateChanged.connect(
+            partial(
+                self.stylesheets.stylesheet_changed,
+            )
+        )
+
+        self.opacity_effect = QGraphicsOpacityEffect(self.refreshConfirmLabel)
+        self.refreshConfirmLabel.setGraphicsEffect(self.opacity_effect)
+        # set initial log table widths
+        self.activityLogTable.setColumnWidth(0, 100)
+        self.activityLogTable.setColumnWidth(1, 100)
+        self.activityLogTable.horizontalHeader().setStretchLastSection(True)
+
+        # Change mouse to select from map
+        self.createResFeatureSelectButton.clicked.connect(
+            self.iface.actionSelect().trigger
+        )
+        self.editResFeatureSelectButton.clicked.connect(
+            self.iface.actionSelect().trigger
         )
 
     def handle_auth_config_changed(self, index):

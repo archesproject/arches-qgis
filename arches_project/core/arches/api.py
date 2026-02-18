@@ -18,9 +18,10 @@ class ArchesAPI:
             "nodeid": "",
             "tileid": "",
         }
-
-        # Layers is a global state, but will be removed soon
-        self.layers = []
+        # Store selected features to send to Arches
+        self.selected_features = {"features": [], "layer_crs": None}
+        # TODO this only works with selections from a single layer (QGIS default), but won't work with
+        # selections across layers - https://gis.stackexchange.com/questions/257474/select-features-from-different-vector-layers-at-once
 
 
 # Create an instance of the Arches API class that can be used throughout the plugin.

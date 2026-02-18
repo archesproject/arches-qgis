@@ -25,7 +25,7 @@ __copyright__ = (
 import logging
 from typing import List
 from PyQt5.QtCore import QObject, pyqtSlot, pyqtSignal, QSize
-from qgis.PyQt.QtWidgets import QDockWidget
+from qgis.PyQt.QtWidgets import QDockWidget, QAction
 from qgis.core import QgsProject, QgsMapLayer
 from qgis.gui import QgsMapCanvas, QgsMessageBar
 
@@ -249,3 +249,10 @@ class QgisInterface(QObject):
         menu (ie the user visible text on the menu item).
         """
         pass
+
+    def actionSelect(self) -> QAction:
+        """
+        Returns the native select action.
+        Call trigger() on it to set the default select map tool.
+        """
+        return QAction()

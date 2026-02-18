@@ -6,7 +6,7 @@ from arches_project.core.arches.api import arches_api
 
 def map_selection(iface, dlg):
     """
-    Get the Arches Resource from the map
+    Feature selection from the QGIS map.
     """
 
     active_layer = iface.activeLayer()
@@ -29,124 +29,77 @@ def map_selection(iface, dlg):
         level=Qgis.Info,
     )
 
-    if features:
-        if len(features) > 1:
-            QgsMessageLog.logMessage(
-                "Select one feature",
-                "Arches Plugin",
-                level=Qgis.Info,
-            )
-            dlg.selectedResAttributeTable.setRowCount(0)
-            if arches_api.arches_user_info:
-                dlg.selectedResUUID.setText(
-                    "Multiple features selected, select one feature to proceed."
-                )
-            else:
-                dlg.selectedResUUID.setText(
-                    "Connect to your Arches instance to edit resources."
-                )
-            return
+    if not features:
+        reset_saved_selected_features()
+        default_text = "0 features selected. Select features from the map."
+        dlg.createResFeatureLineEdit.setText(default_text)
+        dlg.editResFeatureLineEdit.setText(default_text)
+        dlg.editResAddGeom.setEnabled(False)
+        dlg.editResReplaceGeom.setEnabled(False)
+        dlg.createResButton.setEnabled(False)
 
-        elif len(features) == 0:
-            QgsMessageLog.logMessage(
-                "No feature selected",
-                "Arches Plugin",
-                level=Qgis.Info,
-            )
-            dlg.selectedResAttributeTable.setRowCount(0)
-            if arches_api.arches_user_info:
-                dlg.selectedResUUID.setText("Select a feature to proceed.")
-                dlg.addEditRes.setEnabled(False)
-                dlg.replaceEditRes.setEnabled(False)
-            else:
-                dlg.selectedResUUID.setText(
-                    "Connect to your Arches instance to edit resources."
-                )
-            return
+    else:
+        num_features_selected = f"{len(features)} features selected"
+        dlg.createResFeatureLineEdit.setText(num_features_selected)
+        dlg.editResFeatureLineEdit.setText(num_features_selected)
+        dlg.createResButton.setEnabled(True)
+        dlg.editResAddGeom.setEnabled(True)
+        dlg.editResReplaceGeom.setEnabled(True)
 
-        else:
-            QgsMessageLog.logMessage(
-                "A feature was selected",
-                "Arches Plugin",
-                level=Qgis.Info,
-            )
-            for f in features:
-                if "resourceinstanceid" in f.attributeMap():
-
-                    # Initialise attribute table in the plugin window if the geom is recognised as an Arches res
-                    # if initialised when arches_user_info exists then would have to click off and back on to recognise
-                    no_rows = len(f.attributes())
-                    no_cols = 2
-                    dlg.selectedResAttributeTable.setRowCount(no_rows)
-                    dlg.selectedResAttributeTable.setColumnCount(no_cols)
-
-                    # Fill table with attributes
-                    for i, (k, v) in enumerate(f.attributeMap().items()):
-                        feat = QTableWidgetItem(str(k))
-                        val = QTableWidgetItem(str(v))
-                        dlg.selectedResAttributeTable.setItem(i, 0, feat)
-                        dlg.selectedResAttributeTable.setItem(i, 1, val)
-                        dlg.selectedResAttributeTable.setRowHeight(i, 5)
-                        # Store current resource info
-                        if k == "resourceinstanceid":
-                            arches_api.arches_selected_resource[
-                                "resourceinstanceid"
-                            ] = v
-                        elif k == "nodeid":
-                            arches_api.arches_selected_resource["nodeid"] = v
-                        elif k == "tileid":
-                            arches_api.arches_selected_resource["tileid"] = v
-
-                    dlg.selectedResAttributeTable.setHorizontalHeaderLabels(
-                        ["Feature", "Values"]
-                    )
-                    dlg.selectedResAttributeTable.resizeColumnsToContents()
-
-                    # if the arches_user_info exists then enable the UI elements
-                    if arches_api.arches_user_info:
-                        resource_string = "Resource: %s" % (f["resourceinstanceid"])
-                        dlg.selectedResUUID.setText(resource_string)
-                        dlg.addEditRes.setEnabled(True)
-                        dlg.replaceEditRes.setEnabled(True)
-
-                        # Save resource instance details once selected
-                    else:
-                        dlg.selectedResUUID.setText(
-                            "Connect to your Arches instance to edit resources."
-                        )
-                        dlg.addEditRes.setEnabled(False)
-                        dlg.replaceEditRes.setEnabled(False)
-
-                else:
-                    if arches_api.arches_user_info:
-                        dlg.selectedResUUID.setText(
-                            "The feature selected is not an Arches resource."
-                        )
-                    else:
-                        dlg.selectedResUUID.setText(
-                            "Connect to your Arches instance to edit resources."
-                        )
+        arches_api.selected_features["features"].clear()  # reset list
+        for feature in features:
+            save_selected_features(feature, active_layer)
 
 
-def update_map_layers(checkbox):
+def populate_table(dlg, feature):
     """
-    Function to update new vector layers dynamically
+    Populate a QTableWidget with Arches resource attribute information.
     """
+    # Initialise attribute table in the plugin window if the geom is recognised as an Arches res
+    # if initialised when arches_token exists then would have to click off and back on to recognise
+    no_rows = len(feature.attributes())
+    no_cols = 2
+    dlg.editResSelectedResAttributeTable.setRowCount(no_rows)
+    dlg.editResSelectedResAttributeTable.setColumnCount(no_cols)
 
-    if checkbox.isChecked():
-        all_current_layers = [
-            l
-            for l in QgsProject.instance().mapLayers().values()
-            if l.type() == QgsVectorLayer.VectorLayer
-            if str(l.dataProvider().name()) != "postgres"
-        ]
+    # Fill table with attributes
+    for i, (k, v) in enumerate(feature.attributeMap().items()):
+        feat = QTableWidgetItem(str(k))
+        val = QTableWidgetItem(str(v))
+        dlg.editResSelectedResAttributeTable.setItem(i, 0, feat)
+        dlg.editResSelectedResAttributeTable.setItem(i, 1, val)
+        dlg.editResSelectedResAttributeTable.setRowHeight(i, 5)
 
-    elif not checkbox.isChecked():
-        all_current_layers = [
-            l
-            for l in QgsProject.instance().mapLayers().values()
-            if l.type() == QgsVectorLayer.VectorLayer
-        ]
+    dlg.editResSelectedResAttributeTable.setHorizontalHeaderLabels(
+        ["Feature", "Values"]
+    )
+    dlg.editResSelectedResAttributeTable.resizeColumnsToContents()
 
-    if arches_api.layers != all_current_layers:
-        arches_api.layers = all_current_layers
+    # enable the UI elements
+    dlg.editResAddGeom.setEnabled(True)
+    dlg.editResReplaceGeom.setEnabled(True)
+
+
+def save_selected_arches_resource(feature):
+    required_fields = ["resourceinstanceid", "nodeid", "tileid"]
+
+    if set(required_fields).issubset(set(feature.attributeMap().keys())):
+        # Store current resource info
+        arches_api.arches_selected_resource["resourceinstanceid"] = (
+            feature.attributeMap()["resourceinstanceid"]
+        )
+        arches_api.arches_selected_resource["nodeid"] = feature.attributeMap()["nodeid"]
+        arches_api.arches_selected_resource["tileid"] = feature.attributeMap()["tileid"]
+        return True
+    else:
+        return False
+
+
+def save_selected_features(feature, active_layer):
+    arches_api.selected_features["features"].append(feature)
+    arches_api.selected_features["layer_crs"] = active_layer.crs()
+
+
+def reset_saved_selected_features():
+    arches_api.selected_features["features"].clear()
+    arches_api.selected_features["layer_crs"] = None

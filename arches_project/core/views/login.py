@@ -13,6 +13,9 @@ class LoggedIn:
         self.username = arches_api.arches_user_info["username"]
 
     def update_logged_in_view(self):
+        """
+        Update the "logged in" tab one logged in
+        """
         full_name = ""
         if arches_api.arches_user_info["first_name"]:
             full_name = f'{arches_api.arches_user_info["first_name"]} {arches_api.arches_user_info["last_name"]}'
@@ -34,8 +37,16 @@ class LoggedIn:
             f"You are connected to {available_configs[arches_api.config_id].uri()}."
         )
 
+    def hide_login_tab(self):
+        """
+        Hide the login tab and reveal the logged in/user profile tab
+        """
+        self.dlg.tabWidget.setTabVisible(0, False)
+        self.dlg.tabWidget.setTabVisible(1, True)
+        self.dlg.tabWidget.setCurrentIndex(1)
 
-class UpdateLogin:
+
+class UpdateLoginProgress:
     def __init__(self, dlg_label, step=0):
         self.updateTextLabel = dlg_label
         self.total_number_steps = 5

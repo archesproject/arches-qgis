@@ -2,7 +2,6 @@ import unittest
 import os
 
 from arches_project.arches_project import ArchesProject
-from arches_project.core.views.stylesheets import PluginStylesheets
 
 from qgis.PyQt.QtCore import QSettings
 
@@ -26,19 +25,14 @@ class ArchesQGISTestCase(unittest.TestCase):
         """
 
         QSettings().setValue("locale/userLocale", "en")
+        QSettings().setValue("urls", ["http://127.0.0.1:8000"])
+        QSettings().setValue("usernames", ["admin"])
 
         self.arches_project = ArchesProject(IFACE)
 
         # Call the dialogs from within the plugin rather than establishing new ones.
         self.dlg = self.arches_project.dlg
         self.dlg_resource_confirmation = self.arches_project.dlg_resource_confirmation
-
-        PluginStylesheets(
-            self.dlg,
-            self.dlg_resource_confirmation,
-            self.arches_project.plugin_dir,
-            True,
-        )
 
         self.arches_url = (
             f"http://{os.environ.get('ARCHES_HOST')}:{os.environ.get('DJANGO_PORT')}"
@@ -52,6 +46,8 @@ class ArchesQGISTestCase(unittest.TestCase):
         Runs after each test.
         """
         QSettings().setValue("locale/userLocale", None)
+        QSettings().setValue("urls", [])
+        QSettings().setValue("usernames", [])
 
         self.arches_project.unload()
         self.arches_project = None

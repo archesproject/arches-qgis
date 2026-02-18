@@ -1,4 +1,6 @@
 import json
+from datetime import datetime
+import requests
 from functools import partial
 
 from qgis.core import QgsMessageLog, Qgis, QgsApplication
@@ -7,6 +9,7 @@ from PyQt5.QtCore import QObject, pyqtSignal
 from arches_project.core.utils.geometry_conversion import Geometries
 from arches_project.core.utils.network import ArchesRequester
 from arches_project.core.views.components.qgis_messaging import show_message
+from arches_project.core.views.components.dialog_updates import update_activity_log
 from arches_project.core.arches.api import arches_api
 
 
@@ -67,51 +70,45 @@ class ArchesResources(QObject):
         Create Resource dialog and functionality
         """
 
-        def update_ui(dlg, result):
-            if not result["error"]:
-                available_configs = (
-                    QgsApplication.authManager().availableAuthMethodConfigs()
-                )
-                dlg.createResOutputBox.setText(
-                    """Successfully created a new resource with the selected geometry.
-                                                    \nTo continue the creation of your new resource, navigate to...\n%s/resource/%s"""
-                    % (
-                        available_configs[arches_api.config_id].uri(),
-                        result["resourceinstance_id"],
-                    )
-                )
-                show_message(
-                    iface, "Success", "A new Arches resource has been created."
-                )
-                dlg_resource_creation.close()
-            else:
-                dlg.createResOutputBox.setText("Resource creation FAILED.")
-                show_message(
-                    iface,
-                    "Error",
-                    f"Resource creation failed. {result['error']}",
-                    duration=-1,
-                )
-                dlg_resource_creation.close()
 
         def send_new_resource_to_arches():
             if (
                 selectedNode["nodegroup_id"]
                 in arches_api.arches_user_info["editable_nodegroups"]
             ):
-                self.save_to_arches(
-                    tileid=self.tileid,
-                    nodeid=selectedNode["node_id"],
-                    geometry_collection=geomcoll,
-                    geometry_format=None,
-                    arches_operation="create",
-                )
-                update_ui_handler = partial(update_ui, dlg)
-
-                self.resource_creation_finished.connect(update_ui_handler)
-
+                try:
+                    results = self.save_to_arches(
+                        tileid=self.tileid,
+                        nodeid=selectedNode["node_id"],
+                        geometry_collection=geomcoll,
+                        geometry_format=None,
+                        arches_operation="create",
+                    )
+                    dlg.createResOutputBoxFrame.show()
+                    created_resource_url = f"{arches_api.arches_token['formatted_url']}/resource/{results['resourceinstance_id']}"
+                    dlg.createResOutputBoxLabel.setText(
+                        f'Successfully created a new resource with the selected geometry.<br>To continue the creation of your new resource, navigate to...<br><a href="{created_resource_url}">{created_resource_url}</a>'
+                    )
+                    update_activity_log(
+                        dlg,
+                        "Created resource",
+                        created_resource_url,
+                        results["resourceinstance_id"],
+                    )
+                    show_message(
+                        iface, "Success", "A new Arches resource has been created."
+                    )
+                    dlg_resource_confirmation.close()
+                except:
+                    dlg.createResOutputBoxFrame.show()
+                    dlg.createResOutputBoxLabel.setText("Resource creation FAILED.")
+                    show_message(
+                        iface, "Error", "Resource creation failed.", duration=-1
+                    )
+                    dlg_resource_confirmation.close()
             else:
-                dlg.createResOutputBox.setText(
+                dlg.createResOutputBoxFrame.show()
+                dlg.createResOutputBoxLabel.setText(
                     "This user does not have permission to create data for the geometry nodegroup in this resource model. An Arches resource has not been created."
                 )
                 show_message(
@@ -127,13 +124,11 @@ class ArchesResources(QObject):
             dlg_resource_confirmation.messageLabel.setText("Confirmation prompt")
 
         # Get info on current layer and selected graph
-        selectedLayerIndex = dlg.createResFeatureSelect.currentIndex()
-        selectedLayer = arches_api.layers[selectedLayerIndex]
-        selectedGraphIndex = dlg.createResModelSelect.currentIndex()
+        selectedGraphIndex = dlg.createResModelSelectCombo.currentIndex()
         selectedGraph = arches_api.arches_graphs_list[selectedGraphIndex]
 
         if selectedGraph["multiple_geometry_nodes"] == True:
-            selectedNodeIndex = dlg.geometryNodeSelect.currentIndex()
+            selectedNodeIndex = dlg.createResNodeSelectCombo.currentIndex()
             selectedNode = arches_api.geometry_nodes[selectedNodeIndex]
 
         elif selectedGraph["multiple_geometry_nodes"] == False:
@@ -145,7 +140,7 @@ class ArchesResources(QObject):
                 "name": selectedGraph["geometry_node_data"][node_id]["name"],
             }
 
-        geom_convert = Geometries(selectedLayer)
+        geom_convert = Geometries()
         geomcoll, geometry_type_dict = geom_convert.geometry_conversion()
 
         # Format text box
@@ -154,7 +149,7 @@ class ArchesResources(QObject):
         )  # Sets the text box to be invisible
         dlg_resource_confirmation.infoText.setText("")
         dlg_resource_confirmation.infoText.append(
-            "An Arches resource will be created with the following geometries:\n"
+            "An Arches resource will be created with the following selected geometries:\n"
         )
         for k, v in geometry_type_dict.items():
             dlg_resource_confirmation.infoText.append(f"{k}: {v}")
@@ -167,9 +162,11 @@ class ArchesResources(QObject):
         dlg_resource_confirmation.show()
 
         # Push button responses
+        dlg_resource_confirmation.confirmDialogConfirm.disconnect()
         dlg_resource_confirmation.confirmDialogConfirm.clicked.connect(
             send_new_resource_to_arches
         )
+        dlg_resource_confirmation.confirmDialogCancel.disconnect()
         dlg_resource_confirmation.confirmDialogCancel.clicked.connect(close_dialog)
 
     def edit_resource(
@@ -186,21 +183,41 @@ class ArchesResources(QObject):
         def send_edited_data_to_arches(operation_type, dialog):
             if nodegroup_value in arches_api.arches_user_info["editable_nodegroups"]:
                 try:
-                    self.save_to_arches(
+                    results = self.save_to_arches(
                         tileid=self.tileid,
                         nodeid=self.nodeid,
                         geometry_collection=geomcoll,
                         geometry_format=None,
                         arches_operation=operation_type,
                     )
+                    dlg.editResOutputBoxFrame.show()
+                    edited_resource_url = f"{arches_api.arches_token['formatted_url']}/resource/{results['resourceinstance_id']}"
+                    dlg.editResOutputBoxLabel.setText(
+                        f'Successfully edited the selected resource with the selected geometry.<br>To continue editing the resource navigate to...<br><a href="{edited_resource_url}">{edited_resource_url}</a>'
+                    )
                     show_message(
                         iface,
                         "Success",
                         f"Resource geometry {operation_type} was successful.",
                     )
+                    action_description = (
+                        "Appended feature(s)"
+                        if operation_type == "append"
+                        else "Replaced feature(s)"
+                    )
+
+                    update_activity_log(
+                        dlg,
+                        action_description,
+                        edited_resource_url,
+                        results["resourceinstance_id"],
+                    )
                     dialog.close()
                 except:
-                    print(f"Couldn't {operation_type} geometry in resource")
+                    dlg.editResOutputBoxFrame.show()
+                    dlg.editResOutputBoxLabel.setText(
+                        f"Couldn't {operation_type} geometry in resource"
+                    )
                     show_message(
                         iface,
                         "error",
@@ -209,14 +226,15 @@ class ArchesResources(QObject):
                     )
                     dialog.close()
             else:
+                dlg.editResOutputBoxFrame.show()
+                dlg.editResOutputBoxLabel.setText(
+                    "This user does not have permission to update data for the geometry nodegroup in this resource model."
+                )
                 show_message(
                     iface,
                     "error",
                     "This user does not have permission to update data for the geometry nodegroup in this resource model",
                     duration=-1,
-                )
-                print(
-                    "This user does not have permission to update data for the geometry nodegroup in this resource model."
                 )
                 dialog.close()
 
@@ -225,10 +243,8 @@ class ArchesResources(QObject):
             dlg_resource_confirmation.messageLabel.setText("Confirmation prompt")
 
         if arches_api.arches_selected_resource:
-            selectedLayerIndex = dlg.editResSelectFeatures.currentIndex()
-            selectedLayer = arches_api.layers[selectedLayerIndex]
 
-            geom_convert = Geometries(selectedLayer)
+            geom_convert = Geometries()
             geomcoll, geometry_type_dict = geom_convert.geometry_conversion()
 
             # Get nodegroup from graph
@@ -246,7 +262,7 @@ class ArchesResources(QObject):
                 )  # Sets the text box to be invisible
                 dlg_resource_confirmation.infoText.setText("")
                 dlg_resource_confirmation.infoText.append(
-                    "The following geometries will be replace the existing Arches resource's geometries:\n"
+                    "The following selected geometries will replace the feature collection of the registered resource's tile:\n"
                 )
                 for k, v in geometry_type_dict.items():
                     dlg_resource_confirmation.infoText.append(f"{k}: {v}")
@@ -278,7 +294,7 @@ class ArchesResources(QObject):
                 )  # Sets the text box to be invisible
                 dlg_resource_confirmation.infoText.setText("")
                 dlg_resource_confirmation.infoText.append(
-                    "The following geometries will be added to the Arches resource:\n"
+                    "The following selected geometries will be added to the feature collection of the registered resource's tile:\n"
                 )
                 for k, v in geometry_type_dict.items():
                     dlg_resource_confirmation.infoText.append(f"{k}: {v}")

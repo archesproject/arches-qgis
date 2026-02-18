@@ -1,5 +1,9 @@
 from arches_project.core.arches.resources import ArchesResources
 from arches_project.core.arches.api import arches_api
+from arches_project.core.views.components.map import (
+    save_selected_arches_resource,
+    populate_table,
+)
 
 
 class ResourcesView:
@@ -38,3 +42,53 @@ class ResourcesView:
             dlg_resource_confirmation=dlg_resource_confirmation,
             iface=self.iface,
         )
+
+    def register_resource(self):
+        """
+        Button connection for registering Arches resource with the plugin.
+
+        Only when the button is activated and successful will the rest of the edit
+        UI be revealed, and the Arches resource stored until re-registered.
+        """
+
+        self.dlg.editResSelectResButton.setText("Register resource for editing")
+
+        if not arches_api.selected_features["features"]:
+            # show confirmation message
+            self.dlg.editResRegisterResMessageLabel.show()
+            self.dlg.editResRegisterResMessageLabel.setText(
+                "No features are selected. Select an Arches feature to proceed."
+            )
+            # hide operation frame
+            self.dlg.editResOperationFrame.hide()
+        else:
+            if len(arches_api.selected_features["features"]) > 1:
+                self.dlg.editResRegisterResMessageLabel.show()
+                self.dlg.editResRegisterResMessageLabel.setText(
+                    "Multiple features are selected. Select one Arches feature to proceed."
+                )
+                self.dlg.editResOperationFrame.hide()
+            else:
+                # One in the selected features list, need to check if is Arches resource
+                feat = arches_api.selected_features["features"][0]
+                save_arches_res = save_selected_arches_resource(feat)
+                if save_arches_res:
+                    populate_table(self.dlg, feat)
+                    self.dlg.editResRegisterResMessageLabel.setText("")
+                    self.dlg.editResRegisterResMessageLabel.hide()
+                    self.dlg.editResOperationFrame.show()
+
+                    # rename register label and button text
+                    self.dlg.editResSelectedResLabel.setText(
+                        f"Selected resource: {arches_api.arches_selected_resource['resourceinstanceid']}"
+                    )
+                    self.dlg.editResSelectResButton.setText("Register new resource")
+
+                    # automatically deselect the selected Arches resource
+                    self.iface.activeLayer().removeSelection()
+                else:
+                    self.dlg.editResRegisterResMessageLabel.show()
+                    self.dlg.editResRegisterResMessageLabel.setText(
+                        "The selected feature is not an Arches resource. Select an Arches feature to proceed."
+                    )
+                    self.dlg.editResOperationFrame.hide()
